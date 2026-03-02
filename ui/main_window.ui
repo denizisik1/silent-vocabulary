@@ -1,0 +1,1452 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1113</width>
+    <height>909</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Vocabulary IPA - Language Pronunciation Retriever</string>
+  </property>
+  <property name="styleSheet">
+   <string>QMainWindow {
+      background-color: #2b2b2b;
+      color: #ffffff;
+      }
+
+      QTabWidget::pane {
+      border: 1px solid #555555;
+      background-color: #3a3a3a;
+      }
+
+      QTabBar::tab {
+      background-color: #4a4a4a;
+      color: #ffffff;
+      }
+
+      QTabBar::tab:selected {
+      background-color: #5a5a5a;
+      }
+
+      QTabBar::tab:hover {
+      background-color: #505050;
+      }
+
+      QWidget {
+      background-color: #3a3a3a;
+      color: #ffffff;
+      }
+
+      QLabel {
+      color: #ffffff;
+      }
+
+      QLineEdit, QTextEdit, QComboBox, QSpinBox {
+      background-color: #4a4a4a;
+      color: #ffffff;
+      }
+
+      QLineEdit:focus, QTextEdit:focus, QComboBox:focus, QSpinBox:focus {
+      border: 1px solid #0078d4;
+      }
+
+      QPushButton {
+      background-color: #0078d4;
+      color: #ffffff;
+      }
+
+      QPushButton:hover {
+      background-color: #106ebe;
+      }
+
+      QPushButton:pressed {
+      background-color: #005a9e;
+      }
+
+      QStatusBar {
+      background-color: #2b2b2b;
+      color: #ffffff;
+          }</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>10</y>
+      <width>121</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Random Words</string>
+    </property>
+    <widget class="QPushButton" name="pushButton">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>91</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Get Word(s)</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>33</y>
+       <width>51</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Number</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit">
+     <property name="geometry">
+      <rect>
+       <x>63</x>
+       <y>30</y>
+       <width>31</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_5">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>90</y>
+       <width>91</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Pull Async</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>141</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Language Selection</string>
+    </property>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>61</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Language</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>111</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>German</string>
+      </property>
+     </item>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_3">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>150</y>
+      <width>281</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Add Word</string>
+    </property>
+    <widget class="QLineEdit" name="lineEdit_2">
+     <property name="geometry">
+      <rect>
+       <x>47</x>
+       <y>30</y>
+       <width>161</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_3">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>30</y>
+       <width>41</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Add</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>33</y>
+       <width>31</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Word</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_4">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>10</y>
+      <width>461</width>
+      <height>621</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Reference</string>
+    </property>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>540</y>
+       <width>336</width>
+       <height>14</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>https://en.wikipedia.org/wiki/Help:IPA/Standard_German</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_6">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>580</y>
+       <width>336</width>
+       <height>14</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>get it from the link above once again once done with the ui</string>
+     </property>
+    </widget>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>50</y>
+       <width>411</width>
+       <height>461</height>
+      </rect>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Tab 1</string>
+      </attribute>
+      <widget class="QTextEdit" name="textEdit">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>10</y>
+         <width>371</width>
+         <height>401</height>
+        </rect>
+       </property>
+       <property name="html">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;table border=&quot;0&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;&quot; cellspacing=&quot;2&quot; cellpadding=&quot;0&quot;&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;5&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Consonant&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; text-decoration: underline; color:#0000ff;&quot;&gt;Consonants&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Germany&quot;&gt;&lt;img src=&quot;https://upload.wikimedia.org/wikipedia/en/thumb/b/ba/Flag_of_Germany.svg/40px-Flag_of_Germany.svg.png&quot; alt=&quot;Germany&quot; width=&quot;23&quot; height=&quot;14&quot; /&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt; DEU&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Austria&quot;&gt;&lt;img src=&quot;https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Flag_of_Austria.svg/40px-Flag_of_Austria.svg.png&quot; alt=&quot;Austria&quot; width=&quot;23&quot; height=&quot;15&quot; /&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt; AUT&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Switzerland&quot;&gt;&lt;img src=&quot;https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Flag_of_Switzerland_%28Pantone%29.svg/20px-Flag_of_Switzerland_%28Pantone%29.svg.png&quot; alt=&quot;Switzerland&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt; CH &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;Examples&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;English approximation &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiced_bilabial_plosive&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;b&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;b&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ei;&lt;/span&gt;&lt;a name=&quot;cite_ref-fortislenis_1-0&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-fortislenis-1&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-fortislenis-1&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;1]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt; a&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;b&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; (AT, CH)&lt;/span&gt;&lt;a name=&quot;cite_ref-devoicing_2-0&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-devoicing-2&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-devoicing-2&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;2]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;b&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;all &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiceless_palatal_fricative&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ç&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;i&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ch&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;, dur&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ch&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;;&lt;/span&gt;&lt;a name=&quot;cite_ref-dorsalfricatives_3-0&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-dorsalfricatives-3&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-dorsalfricatives-3&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;3]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;Ch&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ina, Leipzi&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;g&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; (DE) &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;h&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ue &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiced_alveolar_plosive&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;d&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;d&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ann; Klei&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;d&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; (AT, CH)&lt;/span&gt;&lt;a name=&quot;cite_ref-devoicing_2-1&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-devoicing-2&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-devoicing-2&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;2]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;d&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;one &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiceless_labiodental_fricative&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;f&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;f&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ür, &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;v&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;on, &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;Ph&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;änomen&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;f&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;uss &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiced_velar_plosive&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ɡ&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;g&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ut; Ta&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;g&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;, Leipzi&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;g&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; (AT, CH)&lt;/span&gt;&lt;a name=&quot;cite_ref-devoicing_2-2&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-devoicing-2&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-devoicing-2&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;2]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;g&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;uest &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiceless_glottal_fricative&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;h&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;h&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;at&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;h&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ut &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiced_palatal_approximant&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;j&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;J&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ahr, &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;Y&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ak&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;y&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ard &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiceless_velar_plosive&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;k&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;k&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ann, &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;c&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;remen, se&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ch&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;s, be&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;q&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;uem; Ta&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;g&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; (DE);&lt;/span&gt;&lt;a name=&quot;cite_ref-devoicing_2-3&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-devoicing-2&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-devoicing-2&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;2]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;Ch&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ina&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; (AT, CH) &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;c&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;old &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiced_alveolar_lateral_approximant&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;l&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;L&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;eben&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;l&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ast &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Syllabic_consonant&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;l̩&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;Mant&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;el&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;bott&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;le&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiced_bilabial_nasal&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;m&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;M&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ann&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;m&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ust &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Syllabic_consonant&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;m̩&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;groß&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;em&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;rhyth&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;m&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiced_alveolar_nasal&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;n&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;N&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ame&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;n&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ot &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Syllabic_consonant&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;n̩&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;beid&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;en&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;sudd&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;en&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiced_velar_nasal&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ŋ&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;la&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ng&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;lo&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;ng&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiceless_bilabial_plosive&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;p&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;P&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;erson, a&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;b&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; (DE)&lt;/span&gt;&lt;a name=&quot;cite_ref-devoicing_2-4&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-devoicing-2&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-devoicing-2&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;2]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;p&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;uck &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiceless_labiodental_affricate&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;pf&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;Pf&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;effer&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;cu&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;pf&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ul &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiced_uvular_fricative&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ʁ&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td colspan=&quot;2&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiced_alveolar_trill&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;r&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;r&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;eden&lt;/span&gt;&lt;a name=&quot;cite_ref-r-allophones_4-0&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-r-allophones-4&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-r-allophones-4&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;4]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;DE: &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;French&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;r&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ouge&lt;br /&gt;AT, CH: &lt;/span&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Scottish_English&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic; text-decoration: underline; color:#0000ff;&quot;&gt;Scottish&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;r&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ed &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiceless_alveolar_fricative&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;s&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;la&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ss&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;en, gro&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ß&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;, flie&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ß&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;en, Fe&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;s&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;t&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;fa&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;s&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;t &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiceless_postalveolar_fricative&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ʃ&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;sch&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;on, &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;S&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;tadt, &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;s&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;pitz, &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;Ch&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ampagner, &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;Sk&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;i&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;sh&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;all &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiceless_alveolar_plosive&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;t&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;T&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ag, Sta&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;dt&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;; Klei&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;d&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; (DE)&lt;/span&gt;&lt;a name=&quot;cite_ref-devoicing_2-5&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-devoicing-2&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-devoicing-2&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;2]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;t&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;all &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiceless_alveolar_affricate&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ts&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;Z&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;eit, Pla&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;tz&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;, Po&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ts&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;dam, &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;C&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;elle&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ca&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;ts&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiceless_postalveolar_affricate&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;tʃ&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;Ma&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;tsch&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;, &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;C&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ello&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ma&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;tch&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiced_labiodental_fricative&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;v&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;w&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;as, Q&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;u&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;elle, &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;V&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ase&lt;/span&gt;&lt;a name=&quot;cite_ref-fortislenis_1-1&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-fortislenis-1&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-fortislenis-1&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;1]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;v&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;anish &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiceless_velar_fricative&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;x&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;na&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ch&lt;/span&gt;&lt;a name=&quot;cite_ref-dorsalfricatives_3-1&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-dorsalfricatives-3&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-dorsalfricatives-3&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;3]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;Scottish&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; lo&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;ch&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiced_alveolar_fricative&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;z&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiceless_alveolar_fricative&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;s&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiced_alveolar_fricative&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;z&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;S&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ie, die&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;s&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;e&lt;/span&gt;&lt;a name=&quot;cite_ref-fortislenis_1-2&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-fortislenis-1&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-fortislenis-1&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;1]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;DE, CH: &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;z&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ebra&lt;br /&gt;AT: &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;s&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;oup &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Glottal_stop&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ʔ&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td colspan=&quot;2&quot;&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;beamtet&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; [bəˈʔamtət]&lt;/span&gt;&lt;a name=&quot;cite_ref-5&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-5&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-5&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;5]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;uh&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;-&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;oh! &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;5&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;Non-native consonants &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiced_dental_fricative&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ð&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;Mo&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;th&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;erboard&lt;/span&gt;&lt;a name=&quot;cite_ref-th_6-0&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-th-6&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-th-6&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;6]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;th&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;is &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiced_postalveolar_affricate&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;dʒ&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;Dsch&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ungel, Pi&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;dg&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;in&lt;/span&gt;&lt;a name=&quot;cite_ref-fortislenis_1-3&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-fortislenis-1&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-fortislenis-1&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;1]&lt;/span&gt;&lt;/a&gt;&lt;a name=&quot;cite_ref-postalveolarlenis_7-0&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-postalveolarlenis-7&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-postalveolarlenis-7&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;7]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;j&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ungle &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiceless_dental_fricative&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;θ&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;Th&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;atcherismus&lt;/span&gt;&lt;a name=&quot;cite_ref-th_6-1&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-th-6&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-th-6&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;6]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;th&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ink &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiced_alveolar_approximant&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ɹ&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;Sp&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;r&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ay&lt;/span&gt;&lt;a name=&quot;cite_ref-8&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-8&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-8&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;8]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;r&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ice &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiced_labial%E2%80%93velar_approximant&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;w&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;W&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;eb, &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;W&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;hiskey, Sq&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;u&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ash&lt;/span&gt;&lt;a name=&quot;cite_ref-9&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-9&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-9&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;9]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;w&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;eb &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Voiced_postalveolar_fricative&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ʒ&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;G&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;enie, Entoura&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;g&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;e&lt;/span&gt;&lt;a name=&quot;cite_ref-fortislenis_1-4&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-fortislenis-1&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-fortislenis-1&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;1]&lt;/span&gt;&lt;/a&gt;&lt;a name=&quot;cite_ref-postalveolarlenis_7-1&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-postalveolarlenis-7&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-postalveolarlenis-7&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;7]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;plea&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;s&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ure &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;5&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Stress_(linguistics)&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; text-decoration: underline; color:#0000ff;&quot;&gt;Stress&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Stress_(linguistics)&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ˈ&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td rowspan=&quot;2&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;Bahn&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;hof&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;stra&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ße&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;[ˈbaːnhoːfˌʃtʁaːsə] &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td rowspan=&quot;2&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;battleship &lt;/span&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/English&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff;&quot;&gt;/ˈbætəlˌʃɪp/&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Secondary_stress&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ˌ&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;5&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Syllabification&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; text-decoration: underline; color:#0000ff;&quot;&gt;Syllable break&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Syllable&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;.&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;Ephr&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ai&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;m&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;[ˈeːfra.ɪm] &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;flower &lt;/span&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/English&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff;&quot;&gt;/ˈflaʊ.ər/&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;(contrasting with&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; flour &lt;/span&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/English&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff;&quot;&gt;/ˈflaʊər/&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;)&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Tab 2</string>
+      </attribute>
+      <widget class="QTextEdit" name="textEdit_2">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>20</y>
+         <width>371</width>
+         <height>411</height>
+        </rect>
+       </property>
+       <property name="html">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;table border=&quot;0&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;&quot; cellspacing=&quot;2&quot; cellpadding=&quot;0&quot;&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;5&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; text-decoration: underline; color:#0000ff;&quot;&gt;Vowels&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Germany&quot;&gt;&lt;img src=&quot;https://upload.wikimedia.org/wikipedia/en/thumb/b/ba/Flag_of_Germany.svg/40px-Flag_of_Germany.svg.png&quot; alt=&quot;Germany&quot; width=&quot;23&quot; height=&quot;14&quot; /&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt; DEU&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Austria&quot;&gt;&lt;img src=&quot;https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Flag_of_Austria.svg/40px-Flag_of_Austria.svg.png&quot; alt=&quot;Austria&quot; width=&quot;23&quot; height=&quot;15&quot; /&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt; AUT&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Switzerland&quot;&gt;&lt;img src=&quot;https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Flag_of_Switzerland_%28Pantone%29.svg/20px-Flag_of_Switzerland_%28Pantone%29.svg.png&quot; alt=&quot;Switzerland&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt; CH &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;Examples&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;English approximation &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;5&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Monophthong&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; text-decoration: underline; color:#0000ff;&quot;&gt;Monophthongs&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Open_central_unrounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;a&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;a&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;lles, K&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;a&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;lender&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;p&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;a&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;sta &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Open_central_unrounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;aː&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;a&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ber, s&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ah&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;, St&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;aa&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;t&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;f&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;a&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ther &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Open-mid_front_unrounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ɛ&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;E&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;nde, h&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ä&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;tte&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;b&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;e&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;t &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Open-mid_front_unrounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ɛː&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;sp&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ä&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;t, w&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;äh&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;len&lt;/span&gt;&lt;a name=&quot;cite_ref-10&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-10&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-10&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;10]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Received_Pronunciation&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic; text-decoration: underline; color:#0000ff;&quot;&gt;RP&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; h&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;air&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Close-mid_front_unrounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;eː&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;e&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ben, g&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;eh&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;en, S&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ee&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;Scottish&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; m&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;a&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;te &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Near-close_near-front_unrounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ɪ&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;i&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;st&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;s&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;i&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;t &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Close_front_unrounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;iː&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;L&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ie&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;be, Berl&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;i&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;n, &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ih&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;m&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;s&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;ee&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;d &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Close-mid_back_rounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;oː&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;o&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;der, h&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;oh&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;e, B&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;oo&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;t&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;st&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;o&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ry &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Open-mid_back_rounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ɔ&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;k&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;o&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;mmen&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;o&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ff &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Close-mid_front_rounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;øː&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;Ö&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;sterreich, M&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;öh&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;re, adi&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;eu&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;somewhat like&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; h&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;ear&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;d &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Open-mid_front_rounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;œ&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ö&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ffnen&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;somewhat like&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; h&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;ur&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;t; &lt;/span&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Received_Pronunciation&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic; text-decoration: underline; color:#0000ff;&quot;&gt;RP&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;ugh&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Near-close_near-back_rounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ʊ&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;u&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;nd&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;p&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;u&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ll &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Close_back_rounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;uː&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;H&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;u&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;t, K&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;uh&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;t&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;oo&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;l &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Near-close_near-front_rounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ʏ&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;m&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ü&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ssen, &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;Y&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;psilon&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;somewhat like&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; c&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;u&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;te &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Close_front_rounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;yː&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ü&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ber, M&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;üh&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;e, ps&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;y&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;chisch&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;somewhat like&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; f&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;ew&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;5&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Diphthong&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; text-decoration: underline; color:#0000ff;&quot;&gt;Diphthongs&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large;&quot;&gt;aɪ&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ei&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;n, K&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ai&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ser, H&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ay&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;dn, Verl&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;eih&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;, Sp&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ey&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;er&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;h&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;igh&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large;&quot;&gt;aʊ&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;au&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;f&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;v&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;ow&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large;&quot;&gt;ɔʏ&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;Eu&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ro, H&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;äu&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ser&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ch&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;oi&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ce &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;5&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Vowel_reduction&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; text-decoration: underline; color:#0000ff;&quot;&gt;Reduced vowels&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Near-open_central_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ɐ&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large;&quot;&gt;ər&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;imm&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;er&lt;/span&gt;&lt;a name=&quot;cite_ref-r-allophones_4-1&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-r-allophones-4&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-r-allophones-4&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;4]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;DE, AT: fr&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;u&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;stration&lt;br /&gt;CH: &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;Scottish&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; lett&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;er&lt;/span&gt;&lt;a name=&quot;cite_ref-schwas_11-0&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-schwas-11&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-schwas-11&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;11]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Mid_central_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ə&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td colspan=&quot;2&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Mid_front_unrounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ɛ&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;Nam&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;e&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;DE: bal&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;a&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;nce &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;(but not&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; sof&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;a&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;)&lt;/span&gt;&lt;a name=&quot;cite_ref-schwas_11-1&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-schwas-11&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-schwas-11&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;11]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;AT, CH: b&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;e&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;t&lt;/span&gt;&lt;a name=&quot;cite_ref-12&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-12&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-12&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;12]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;5&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Semivowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; text-decoration: underline; color:#0000ff;&quot;&gt;Semivowels&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large;&quot;&gt;ɐ̯&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large;&quot;&gt;r&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;Uh&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;r&lt;/span&gt;&lt;a name=&quot;cite_ref-r-allophones_4-2&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-r-allophones-4&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-r-allophones-4&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;4]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;DE, AT: sof&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;a&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;&lt;br /&gt;CH: &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;Scottish&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; fa&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;r&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Close_front_unrounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;i̯&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;Stud&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;i&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;e, Ital&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;i&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;en&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;y&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ard &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Close-mid_back_rounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;o̯&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;P&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;o&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;inte&lt;/span&gt;&lt;a name=&quot;cite_ref-semivowels_13-0&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-semivowels-13&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-semivowels-13&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;13]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;q&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;u&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ite &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Close_back_rounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;u̯&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;Ling&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;u&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ist, G&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ou&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ache&lt;/span&gt;&lt;a name=&quot;cite_ref-semivowels_13-1&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-semivowels-13&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-semivowels-13&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;13]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;w&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ould &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Close_front_rounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;y̑&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;Et&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;u&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;i&lt;/span&gt;&lt;a name=&quot;cite_ref-semivowels_13-2&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-semivowels-13&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-semivowels-13&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;13]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;somewhat like&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; eval&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;u&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ation &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;5&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;Shortened vowels &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Close-mid_front_unrounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;e&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;E&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;l&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;e&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ment&lt;/span&gt;&lt;a name=&quot;cite_ref-shorttense_14-0&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-shorttense-14&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-shorttense-14&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;14]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;roughly like&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; dr&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;e&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ss &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Close_front_unrounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;i&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;I&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;talien&lt;/span&gt;&lt;a name=&quot;cite_ref-shorttense_14-1&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-shorttense-14&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-shorttense-14&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;14]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;s&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;ea&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;t &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Close-mid_back_rounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;o&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;o&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;riginell&lt;/span&gt;&lt;a name=&quot;cite_ref-shorttense_14-2&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-shorttense-14&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-shorttense-14&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;14]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;st&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;o&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ry, &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;but short&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Close-mid_front_rounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ø&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;Ö&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;konomie&lt;/span&gt;&lt;a name=&quot;cite_ref-shorttense_14-3&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-shorttense-14&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-shorttense-14&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;14]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;roughly like&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; h&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;ur&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;t &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Close_back_rounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;u&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;U&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;niversität, S&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ou&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;venir&lt;/span&gt;&lt;a name=&quot;cite_ref-shorttense_14-4&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-shorttense-14&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-shorttense-14&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;14]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;cessp&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;oo&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;l &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Close_front_rounded_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;y&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;Ps&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;y&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;chologie&lt;/span&gt;&lt;a name=&quot;cite_ref-shorttense_14-5&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-shorttense-14&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-shorttense-14&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;14]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;like&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; m&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;ee&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;t, &lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;but with the lips rounded&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;5&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;Non-native vowels &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large;&quot;&gt;ãː&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;Gourm&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;and&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;, Engagem&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ent&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;, Restaur&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ant&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;, Ch&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;an&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ce&lt;/span&gt;&lt;a name=&quot;cite_ref-nasalV_15-0&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-nasalV-15&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-nasalV-15&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;15]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;French&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; Prov&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;en&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ce &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large;&quot;&gt;ɛ̃ː&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;Po&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;in&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;te&lt;/span&gt;&lt;a name=&quot;cite_ref-nasalV_15-1&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-nasalV-15&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-nasalV-15&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;15]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;French&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; qu&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;in&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ze &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large;&quot;&gt;ɛɪ&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;M&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ai&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;l&lt;/span&gt;&lt;a name=&quot;cite_ref-middiphthongs_16-0&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-middiphthongs-16&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-middiphthongs-16&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;16]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;f&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;a&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;ce &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large;&quot;&gt;õː&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;Garç&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;on&lt;/span&gt;&lt;a name=&quot;cite_ref-nasalV_15-2&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-nasalV-15&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-nasalV-15&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;15]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;French&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; Le M&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;on&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;de &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large;&quot;&gt;ɔː&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;st&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;al&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;ken, Motherb&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;oa&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;rd&lt;/span&gt;&lt;a name=&quot;cite_ref-17&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-17&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-17&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;17]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;d&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;o&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;g &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large;&quot;&gt;ɔʊ&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;C&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;o&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;de&lt;/span&gt;&lt;a name=&quot;cite_ref-middiphthongs_16-1&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-middiphthongs-16&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-middiphthongs-16&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;16]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;g&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;oa&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;l &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large;&quot;&gt;œ̃ː&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;Parf&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;um&lt;/span&gt;&lt;a name=&quot;cite_ref-nasalV_15-3&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-nasalV-15&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-nasalV-15&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;15]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;French&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; empr&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;un&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;te &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;2&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large;&quot;&gt;œːɐ̯&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large;&quot;&gt;øːr&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;s&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ur&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;fen, Fl&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;ir&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;t&lt;/span&gt;&lt;a name=&quot;cite_ref-18&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-18&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-18&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;18]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;roughly like &lt;/span&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Received_Pronunciation&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic; text-decoration: underline; color:#0000ff;&quot;&gt;RP&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; b&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;ir&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;d &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;5&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;Shortened vowels (Non-native vowels) &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Nasal_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ã&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;en&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;gagieren&lt;/span&gt;&lt;a name=&quot;cite_ref-nasalV_15-4&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-nasalV-15&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-nasalV-15&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;15]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;French&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; ch&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;an&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;son &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Nasal_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;ɛ̃&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;im&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;pair&lt;/span&gt;&lt;a name=&quot;cite_ref-nasalV_15-5&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-nasalV-15&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-nasalV-15&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;15]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;French&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; v&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;ing&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;t-et-un &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Nasal_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;õ&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;f&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;on&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;cé&lt;/span&gt;&lt;a name=&quot;cite_ref-nasalV_15-6&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-nasalV-15&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-nasalV-15&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;15]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;French&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; M&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;on&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt;t Blanc &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td colspan=&quot;3&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Nasal_vowel&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-size:large; text-decoration: underline; color:#0000ff;&quot;&gt;œ̃&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;L&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700; font-style:italic;&quot;&gt;un&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;dist&lt;/span&gt;&lt;a name=&quot;cite_ref-nasalV_15-7&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-nasalV-15&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;[&lt;/span&gt;&lt;/a&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Help:IPA/Standard_German#cite_note-nasalV-15&quot;&gt;&lt;span style=&quot; font-family:'monospace'; text-decoration: underline; color:#0000ff; vertical-align:super;&quot;&gt;15]&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'monospace'; font-style:italic;&quot;&gt;French&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; vingt-et-&lt;/span&gt;&lt;span style=&quot; font-family:'monospace'; font-weight:700;&quot;&gt;un&lt;/span&gt;&lt;span style=&quot; font-family:'monospace';&quot;&gt; &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_5">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>10</y>
+      <width>271</width>
+      <height>201</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Results</string>
+    </property>
+    <widget class="QTextEdit" name="textEdit_3">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>40</y>
+       <width>231</width>
+       <height>141</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_6">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>350</y>
+      <width>551</width>
+      <height>501</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Retrieve</string>
+    </property>
+    <widget class="QGroupBox" name="groupBox_7">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>531</width>
+       <height>191</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>GroupBox</string>
+     </property>
+     <widget class="QLabel" name="label_8">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>40</y>
+        <width>401</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Only two mainstream online dictionaries provide IPA for german.</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_8">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>150</y>
+        <width>113</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>pron</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_6">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>100</y>
+        <width>431</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>https://www.collinsdictionary.com/dictionary/german-english/</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_9">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>130</y>
+        <width>231</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Find element by:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_10">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>80</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Primary Source:</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_8">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>230</y>
+       <width>521</width>
+       <height>131</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>GroupBox</string>
+     </property>
+     <widget class="QLineEdit" name="lineEdit_7">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>100</y>
+        <width>113</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>phonetics</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_12">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>80</y>
+        <width>231</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Find element by:</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_9">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>461</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>https://en.pons.com/translate-2/german-english/</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_11">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>461</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Backup source (In case primary fails or doesn't have the pronunciation):</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QPushButton" name="pushButton_6">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>370</y>
+       <width>80</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Primary</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_7">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>370</y>
+       <width>80</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Backup</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_8">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>370</y>
+       <width>191</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Check Retrieving Capabilities</string>
+     </property>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_9">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>400</y>
+       <width>301</width>
+       <height>80</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>GroupBox</string>
+     </property>
+     <widget class="QLabel" name="label_4">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>121</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Retrieving Progress</string>
+      </property>
+     </widget>
+     <widget class="QProgressBar" name="progressBar">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>50</y>
+        <width>336</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="value">
+       <number>24</number>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_10">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>770</y>
+      <width>471</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>GroupBox</string>
+    </property>
+    <widget class="QLabel" name="label_7">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>41</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Zoom</string>
+     </property>
+    </widget>
+    <widget class="QSlider" name="horizontalSlider">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>336</width>
+       <height>15</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_11">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>230</y>
+      <width>231</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>GroupBox</string>
+    </property>
+    <widget class="QPushButton" name="pushButton_4">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>30</y>
+       <width>181</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Analyze Selected Language</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>60</y>
+       <width>101</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Daemon Mode</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_12">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>650</y>
+      <width>451</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Notification Daemon</string>
+    </property>
+    <widget class="QRadioButton" name="radioButton">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>40</y>
+       <width>131</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Dunst via i3-msg</string>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="radioButton_2">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>40</y>
+       <width>99</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Windows</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_13">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>40</y>
+       <width>141</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Frequency in minutes:</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_3">
+     <property name="geometry">
+      <rect>
+       <x>400</x>
+       <y>40</y>
+       <width>41</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_13">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>230</y>
+      <width>291</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Include</string>
+    </property>
+    <widget class="QCheckBox" name="checkBox">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>30</y>
+       <width>85</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Word</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_2">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>40</y>
+       <width>85</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>CheckBox</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_3">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>50</y>
+       <width>85</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Pronunciation Example</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_4">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>60</y>
+       <width>85</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>CheckBox</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_5">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>70</y>
+       <width>85</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>CheckBox</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1113</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>About</string>
+    </property>
+   </widget>
+   <addaction name="menuAbout"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
