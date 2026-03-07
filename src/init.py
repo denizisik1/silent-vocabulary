@@ -3,11 +3,18 @@ from pathlib import Path
 
 from PySide6.QtCore import QFile, QIODevice
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtWidgets import QApplication, QMainWindow, QRadioButton
+from PySide6.QtWidgets import QApplication, QMainWindow, QRadioButton, QTextEdit
 
 from themes import DEFAULT_THEME, stylesheet
 
-UI_PATH = Path(__file__).resolve().parent.parent / "ui" / "main_window.ui"
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+UI_PATH = PROJECT_ROOT / "ui" / "main_window.ui"
+REFERENCE_DIR = PROJECT_ROOT / "data" / "reference"
+
+_REFERENCE_VIEWS = {
+    "textEdit": "consonants.html",
+    "textEdit_2": "vowels.html",
+}
 
 _THEME_RADIOS = {
     "white": "radioButton_themeWhite",
@@ -42,10 +49,20 @@ def _wire_themes(window: QMainWindow) -> None:
         )
 
 
+def _load_reference(window: QMainWindow) -> None:
+    for widget_name, filename in _REFERENCE_VIEWS.items():
+        editor = window.findChild(QTextEdit, widget_name)
+        if editor is None:
+            raise RuntimeError(f"Missing reference view: {widget_name}")
+        path = REFERENCE_DIR / filename
+        editor.setHtml(path.read_text(encoding="utf-8"))
+
+
 def main() -> None:
     app = QApplication(sys.argv)
     window = _load_window()
     _wire_themes(window)
+    _load_reference(window)
     _apply_theme(window, DEFAULT_THEME)
     window.show()
     sys.exit(app.exec())
