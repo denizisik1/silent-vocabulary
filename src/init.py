@@ -1,10 +1,12 @@
 import sys
 from pathlib import Path
+from typing import cast
 
 from PySide6.QtCore import QFile, QIODevice
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QApplication, QMainWindow, QRadioButton, QTextEdit
 
+from config import AppConfig, load_config, save_config
 from themes import DEFAULT_THEME, stylesheet
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -32,21 +34,40 @@ def _load_window() -> QMainWindow:
     ui_file.close()
     if window is None:
         raise RuntimeError(f"Cannot load {UI_PATH}")
-    return window
+    return cast(QMainWindow, window)
 
 
 def _apply_theme(window: QMainWindow, name: str) -> None:
     window.setStyleSheet(stylesheet(name))
 
 
-def _wire_themes(window: QMainWindow) -> None:
+def _select_theme(window: QMainWindow, name: str) -> None:
+    object_name = _THEME_RADIOS.get(name, _THEME_RADIOS[DEFAULT_THEME])
+    button = window.findChild(QRadioButton, object_name)
+    if button is None:
+        raise RuntimeError(f"Missing theme control: {object_name}")
+    button.setChecked(True)
+
+
+def _on_theme_selected(window: QMainWindow, config: AppConfig, theme_name: str) -> None:
+    _apply_theme(window, theme_name)
+    config.theme = theme_name
+    save_config(config)
+
+
+def _wire_themes(window: QMainWindow, config: AppConfig) -> None:
+    def make_handler(theme_name: str):
+        def on_toggled(checked: bool) -> None:
+            if checked:
+                _on_theme_selected(window, config, theme_name)
+
+        return on_toggled
+
     for theme, object_name in _THEME_RADIOS.items():
         button = window.findChild(QRadioButton, object_name)
         if button is None:
             raise RuntimeError(f"Missing theme control: {object_name}")
-        button.toggled.connect(
-            lambda checked, theme_name=theme: checked and _apply_theme(window, theme_name)
-        )
+        button.toggled.connect(make_handler(theme))
 
 
 def _load_reference(window: QMainWindow) -> None:
@@ -58,12 +79,25 @@ def _load_reference(window: QMainWindow) -> None:
         editor.setHtml(path.read_text(encoding="utf-8"))
 
 
+def _apply_window_config(window: QMainWindow, config: AppConfig) -> None:
+    window.resize(config.window.width, config.window.height)
+
+
+def _persist_window_config(window: QMainWindow, config: AppConfig) -> None:
+    config.window.width = window.width()
+    config.window.height = window.height()
+    save_config(config)
+
+
 def main() -> None:
     app = QApplication(sys.argv)
+    config = load_config()
     window = _load_window()
-    _wire_themes(window)
+    _apply_window_config(window, config)
+    _wire_themes(window, config)
     _load_reference(window)
-    _apply_theme(window, DEFAULT_THEME)
+    _select_theme(window, config.theme)
+    app.aboutToQuit.connect(lambda: _persist_window_config(window, config))
     window.show()
     sys.exit(app.exec())
 

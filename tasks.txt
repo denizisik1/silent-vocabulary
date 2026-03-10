@@ -1,6 +1,1 @@
-Also that wikipedia thing because it is html it is too many lines of code, is there a better solution?
-
-Split it into smaller parts if it will make it better leave it alone if it won't.
-
-Check memory for theme.
-Add memory for dimensions but before probably a place for it to hold its config like in ~/.config/vipa/vipa.conf
+.keep

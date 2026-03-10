@@ -111,4 +111,5 @@ QSlider::handle:horizontal {{ width: 12px; margin: -4px 0; background: #0078d4; 
 QLabel#label_6 {{ color: {colors["muted"]}; font-style: italic; }}"""
 
 
+THEMES: Final = frozenset(_PALETTE)
 DEFAULT_THEME: Final = "gray"
