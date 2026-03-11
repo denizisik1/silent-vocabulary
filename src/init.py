@@ -1,6 +1,6 @@
 import sys
+from functools import partial
 from pathlib import Path
-from typing import cast
 
 from PySide6.QtCore import QFile, QIODevice
 from PySide6.QtUiTools import QUiLoader
@@ -34,7 +34,9 @@ def _load_window() -> QMainWindow:
     ui_file.close()
     if window is None:
         raise RuntimeError(f"Cannot load {UI_PATH}")
-    return cast(QMainWindow, window)
+    if not isinstance(window, QMainWindow):
+        raise RuntimeError(f"Loaded UI is not a main window: {UI_PATH}")
+    return window
 
 
 def _apply_theme(window: QMainWindow, name: str) -> None:
@@ -55,19 +57,24 @@ def _on_theme_selected(window: QMainWindow, config: AppConfig, theme_name: str) 
     save_config(config)
 
 
+def _handle_theme_toggle(
+    window: QMainWindow,
+    config: AppConfig,
+    theme_name: str,
+    checked: bool,
+) -> None:
+    if not checked:
+        return
+    _on_theme_selected(window, config, theme_name)
+
+
 def _wire_themes(window: QMainWindow, config: AppConfig) -> None:
-    def make_handler(theme_name: str):
-        def on_toggled(checked: bool) -> None:
-            if checked:
-                _on_theme_selected(window, config, theme_name)
-
-        return on_toggled
-
-    for theme, object_name in _THEME_RADIOS.items():
+    for theme_name, object_name in _THEME_RADIOS.items():
         button = window.findChild(QRadioButton, object_name)
         if button is None:
             raise RuntimeError(f"Missing theme control: {object_name}")
-        button.toggled.connect(make_handler(theme))
+        handler = partial(_handle_theme_toggle, window, config, theme_name)
+        button.toggled.connect(handler)
 
 
 def _load_reference(window: QMainWindow) -> None:
@@ -90,16 +97,17 @@ def _persist_window_config(window: QMainWindow, config: AppConfig) -> None:
 
 
 def main() -> None:
-    app = QApplication(sys.argv)
+    application = QApplication(sys.argv)
     config = load_config()
     window = _load_window()
     _apply_window_config(window, config)
     _wire_themes(window, config)
     _load_reference(window)
     _select_theme(window, config.theme)
-    app.aboutToQuit.connect(lambda: _persist_window_config(window, config))
+    quit_handler = partial(_persist_window_config, window, config)
+    application.aboutToQuit.connect(quit_handler)
     window.show()
-    sys.exit(app.exec())
+    sys.exit(application.exec())
 
 
 if __name__ == "__main__":

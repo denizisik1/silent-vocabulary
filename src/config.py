@@ -1,5 +1,3 @@
-"""Load and save application settings in ~/.config/vipa/vipa.toml."""
-
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -35,25 +33,40 @@ def _clamp_dimension(value: int, minimum: int, default: int) -> int:
     return value
 
 
+def _is_valid_theme_name(theme_name: str) -> bool:
+    return theme_name in THEMES
+
+
+def _parse_window_table(window_table) -> WindowConfig:
+    if not isinstance(window_table, dict):
+        return WindowConfig()
+
+    width = window_table.get("width", DEFAULT_WINDOW_WIDTH)
+    height = window_table.get("height", DEFAULT_WINDOW_HEIGHT)
+    if not isinstance(width, int) or not isinstance(height, int):
+        return WindowConfig()
+
+    return WindowConfig(
+        width=_clamp_dimension(width, MIN_WINDOW_WIDTH, DEFAULT_WINDOW_WIDTH),
+        height=_clamp_dimension(height, MIN_WINDOW_HEIGHT, DEFAULT_WINDOW_HEIGHT),
+    )
+
+
+def _parse_theme_name(theme_value) -> str:
+    if not isinstance(theme_value, str):
+        return DEFAULT_THEME
+    if not _is_valid_theme_name(theme_value):
+        return DEFAULT_THEME
+    return theme_value
+
+
 def load_config() -> AppConfig:
     if not CONFIG_PATH.is_file():
         return AppConfig()
 
-    doc = tomlkit.parse(CONFIG_PATH.read_text(encoding="utf-8"))
-    window_table = doc.get("window")
-    window = WindowConfig()
-    if isinstance(window_table, dict):
-        width = window_table.get("width", DEFAULT_WINDOW_WIDTH)
-        height = window_table.get("height", DEFAULT_WINDOW_HEIGHT)
-        if isinstance(width, int) and isinstance(height, int):
-            window = WindowConfig(
-                width=_clamp_dimension(width, MIN_WINDOW_WIDTH, DEFAULT_WINDOW_WIDTH),
-                height=_clamp_dimension(height, MIN_WINDOW_HEIGHT, DEFAULT_WINDOW_HEIGHT),
-            )
-
-    theme = doc.get("theme", DEFAULT_THEME)
-    if not isinstance(theme, str) or theme not in THEMES:
-        theme = DEFAULT_THEME
+    config_document = tomlkit.parse(CONFIG_PATH.read_text(encoding="utf-8"))
+    window = _parse_window_table(config_document.get("window"))
+    theme = _parse_theme_name(config_document.get("theme", DEFAULT_THEME))
 
     return AppConfig(theme=theme, window=window)
 
@@ -61,11 +74,11 @@ def load_config() -> AppConfig:
 def save_config(config: AppConfig) -> None:
     CONFIG_DIR.mkdir(parents=True, exist_ok=True)
 
-    doc = {
+    config_data = {
         "theme": config.theme,
         "window": {
             "width": config.window.width,
             "height": config.window.height,
         },
     }
-    CONFIG_PATH.write_text(tomlkit.dumps(doc), encoding="utf-8")
+    CONFIG_PATH.write_text(tomlkit.dumps(config_data), encoding="utf-8")

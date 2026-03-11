@@ -2,35 +2,35 @@ import sqlite3
 import os
 
 
-def test_db_exists():
+def test_database_file_exists():
     assert os.path.exists("pronunciations.db"), "Database file does not exist."  # nosec
 
 
 def test_basic_query_operations():
-    conn = sqlite3.connect("pronunciations.db")
-    cur = conn.cursor()
+    connection = sqlite3.connect("pronunciations.db")
+    cursor = connection.cursor()
 
-    cur.execute("SELECT 1;")
-    assert cur.fetchone()[0] == 1  # nosec
+    cursor.execute("SELECT 1;")
+    assert cursor.fetchone()[0] == 1  # nosec
 
-    cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
-    first_table = cur.fetchone()
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    first_table = cursor.fetchone()
     assert first_table, "No tables found in database."  # nosec
 
     table_name = first_table[0]
-    cur.execute(f"SELECT COUNT(*) FROM {table_name};")  # nosec
-    count = cur.fetchone()[0]
-    assert count >= 0, f"Invalid count from {table_name}"  # nosec
+    cursor.execute(f"SELECT COUNT(*) FROM {table_name};")  # nosec
+    row_count = cursor.fetchone()[0]
+    assert row_count >= 0, f"Invalid count from {table_name}"  # nosec
 
-    conn.close()
+    connection.close()
 
 
 def test_tables_exist():
-    conn = sqlite3.connect("pronunciations.db")
-    cur = conn.cursor()
-    cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
-    tables = {row[0] for row in cur.fetchall()}
-    conn.close()
+    connection = sqlite3.connect("pronunciations.db")
+    cursor = connection.cursor()
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    tables = {row[0] for row in cursor.fetchall()}
+    connection.close()
 
     expected = {"german"}
     missing = expected - tables

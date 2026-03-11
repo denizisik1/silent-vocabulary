@@ -1,7 +1,3 @@
-"""Application color themes as Qt stylesheets."""
-
-from typing import Final
-
 _PALETTE = {
     "white": {
         "window": "#f0f0f0",
@@ -107,9 +103,11 @@ QProgressBar {{
 }}
 QProgressBar::chunk {{ background-color: #0078d4; border-radius: 2px; }}
 QSlider::groove:horizontal {{ height: 4px; background: {colors["input"]}; border-radius: 2px; }}
-QSlider::handle:horizontal {{ width: 12px; margin: -4px 0; background: #0078d4; border-radius: 6px; }}
+QSlider::handle:horizontal {{
+    width: 12px; margin: -4px 0; background: #0078d4; border-radius: 6px;
+}}
 QLabel#label_6 {{ color: {colors["muted"]}; font-style: italic; }}"""
 
 
-THEMES: Final = frozenset(_PALETTE)
-DEFAULT_THEME: Final = "gray"
+THEMES = frozenset(_PALETTE)
+DEFAULT_THEME = "gray"
