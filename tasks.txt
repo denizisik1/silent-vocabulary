@@ -1,1 +1,2 @@
-.keep
+Consider adding pyinstaller.
+Support for Windows.
