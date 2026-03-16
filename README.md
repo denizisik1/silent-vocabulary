@@ -1,5 +1,3 @@
-# vipa
-
 ## Install and run
 
 ```bash
