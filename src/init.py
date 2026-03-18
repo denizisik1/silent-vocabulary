@@ -1,12 +1,22 @@
+import sqlite3
 import sys
 from functools import partial
 from pathlib import Path
 
 from PySide6.QtCore import QFile, QIODevice
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtWidgets import QApplication, QMainWindow, QRadioButton, QTextEdit
+from PySide6.QtWidgets import (
+    QApplication,
+    QComboBox,
+    QMainWindow,
+    QPushButton,
+    QRadioButton,
+    QSpinBox,
+    QTextEdit,
+)
 
 from config import AppConfig, load_config, save_config
+from database import format_word_row, get_random_words
 from themes import DEFAULT_THEME, stylesheet
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -77,6 +87,40 @@ def _wire_themes(window: QMainWindow, config: AppConfig) -> None:
         button.toggled.connect(handler)
 
 
+def _language_key_from_combo(language_text: str) -> str:
+    return language_text.strip().lower()
+
+
+def _on_get_words(window: QMainWindow) -> None:
+    count_input = window.findChild(QSpinBox, "spinBox")
+    language_combo = window.findChild(QComboBox, "comboBox")
+    results = window.findChild(QTextEdit, "textEdit_3")
+    if count_input is None or language_combo is None or results is None:
+        raise RuntimeError("Missing Get Word(s) controls")
+
+    count = count_input.value()
+    language_key = _language_key_from_combo(language_combo.currentText())
+    try:
+        words = get_random_words(language_key, count)
+    except ValueError as error:
+        results.setPlainText(str(error))
+        return
+    except sqlite3.Error as error:
+        results.setPlainText(f"Database error: {error}")
+        return
+
+    lines = [format_word_row(row) for row in words]
+    results.setPlainText("\n".join(lines))
+
+
+def _wire_get_words(window: QMainWindow) -> None:
+    button = window.findChild(QPushButton, "pushButton")
+    if button is None:
+        raise RuntimeError("Missing Get Word(s) button: pushButton")
+    handler = partial(_on_get_words, window)
+    button.clicked.connect(handler)
+
+
 def _load_reference(window: QMainWindow) -> None:
     for widget_name, filename in _REFERENCE_VIEWS.items():
         editor = window.findChild(QTextEdit, widget_name)
@@ -102,6 +146,7 @@ def main() -> None:
     window = _load_window()
     _apply_window_config(window, config)
     _wire_themes(window, config)
+    _wire_get_words(window)
     _load_reference(window)
     _select_theme(window, config.theme)
     quit_handler = partial(_persist_window_config, window, config)
