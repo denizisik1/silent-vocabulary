@@ -369,35 +369,49 @@ QLabel#label_6 { color: #555555; font-style: italic; }</string>
              <item>
               <widget class="QCheckBox" name="checkBox">
                <property name="text">
-                <string>Word</string>
+                <string>Article</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QCheckBox" name="checkBox_2">
                <property name="text">
-                <string>CheckBox</string>
+                <string>Word</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QCheckBox" name="checkBox_3">
                <property name="text">
-                <string>Pronunciation Example</string>
+                <string>Meaning</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QCheckBox" name="checkBox_4">
                <property name="text">
-                <string>CheckBox</string>
+                <string>Pronunciation</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QCheckBox" name="checkBox_5">
                <property name="text">
-                <string>CheckBox</string>
+                <string>Example</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="checkBox_6">
+               <property name="text">
+                <string>Translation</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="checkBox_7">
+               <property name="text">
+                <string>Plural</string>
                </property>
               </widget>
              </item>
@@ -783,7 +797,7 @@ QLabel#label_6 { color: #555555; font-style: italic; }</string>
           <item row="0" column="0">
            <widget class="QRadioButton" name="radioButton">
             <property name="text">
-             <string>Dunst via i3-msg</string>
+             <string>Dunst</string>
             </property>
             <property name="checked">
              <bool>true</bool>

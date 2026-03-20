@@ -4,3 +4,5 @@
 .coverage
 **/.vscode/
 **/sql_temp/
+*.db
+**/.~lock.*

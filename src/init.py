@@ -1,4 +1,3 @@
-import sqlite3
 import sys
 from functools import partial
 from pathlib import Path
@@ -14,10 +13,9 @@ from PySide6.QtWidgets import (
     QSpinBox,
     QTextEdit,
 )
-
 from config import AppConfig, load_config, save_config
-from database import format_word_row, get_random_words
 from themes import DEFAULT_THEME, stylesheet
+from words import format_word_row, get_random_words
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 UI_PATH = PROJECT_ROOT / "ui" / "main_window.ui"
@@ -102,11 +100,8 @@ def _on_get_words(window: QMainWindow) -> None:
     language_key = _language_key_from_combo(language_combo.currentText())
     try:
         words = get_random_words(language_key, count)
-    except ValueError as error:
+    except (ValueError, FileNotFoundError, OSError) as error:
         results.setPlainText(str(error))
-        return
-    except sqlite3.Error as error:
-        results.setPlainText(f"Database error: {error}")
         return
 
     lines = [format_word_row(row) for row in words]

@@ -1,6 +1,6 @@
 import pytest
 
-from database import format_word_row, get_random_words
+from words import format_word_row, get_random_words
 
 
 def test_get_random_words_returns_requested_count():
