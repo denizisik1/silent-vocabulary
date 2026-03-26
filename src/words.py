@@ -24,8 +24,20 @@ DISPLAY_COLUMNS = (
     "word",
     "meaning",
     "pronunciation",
-    "classification",
+    "example",
+    "translation",
+    "plural",
 )
+
+DEFAULT_INCLUDE = {
+    "article": True,
+    "word": True,
+    "meaning": True,
+    "pronunciation": True,
+    "example": False,
+    "translation": False,
+    "plural": False,
+}
 
 LANGUAGE_VOCABULARY_FILES = {
     "german": {
@@ -86,7 +98,7 @@ def _split_article(word_field: str) -> tuple[str | None, str]:
     return None, text
 
 
-def _row_from_mapping(values: dict[str, str | None], default_classification: str) -> tuple:
+def _row_from_mapping(values: dict[str, str | None], default_classification: str) -> tuple | None:
     article = _empty_field(values.get("article"))
     word = _empty_field(values.get("word"))
     meaning = _empty_field(values.get("meaning"))
@@ -98,7 +110,19 @@ def _row_from_mapping(values: dict[str, str | None], default_classification: str
 
     pronunciation = _empty_field(values.get("pronunciation"))
     classification = _empty_field(values.get("classification")) or default_classification
-    return (article, word, meaning, pronunciation, classification)
+    example = _empty_field(values.get("example"))
+    translation = _empty_field(values.get("translation"))
+    plural = _empty_field(values.get("plural"))
+    return (
+        article,
+        word,
+        meaning,
+        pronunciation,
+        classification,
+        example,
+        translation,
+        plural,
+    )
 
 
 def _legacy_row(word_field: str, meaning_field: str, default_classification: str) -> tuple | None:
@@ -183,14 +207,39 @@ def get_random_words(language_key: str, count: int) -> list[tuple]:
     return random.sample(words, count)
 
 
-def format_word_row(row: tuple) -> str:
-    article, word, meaning, pronunciation, _classification = row
-    if article:
-        line = f"{article} {word}"
-    else:
-        line = word
-    if meaning:
-        line = f"{line} - {meaning}"
-    if pronunciation:
-        line = f"{line} ({pronunciation})"
+def _normalize_row(row: tuple) -> tuple:
+    padded = row + (None,) * (8 - len(row))
+    return padded[:8]
+
+
+def format_word_row(row: tuple, include: dict[str, bool] | None = None) -> str:
+    (
+        article,
+        word,
+        meaning,
+        pronunciation,
+        _classification,
+        example,
+        translation,
+        plural,
+    ) = _normalize_row(row)
+    flags = DEFAULT_INCLUDE if include is None else include
+
+    head_parts: list[str] = []
+    if flags.get("article") and article:
+        head_parts.append(article)
+    if flags.get("word") and word:
+        head_parts.append(word)
+
+    line = " ".join(head_parts)
+    if flags.get("meaning") and meaning:
+        line = f"{line} - {meaning}" if line else meaning
+    if flags.get("pronunciation") and pronunciation:
+        line = f"{line} ({pronunciation})" if line else pronunciation
+    if flags.get("plural") and plural:
+        line = f"{line} [pl. {plural}]" if line else f"[pl. {plural}]"
+    if flags.get("example") and example:
+        line = f"{line}; e.g. {example}" if line else example
+    if flags.get("translation") and translation:
+        line = f"{line}; tr. {translation}" if line else translation
     return line

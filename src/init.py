@@ -6,6 +6,7 @@ from PySide6.QtCore import QFile, QIODevice
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import (
     QApplication,
+    QCheckBox,
     QComboBox,
     QMainWindow,
     QPushButton,
@@ -15,7 +16,7 @@ from PySide6.QtWidgets import (
 )
 from config import AppConfig, load_config, save_config
 from themes import DEFAULT_THEME, stylesheet
-from words import format_word_row, get_random_words
+from words import DEFAULT_INCLUDE, format_word_row, get_random_words
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 UI_PATH = PROJECT_ROOT / "ui" / "main_window.ui"
@@ -30,6 +31,16 @@ _THEME_RADIOS = {
     "white": "radioButton_themeWhite",
     "gray": "radioButton_themeGray",
     "dark": "radioButton_themeDark",
+}
+
+_INCLUDE_CHECKBOXES = {
+    "article": "checkBox",
+    "word": "checkBox_2",
+    "meaning": "checkBox_3",
+    "pronunciation": "checkBox_4",
+    "example": "checkBox_5",
+    "translation": "checkBox_6",
+    "plural": "checkBox_7",
 }
 
 
@@ -89,6 +100,24 @@ def _language_key_from_combo(language_text: str) -> str:
     return language_text.strip().lower()
 
 
+def _include_flags(window: QMainWindow) -> dict[str, bool]:
+    flags = dict(DEFAULT_INCLUDE)
+    for field_name, object_name in _INCLUDE_CHECKBOXES.items():
+        checkbox = window.findChild(QCheckBox, object_name)
+        if checkbox is None:
+            raise RuntimeError(f"Missing include control: {object_name}")
+        flags[field_name] = checkbox.isChecked()
+    return flags
+
+
+def _apply_default_include(window: QMainWindow) -> None:
+    for field_name, object_name in _INCLUDE_CHECKBOXES.items():
+        checkbox = window.findChild(QCheckBox, object_name)
+        if checkbox is None:
+            raise RuntimeError(f"Missing include control: {object_name}")
+        checkbox.setChecked(DEFAULT_INCLUDE[field_name])
+
+
 def _on_get_words(window: QMainWindow) -> None:
     count_input = window.findChild(QSpinBox, "spinBox")
     language_combo = window.findChild(QComboBox, "comboBox")
@@ -98,13 +127,14 @@ def _on_get_words(window: QMainWindow) -> None:
 
     count = count_input.value()
     language_key = _language_key_from_combo(language_combo.currentText())
+    include = _include_flags(window)
     try:
         words = get_random_words(language_key, count)
     except (ValueError, FileNotFoundError, OSError) as error:
         results.setPlainText(str(error))
         return
 
-    lines = [format_word_row(row) for row in words]
+    lines = [format_word_row(row, include) for row in words]
     results.setPlainText("\n".join(lines))
 
 
@@ -142,6 +172,7 @@ def main() -> None:
     _apply_window_config(window, config)
     _wire_themes(window, config)
     _wire_get_words(window)
+    _apply_default_include(window)
     _load_reference(window)
     _select_theme(window, config.theme)
     quit_handler = partial(_persist_window_config, window, config)

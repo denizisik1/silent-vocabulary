@@ -17,9 +17,12 @@ def test_german_vocabulary_has_rows():
     words = get_random_words("german", 1)
 
     assert len(words) == 1
-    article, word, meaning, pronunciation, classification = words[0]
+    article, word, meaning, pronunciation, classification, example, translation, plural = words[0]
     assert word
     assert classification in {"noun", "verb", "adjective", "adverb"}
+    assert example is None or isinstance(example, str)
+    assert translation is None or isinstance(translation, str)
+    assert plural is None or isinstance(plural, str)
 
 
 def test_header_csv_format(tmp_path, monkeypatch):
@@ -27,7 +30,8 @@ def test_header_csv_format(tmp_path, monkeypatch):
     vocabulary_root.mkdir()
     csv_path = vocabulary_root / "nouns.csv"
     csv_path.write_text(
-        ",".join(CSV_COLUMNS) + "\n" "der,Abend,evening,[aːbənt],noun,,,,\n",
+        ",".join(CSV_COLUMNS) + "\n"
+        "der,Abend,evening,[aːbənt],noun,,Am Abend.,In the evening.,Abende\n",
         encoding="utf-8",
     )
     for filename in ("verbs.csv", "adjectives.csv", "adverbs.csv"):
@@ -36,4 +40,13 @@ def test_header_csv_format(tmp_path, monkeypatch):
     monkeypatch.setenv("VIPA_VOCABULARY_DIR", str(vocabulary_root))
 
     words = get_random_words("german", 1)
-    assert words[0][0:4] == ("der", "Abend", "evening", "[aːbənt]")
+    assert words[0] == (
+        "der",
+        "Abend",
+        "evening",
+        "[aːbənt]",
+        "noun",
+        "Am Abend.",
+        "In the evening.",
+        "Abende",
+    )

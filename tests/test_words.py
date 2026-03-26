@@ -20,7 +20,7 @@ def test_get_random_words_rejects_non_positive_count():
 
 
 def test_format_word_row_includes_article_and_meaning():
-    row = ("der", "Abend", "evening", None, "noun")
+    row = ("der", "Abend", "evening", None, "noun", None, None, None)
 
     formatted = format_word_row(row)
 
@@ -28,8 +28,51 @@ def test_format_word_row_includes_article_and_meaning():
 
 
 def test_format_word_row_includes_pronunciation_when_present():
-    row = ("die", "Zeit", "time", "[tsaɪt]", "noun")
+    row = ("die", "Zeit", "time", "[tsaɪt]", "noun", None, None, None)
 
     formatted = format_word_row(row)
 
     assert formatted == "die Zeit - time ([tsaɪt])"
+
+
+def test_format_word_row_respects_include_flags():
+    row = (
+        "das",
+        "Haus",
+        "house",
+        "[haʊs]",
+        "noun",
+        "Das Haus ist groß.",
+        "The house is big.",
+        "Häuser",
+    )
+    include = {
+        "article": False,
+        "word": True,
+        "meaning": False,
+        "pronunciation": True,
+        "example": True,
+        "translation": True,
+        "plural": True,
+    }
+
+    formatted = format_word_row(row, include)
+
+    assert formatted == "Haus ([haʊs]) [pl. Häuser]; e.g. Das Haus ist groß.; tr. The house is big."
+
+
+def test_format_word_row_omits_unchecked_fields():
+    row = ("der", "Abend", "evening", "[aːbənt]", "noun", None, None, None)
+    include = {
+        "article": True,
+        "word": True,
+        "meaning": False,
+        "pronunciation": False,
+        "example": False,
+        "translation": False,
+        "plural": False,
+    }
+
+    formatted = format_word_row(row, include)
+
+    assert formatted == "der Abend"
