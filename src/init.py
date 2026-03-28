@@ -4,19 +4,10 @@ from pathlib import Path
 
 from PySide6.QtCore import QFile, QIODevice
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtWidgets import (
-    QApplication,
-    QCheckBox,
-    QComboBox,
-    QMainWindow,
-    QPushButton,
-    QRadioButton,
-    QSpinBox,
-    QTextEdit,
-)
+from PySide6.QtWidgets import QApplication, QMainWindow, QRadioButton, QTextEdit
 from config import AppConfig, load_config, save_config
 from themes import DEFAULT_THEME, stylesheet
-from words import DEFAULT_INCLUDE, format_word_row, get_random_words
+from ui_words import apply_default_include, wire_add_remove_word, wire_get_words
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 UI_PATH = PROJECT_ROOT / "ui" / "main_window.ui"
@@ -31,16 +22,6 @@ _THEME_RADIOS = {
     "white": "radioButton_themeWhite",
     "gray": "radioButton_themeGray",
     "dark": "radioButton_themeDark",
-}
-
-_INCLUDE_CHECKBOXES = {
-    "article": "checkBox",
-    "word": "checkBox_2",
-    "meaning": "checkBox_3",
-    "pronunciation": "checkBox_4",
-    "example": "checkBox_5",
-    "translation": "checkBox_6",
-    "plural": "checkBox_7",
 }
 
 
@@ -96,56 +77,6 @@ def _wire_themes(window: QMainWindow, config: AppConfig) -> None:
         button.toggled.connect(handler)
 
 
-def _language_key_from_combo(language_text: str) -> str:
-    return language_text.strip().lower()
-
-
-def _include_flags(window: QMainWindow) -> dict[str, bool]:
-    flags = dict(DEFAULT_INCLUDE)
-    for field_name, object_name in _INCLUDE_CHECKBOXES.items():
-        checkbox = window.findChild(QCheckBox, object_name)
-        if checkbox is None:
-            raise RuntimeError(f"Missing include control: {object_name}")
-        flags[field_name] = checkbox.isChecked()
-    return flags
-
-
-def _apply_default_include(window: QMainWindow) -> None:
-    for field_name, object_name in _INCLUDE_CHECKBOXES.items():
-        checkbox = window.findChild(QCheckBox, object_name)
-        if checkbox is None:
-            raise RuntimeError(f"Missing include control: {object_name}")
-        checkbox.setChecked(DEFAULT_INCLUDE[field_name])
-
-
-def _on_get_words(window: QMainWindow) -> None:
-    count_input = window.findChild(QSpinBox, "spinBox")
-    language_combo = window.findChild(QComboBox, "comboBox")
-    results = window.findChild(QTextEdit, "textEdit_3")
-    if count_input is None or language_combo is None or results is None:
-        raise RuntimeError("Missing Get Word(s) controls")
-
-    count = count_input.value()
-    language_key = _language_key_from_combo(language_combo.currentText())
-    include = _include_flags(window)
-    try:
-        words = get_random_words(language_key, count)
-    except (ValueError, FileNotFoundError, OSError) as error:
-        results.setPlainText(str(error))
-        return
-
-    lines = [format_word_row(row, include) for row in words]
-    results.setPlainText("\n".join(lines))
-
-
-def _wire_get_words(window: QMainWindow) -> None:
-    button = window.findChild(QPushButton, "pushButton")
-    if button is None:
-        raise RuntimeError("Missing Get Word(s) button: pushButton")
-    handler = partial(_on_get_words, window)
-    button.clicked.connect(handler)
-
-
 def _load_reference(window: QMainWindow) -> None:
     for widget_name, filename in _REFERENCE_VIEWS.items():
         editor = window.findChild(QTextEdit, widget_name)
@@ -171,8 +102,9 @@ def main() -> None:
     window = _load_window()
     _apply_window_config(window, config)
     _wire_themes(window, config)
-    _wire_get_words(window)
-    _apply_default_include(window)
+    wire_get_words(window)
+    wire_add_remove_word(window)
+    apply_default_include(window)
     _load_reference(window)
     _select_theme(window, config.theme)
     quit_handler = partial(_persist_window_config, window, config)

@@ -20,7 +20,7 @@ def test_get_random_words_rejects_non_positive_count():
 
 
 def test_format_word_row_includes_article_and_meaning():
-    row = ("der", "Abend", "evening", None, "noun", None, None, None)
+    row = ("der", "Abend", "evening", None, "noun", None, None, None, None)
 
     formatted = format_word_row(row)
 
@@ -28,7 +28,7 @@ def test_format_word_row_includes_article_and_meaning():
 
 
 def test_format_word_row_includes_pronunciation_when_present():
-    row = ("die", "Zeit", "time", "[tsaɪt]", "noun", None, None, None)
+    row = ("die", "Zeit", "time", "[tsaɪt]", "noun", None, None, None, None)
 
     formatted = format_word_row(row)
 
@@ -42,6 +42,7 @@ def test_format_word_row_respects_include_flags():
         "house",
         "[haʊs]",
         "noun",
+        "wiki",
         "Das Haus ist groß.",
         "The house is big.",
         "Häuser",
@@ -62,7 +63,7 @@ def test_format_word_row_respects_include_flags():
 
 
 def test_format_word_row_omits_unchecked_fields():
-    row = ("der", "Abend", "evening", "[aːbənt]", "noun", None, None, None)
+    row = ("der", "Abend", "evening", "[aːbənt]", "noun", None, None, None, None)
     include = {
         "article": True,
         "word": True,

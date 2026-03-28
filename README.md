@@ -24,4 +24,9 @@ python3 src/init.py
 cd ..
 rm -rf vipa
 rm -rf "$HOME/.config/vipa"
+rm -rf "${XDG_DATA_HOME:-$HOME/.local/share}/vipa"
 ```
+
+Shipped vocabulary files under `vocabulary/` are read-only. User additions and
+removals are stored under the user data directory above and never mutate the
+original CSVs.
