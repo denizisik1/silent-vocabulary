@@ -3,6 +3,7 @@ from functools import partial
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
+    QGroupBox,
     QLineEdit,
     QMainWindow,
     QPushButton,
@@ -60,6 +61,10 @@ def apply_default_include(window: QMainWindow) -> None:
         if checkbox is None:
             raise RuntimeError(f"Missing include control: {object_name}")
         checkbox.setChecked(DEFAULT_INCLUDE[field_name])
+
+    include_group = window.findChild(QGroupBox, "groupBox_13")
+    if include_group is not None:
+        include_group.setChecked(True)
 
 
 def on_get_words(window: QMainWindow) -> None:
