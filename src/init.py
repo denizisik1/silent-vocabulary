@@ -7,6 +7,7 @@ from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QApplication, QMainWindow, QRadioButton, QTextEdit
 from config import AppConfig, load_config, save_config
 from themes import DEFAULT_THEME, stylesheet
+from ui_daemon import stop_daemon, wire_daemon
 from ui_words import apply_default_include, wire_add_remove_word, wire_get_words
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -96,6 +97,11 @@ def _persist_window_config(window: QMainWindow, config: AppConfig) -> None:
     save_config(config)
 
 
+def _on_about_to_quit(window: QMainWindow, config: AppConfig) -> None:
+    stop_daemon(window)
+    _persist_window_config(window, config)
+
+
 def main() -> None:
     application = QApplication(sys.argv)
     config = load_config()
@@ -104,10 +110,11 @@ def main() -> None:
     _wire_themes(window, config)
     wire_get_words(window)
     wire_add_remove_word(window)
+    wire_daemon(window)
     apply_default_include(window)
     _load_reference(window)
     _select_theme(window, config.theme)
-    quit_handler = partial(_persist_window_config, window, config)
+    quit_handler = partial(_on_about_to_quit, window, config)
     application.aboutToQuit.connect(quit_handler)
     window.show()
     sys.exit(application.exec())

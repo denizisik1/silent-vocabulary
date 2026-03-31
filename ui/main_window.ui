@@ -228,9 +228,19 @@
             </widget>
            </item>
            <item>
+            <widget class="QLabel" name="label_notify_backend">
+             <property name="text">
+              <string>Notify</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QRadioButton" name="radioButton">
              <property name="text">
-              <string>Dunst</string>
+              <string>Desktop</string>
+             </property>
+             <property name="toolTip">
+              <string>Uses notify-send / freedesktop notifications (GNOME, KDE, XFCE, Dunst, Mako, ...)</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -244,6 +254,9 @@
              </property>
              <property name="text">
               <string>Windows</string>
+             </property>
+             <property name="toolTip">
+              <string>Windows toast notifications (not implemented yet)</string>
              </property>
             </widget>
            </item>
