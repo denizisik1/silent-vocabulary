@@ -1,3 +1,5 @@
+from zoom import DEFAULT_ZOOM_PERCENT, clamp_zoom_percent, scale_px
+
 _PALETTE = {
     "white": {
         "window": "#f4f5f3",
@@ -53,11 +55,20 @@ _PALETTE = {
 }
 
 
-def stylesheet(name: str) -> str:
+def stylesheet(name: str, zoom_percent: int = DEFAULT_ZOOM_PERCENT) -> str:
     colors = _PALETTE[name]
+    zoom = clamp_zoom_percent(zoom_percent)
+    brand_size = scale_px(20, zoom)
+    body_size = scale_px(13, zoom)
+    results_size = scale_px(14, zoom)
+    tab_pad_y = scale_px(7, zoom)
+    tab_pad_x = scale_px(14, zoom)
+    input_min = scale_px(22, zoom)
+    button_min = scale_px(24, zoom)
     return f"""QMainWindow {{
     background-color: {colors["window"]};
     color: {colors["text"]};
+    font-size: {body_size}px;
 }}
 QTabWidget::pane {{
     border: 1px solid {colors["border"]};
@@ -68,21 +79,26 @@ QTabWidget::pane {{
 QTabBar::tab {{
     background-color: {colors["tab"]};
     color: {colors["text"]};
-    padding: 7px 14px;
+    padding: {tab_pad_y}px {tab_pad_x}px;
     margin-right: 2px;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
+    font-size: {body_size}px;
 }}
 QTabBar::tab:selected {{
     background-color: {colors["tab_selected"]};
     font-weight: 600;
 }}
 QTabBar::tab:hover {{ background-color: {colors["tab_hover"]}; }}
-QWidget {{ background-color: {colors["widget"]}; color: {colors["text"]}; }}
-QLabel {{ color: {colors["text"]}; }}
+QWidget {{
+    background-color: {colors["widget"]};
+    color: {colors["text"]};
+    font-size: {body_size}px;
+}}
+QLabel {{ color: {colors["text"]}; font-size: {body_size}px; }}
 QLabel#label_brand {{
     color: {colors["brand"]};
-    font-size: 20px;
+    font-size: {brand_size}px;
     font-weight: 700;
     letter-spacing: 0.5px;
 }}
@@ -97,13 +113,14 @@ QLineEdit, QTextEdit, QComboBox, QSpinBox {{
     border: 1px solid {colors["border"]};
     border-radius: 3px;
     padding: 4px 6px;
-    min-height: 22px;
+    min-height: {input_min}px;
+    font-size: {body_size}px;
 }}
 QLineEdit:focus, QTextEdit:focus, QComboBox:focus, QSpinBox:focus {{
     border: 1px solid {colors["accent"]};
 }}
 QTextEdit#textEdit_3 {{
-    font-size: 14px;
+    font-size: {results_size}px;
     padding: 8px;
 }}
 QPushButton {{
@@ -112,7 +129,8 @@ QPushButton {{
     border: none;
     border-radius: 3px;
     padding: 6px 12px;
-    min-height: 24px;
+    min-height: {button_min}px;
+    font-size: {body_size}px;
 }}
 QPushButton:hover {{ background-color: {colors["accent_hover"]}; }}
 QPushButton:pressed {{ background-color: {colors["accent_pressed"]}; }}
@@ -127,6 +145,7 @@ QGroupBox {{
     margin-top: 10px;
     padding: 10px 8px 8px 8px;
     font-weight: 600;
+    font-size: {body_size}px;
 }}
 QGroupBox::title {{
     subcontrol-origin: margin;
@@ -163,6 +182,7 @@ QSlider::handle:horizontal {{
 QCheckBox, QRadioButton {{
     spacing: 6px;
     padding: 2px 0;
+    font-size: {body_size}px;
 }}"""
 
 

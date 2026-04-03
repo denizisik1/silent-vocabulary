@@ -5,6 +5,7 @@ import tomlkit
 from platformdirs import user_config_dir
 
 from themes import DEFAULT_THEME, THEMES
+from zoom import DEFAULT_ZOOM_PERCENT, clamp_zoom_percent
 
 CONFIG_DIR = Path(user_config_dir("vipa", appauthor=False))
 CONFIG_PATH = CONFIG_DIR / "vipa.toml"
@@ -24,6 +25,7 @@ class WindowConfig:
 @dataclass
 class AppConfig:
     theme: str = DEFAULT_THEME
+    zoom_percent: int = DEFAULT_ZOOM_PERCENT
     window: WindowConfig = field(default_factory=WindowConfig)
 
 
@@ -60,6 +62,12 @@ def _parse_theme_name(theme_value) -> str:
     return theme_value
 
 
+def _parse_zoom_percent(zoom_value) -> int:
+    if not isinstance(zoom_value, int):
+        return DEFAULT_ZOOM_PERCENT
+    return clamp_zoom_percent(zoom_value)
+
+
 def load_config() -> AppConfig:
     if not CONFIG_PATH.is_file():
         return AppConfig()
@@ -67,8 +75,11 @@ def load_config() -> AppConfig:
     config_document = tomlkit.parse(CONFIG_PATH.read_text(encoding="utf-8"))
     window = _parse_window_table(config_document.get("window"))
     theme = _parse_theme_name(config_document.get("theme", DEFAULT_THEME))
+    zoom_percent = _parse_zoom_percent(
+        config_document.get("zoom_percent", DEFAULT_ZOOM_PERCENT)
+    )
 
-    return AppConfig(theme=theme, window=window)
+    return AppConfig(theme=theme, zoom_percent=zoom_percent, window=window)
 
 
 def save_config(config: AppConfig) -> None:
@@ -76,6 +87,7 @@ def save_config(config: AppConfig) -> None:
 
     config_data = {
         "theme": config.theme,
+        "zoom_percent": clamp_zoom_percent(config.zoom_percent),
         "window": {
             "width": config.window.width,
             "height": config.window.height,

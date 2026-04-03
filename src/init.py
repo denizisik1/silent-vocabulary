@@ -6,9 +6,10 @@ from PySide6.QtCore import QFile, QIODevice
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QApplication, QMainWindow, QRadioButton, QTextEdit
 from config import AppConfig, load_config, save_config
-from themes import DEFAULT_THEME, stylesheet
+from themes import DEFAULT_THEME
 from ui_daemon import stop_daemon, wire_daemon
 from ui_words import apply_default_include, wire_add_remove_word, wire_get_words
+from ui_zoom import apply_appearance, wire_zoom
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 UI_PATH = PROJECT_ROOT / "ui" / "main_window.ui"
@@ -40,10 +41,6 @@ def _load_window() -> QMainWindow:
     return window
 
 
-def _apply_theme(window: QMainWindow, name: str) -> None:
-    window.setStyleSheet(stylesheet(name))
-
-
 def _select_theme(window: QMainWindow, name: str) -> None:
     object_name = _THEME_RADIOS.get(name, _THEME_RADIOS[DEFAULT_THEME])
     button = window.findChild(QRadioButton, object_name)
@@ -53,8 +50,8 @@ def _select_theme(window: QMainWindow, name: str) -> None:
 
 
 def _on_theme_selected(window: QMainWindow, config: AppConfig, theme_name: str) -> None:
-    _apply_theme(window, theme_name)
     config.theme = theme_name
+    apply_appearance(window, config)
     save_config(config)
 
 
@@ -107,6 +104,7 @@ def main() -> None:
     config = load_config()
     window = _load_window()
     _apply_window_config(window, config)
+    wire_zoom(window, config)
     _wire_themes(window, config)
     wire_get_words(window)
     wire_add_remove_word(window)
@@ -114,6 +112,7 @@ def main() -> None:
     apply_default_include(window)
     _load_reference(window)
     _select_theme(window, config.theme)
+    apply_appearance(window, config)
     quit_handler = partial(_on_about_to_quit, window, config)
     application.aboutToQuit.connect(quit_handler)
     window.show()
