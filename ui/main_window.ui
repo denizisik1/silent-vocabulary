@@ -508,6 +508,19 @@
          </widget>
         </item>
         <item>
+         <widget class="QCheckBox" name="checkBox_protect_base_vocabulary">
+          <property name="text">
+           <string>Keep shipped vocabulary files read-only on launch</string>
+          </property>
+          <property name="toolTip">
+           <string>When enabled, chmod removes write permission from vocabulary/*.csv at startup</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QGroupBox" name="groupBox_3">
           <property name="title">
            <string>Add or remove</string>

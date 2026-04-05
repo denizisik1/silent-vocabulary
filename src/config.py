@@ -26,6 +26,7 @@ class WindowConfig:
 class AppConfig:
     theme: str = DEFAULT_THEME
     zoom_percent: int = DEFAULT_ZOOM_PERCENT
+    protect_base_vocabulary: bool = True
     window: WindowConfig = field(default_factory=WindowConfig)
 
 
@@ -68,6 +69,12 @@ def _parse_zoom_percent(zoom_value) -> int:
     return clamp_zoom_percent(zoom_value)
 
 
+def _parse_bool(value, default: bool) -> bool:
+    if isinstance(value, bool):
+        return value
+    return default
+
+
 def load_config() -> AppConfig:
     if not CONFIG_PATH.is_file():
         return AppConfig()
@@ -78,8 +85,17 @@ def load_config() -> AppConfig:
     zoom_percent = _parse_zoom_percent(
         config_document.get("zoom_percent", DEFAULT_ZOOM_PERCENT)
     )
+    protect_base_vocabulary = _parse_bool(
+        config_document.get("protect_base_vocabulary", True),
+        True,
+    )
 
-    return AppConfig(theme=theme, zoom_percent=zoom_percent, window=window)
+    return AppConfig(
+        theme=theme,
+        zoom_percent=zoom_percent,
+        protect_base_vocabulary=protect_base_vocabulary,
+        window=window,
+    )
 
 
 def save_config(config: AppConfig) -> None:
@@ -88,6 +104,7 @@ def save_config(config: AppConfig) -> None:
     config_data = {
         "theme": config.theme,
         "zoom_percent": clamp_zoom_percent(config.zoom_percent),
+        "protect_base_vocabulary": config.protect_base_vocabulary,
         "window": {
             "width": config.window.width,
             "height": config.window.height,

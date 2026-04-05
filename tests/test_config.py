@@ -20,12 +20,31 @@ def test_save_and_load_round_trip(tmp_path, monkeypatch):
     saved = AppConfig(
         theme="dark",
         zoom_percent=125,
+        protect_base_vocabulary=False,
         window=WindowConfig(width=960, height=720),
     )
     config.save_config(saved)
     loaded = config.load_config()
 
     assert loaded == saved
+
+
+def test_load_protect_base_vocabulary_default_true(tmp_path, monkeypatch):
+    monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "vipa.toml")
+
+    loaded = config.load_config()
+
+    assert loaded.protect_base_vocabulary is True
+
+
+def test_load_protect_base_vocabulary_false(tmp_path, monkeypatch):
+    config_path = tmp_path / "vipa.toml"
+    config_path.write_text("protect_base_vocabulary = false\n", encoding="utf-8")
+    monkeypatch.setattr(config, "CONFIG_PATH", config_path)
+
+    loaded = config.load_config()
+
+    assert loaded.protect_base_vocabulary is False
 
 
 def test_load_ignores_invalid_theme(tmp_path, monkeypatch):
