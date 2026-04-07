@@ -189,6 +189,69 @@ def add_word(language_key: str, fields: WordFields) -> tuple:
     return row
 
 
+def _find_existing_row(language_key: str, word: str) -> tuple | None:
+    try:
+        rows = load_language_words(language_key)
+    except FileNotFoundError:
+        return None
+    needle = word_key(word)
+    for row in rows:
+        if word_key(row[1]) == needle:
+            return row
+    return None
+
+
+def upsert_pronunciation(
+    language_key: str,
+    word: str,
+    pronunciation: str,
+    *,
+    source: str | None = None,
+) -> tuple:
+    if language_key not in LANGUAGE_VOCABULARY_FILES:
+        raise ValueError(f"Unsupported language: {language_key}")
+
+    cleaned_word = empty_field(word)
+    cleaned_pronunciation = empty_field(pronunciation)
+    if cleaned_word is None:
+        raise ValueError("Word input is empty.")
+    if cleaned_pronunciation is None:
+        raise ValueError("Pronunciation is empty.")
+
+    existing = _find_existing_row(language_key, cleaned_word)
+    if existing is None:
+        raise ValueError(f"Word not found: {cleaned_word}")
+
+    (
+        article,
+        existing_word,
+        meaning,
+        _old_pronunciation,
+        classification,
+        old_source,
+        example,
+        translation,
+        plural,
+    ) = normalize_row(existing)
+
+    row = (
+        article,
+        existing_word,
+        meaning,
+        cleaned_pronunciation,
+        classification,
+        empty_field(source) or old_source,
+        example,
+        translation,
+        plural,
+    )
+    _remove_addition_row(language_key, cleaned_word)
+    _append_addition_row(language_key, row)
+    _clear_removal(language_key, cleaned_word)
+    clear_word_cache()
+    return row
+
+
 def remove_word(language_key: str, word: str) -> str:
     if language_key not in LANGUAGE_VOCABULARY_FILES:
         raise ValueError(f"Unsupported language: {language_key}")

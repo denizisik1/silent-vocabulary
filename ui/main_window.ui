@@ -886,7 +886,7 @@
            <item>
             <widget class="QLineEdit" name="lineEdit_9">
              <property name="text">
-              <string>https://en.pons.com/translate-2/german-english/</string>
+              <string>https://en.pons.com/translate/german-english/</string>
              </property>
             </widget>
            </item>

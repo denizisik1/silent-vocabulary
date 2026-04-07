@@ -7,7 +7,7 @@ from words.constants import (
 )
 from words.format import format_word_row
 from words.load import get_random_words
-from words.mutate import WordFields, add_word, remove_word
+from words.mutate import WordFields, add_word, remove_word, upsert_pronunciation
 from words.paths import user_vocabulary_dir, vocabulary_dir
 
 __all__ = [
@@ -21,6 +21,7 @@ __all__ = [
     "format_word_row",
     "get_random_words",
     "remove_word",
+    "upsert_pronunciation",
     "user_vocabulary_dir",
     "vocabulary_dir",
 ]

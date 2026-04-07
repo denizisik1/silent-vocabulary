@@ -9,6 +9,7 @@ from config import AppConfig, load_config, save_config
 from themes import DEFAULT_THEME
 from ui_daemon import stop_daemon, wire_daemon
 from ui_protect import apply_protect_setting, wire_protect_vocabulary
+from ui_retrieve import wire_retrieve
 from ui_words import apply_default_include, wire_add_remove_word, wire_get_words
 from ui_zoom import apply_appearance, wire_zoom
 
@@ -111,6 +112,7 @@ def main() -> None:
     wire_get_words(window)
     wire_add_remove_word(window)
     wire_daemon(window)
+    wire_retrieve(window)
     wire_protect_vocabulary(window, config)
     apply_default_include(window)
     _load_reference(window)
