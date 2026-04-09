@@ -15,6 +15,7 @@ from ui_words import include_flags, language_key_from_combo
 from words import format_word_row
 
 _CONTROLLER_ATTR = "_vipa_retrieve_controller"
+_SYNCING_ATTR = "_vipa_word_fields_syncing"
 
 
 class RetrieveController(QObject):
@@ -29,6 +30,9 @@ class RetrieveController(QObject):
         if editor is None:
             raise RuntimeError(f"Missing control: {object_name}")
         return editor
+
+    def _optional_line(self, object_name: str) -> QLineEdit | None:
+        return self._window.findChild(QLineEdit, object_name)
 
     def _results(self) -> QTextEdit:
         results = self._window.findChild(QTextEdit, "textEdit_3")
@@ -55,11 +59,24 @@ class RetrieveController(QObject):
         else:
             results.setPlainText(message)
 
-    def _set_busy(self, busy: bool) -> None:
-        for object_name in ("pushButton_6", "pushButton_7", "pushButton_8", "pushButton_5"):
+    def _retrieve_buttons(self) -> list[QPushButton]:
+        buttons: list[QPushButton] = []
+        for object_name in (
+            "pushButton_6",
+            "pushButton_7",
+            "pushButton_8",
+            "pushButton_5",
+            "pushButton_vocab_backup",
+            "pushButton_vocab_async",
+        ):
             button = self._window.findChild(QPushButton, object_name)
             if button is not None:
-                button.setEnabled(not busy)
+                buttons.append(button)
+        return buttons
+
+    def _set_busy(self, busy: bool) -> None:
+        for button in self._retrieve_buttons():
+            button.setEnabled(not busy)
 
     def _cleanup_worker(self) -> None:
         if self._thread is not None:
@@ -68,6 +85,12 @@ class RetrieveController(QObject):
         self._thread = None
         self._worker = None
         self._set_busy(False)
+
+    def _word_text(self) -> str:
+        retrieve_word = self._optional_line("lineEdit_retrieve_word")
+        if retrieve_word is not None and retrieve_word.text().strip():
+            return retrieve_word.text().strip()
+        return self._line("lineEdit_2").text().strip()
 
     @Slot(int)
     def on_progress(self, value: int) -> None:
@@ -98,9 +121,9 @@ class RetrieveController(QObject):
         if language_combo is None:
             raise RuntimeError("Missing language control: comboBox")
 
-        word = self._line("lineEdit_2").text().strip()
+        word = self._word_text()
         if mode != "check" and not word:
-            message = "Enter a word in Vocabulary before retrieving IPA."
+            message = "Enter a word on Sources or Vocabulary before retrieving IPA."
             self._append_results(message)
             self._set_status(message)
             return
@@ -134,19 +157,64 @@ class RetrieveController(QObject):
         thread.start()
 
 
+def _sync_word_fields(window: QMainWindow, source_name: str, text: str) -> None:
+    if getattr(window, _SYNCING_ATTR, False):
+        return
+    target_name = (
+        "lineEdit_2" if source_name == "lineEdit_retrieve_word" else "lineEdit_retrieve_word"
+    )
+    target = window.findChild(QLineEdit, target_name)
+    if target is None:
+        return
+    setattr(window, _SYNCING_ATTR, True)
+    try:
+        if target.text() != text:
+            target.setText(text)
+    finally:
+        setattr(window, _SYNCING_ATTR, False)
+
+
+def _wire_word_field_sync(window: QMainWindow) -> None:
+    vocabulary_word = window.findChild(QLineEdit, "lineEdit_2")
+    retrieve_word = window.findChild(QLineEdit, "lineEdit_retrieve_word")
+    if vocabulary_word is None or retrieve_word is None:
+        return
+
+    retrieve_word.setText(vocabulary_word.text())
+    vocabulary_word.textChanged.connect(
+        partial(_sync_word_fields, window, "lineEdit_2")
+    )
+    retrieve_word.textChanged.connect(
+        partial(_sync_word_fields, window, "lineEdit_retrieve_word")
+    )
+
+
 def wire_retrieve(window: QMainWindow) -> None:
     primary = window.findChild(QPushButton, "pushButton_6")
     backup = window.findChild(QPushButton, "pushButton_7")
     check = window.findChild(QPushButton, "pushButton_8")
     pull_async = window.findChild(QPushButton, "pushButton_5")
+    vocab_backup = window.findChild(QPushButton, "pushButton_vocab_backup")
+    vocab_async = window.findChild(QPushButton, "pushButton_vocab_async")
     if primary is None or backup is None or check is None:
         raise RuntimeError("Missing retrieve buttons")
 
     controller = RetrieveController(window)
     setattr(window, _CONTROLLER_ATTR, controller)
+    _wire_word_field_sync(window)
+
     primary.clicked.connect(partial(controller.start, "primary"))
     backup.clicked.connect(partial(controller.start, "backup"))
     check.clicked.connect(partial(controller.start, "check"))
     if pull_async is not None:
         pull_async.clicked.connect(partial(controller.start, "async"))
+    if vocab_backup is not None:
+        vocab_backup.clicked.connect(partial(controller.start, "backup"))
+    if vocab_async is not None:
+        vocab_async.clicked.connect(partial(controller.start, "async"))
+
+    retrieve_word = window.findChild(QLineEdit, "lineEdit_retrieve_word")
+    if retrieve_word is not None:
+        retrieve_word.returnPressed.connect(partial(controller.start, "backup"))
+
     controller._progress().setValue(0)

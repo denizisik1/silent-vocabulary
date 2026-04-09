@@ -360,13 +360,6 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_5">
-             <property name="text">
-              <string>Pull async</string>
-             </property>
-            </widget>
-           </item>
-           <item>
             <spacer name="previewSpacer">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -660,6 +653,26 @@
              </property>
             </widget>
            </item>
+           <item row="3" column="4">
+            <widget class="QPushButton" name="pushButton_vocab_backup">
+             <property name="text">
+              <string>Fetch IPA</string>
+             </property>
+             <property name="toolTip">
+              <string>Fetch pronunciation via backup source (PONS)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="5">
+            <widget class="QPushButton" name="pushButton_vocab_async">
+             <property name="text">
+              <string>Fetch IPA (async)</string>
+             </property>
+             <property name="toolTip">
+              <string>Try primary, then backup</string>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
         </item>
@@ -813,6 +826,62 @@
          </widget>
         </item>
         <item>
+         <widget class="QWidget" name="retrieveWordWidget">
+          <layout class="QHBoxLayout" name="retrieveWordLayout">
+           <property name="spacing">
+            <number>8</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="label_retrieve_word">
+             <property name="text">
+              <string>Word</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineEdit_retrieve_word">
+             <property name="placeholderText">
+              <string>Word to look up</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_8">
+             <property name="text">
+              <string>Check</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_6">
+             <property name="text">
+              <string>Primary</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_7">
+             <property name="text">
+              <string>Backup</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
          <widget class="QGroupBox" name="groupBox_7">
           <property name="title">
            <string>Primary</string>
@@ -936,23 +1005,9 @@
            <number>8</number>
           </property>
           <item>
-           <widget class="QPushButton" name="pushButton_8">
+           <widget class="QPushButton" name="pushButton_5">
             <property name="text">
-             <string>Check capabilities</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton_6">
-            <property name="text">
-             <string>Primary</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton_7">
-            <property name="text">
-             <string>Backup</string>
+             <string>Pull async</string>
             </property>
            </widget>
           </item>
