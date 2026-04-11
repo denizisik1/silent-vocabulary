@@ -1,2 +1,0 @@
-Consider adding pyinstaller.
-Support for Windows.
