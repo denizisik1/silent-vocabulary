@@ -38,3 +38,47 @@ def test_extract_ipa_from_html_missing_raises():
         assert False, "expected ValueError"
     except ValueError as error:
         assert "No IPA found" in str(error)
+
+
+def test_fetch_html_falls_back_to_playwright(monkeypatch):
+    calls: list[str] = []
+
+    def fake_requests(url: str, *, timeout_seconds: float) -> str:
+        calls.append("requests")
+        raise RuntimeError("HTTP 403 for https://example.com/word")
+
+    def fake_playwright(url: str, *, timeout_seconds: float) -> str:
+        calls.append("playwright")
+        return "<html><span class='phonetics'>[ˈa:bn̩t]</span></html>"
+
+    monkeypatch.setattr("retrieve.fetch._fetch_html_requests", fake_requests)
+    monkeypatch.setattr("retrieve.fetch.playwright_available", lambda: True)
+    monkeypatch.setattr("retrieve.fetch.fetch_html_playwright", fake_playwright)
+
+    from retrieve.fetch import fetch_html
+
+    html = fetch_html("https://example.com/word")
+
+    assert calls == ["requests", "playwright"]
+    assert "phonetics" in html
+
+
+def test_fetch_html_reports_both_failures(monkeypatch):
+    monkeypatch.setattr(
+        "retrieve.fetch._fetch_html_requests",
+        lambda url, timeout_seconds: (_ for _ in ()).throw(RuntimeError("HTTP 403")),
+    )
+    monkeypatch.setattr("retrieve.fetch.playwright_available", lambda: True)
+    monkeypatch.setattr(
+        "retrieve.fetch.fetch_html_playwright",
+        lambda url, timeout_seconds: (_ for _ in ()).throw(RuntimeError("browser missing")),
+    )
+
+    from retrieve.fetch import fetch_html
+
+    try:
+        fetch_html("https://example.com/word")
+        assert False, "expected RuntimeError"
+    except RuntimeError as error:
+        assert "requests" in str(error)
+        assert "playwright" in str(error)
