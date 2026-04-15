@@ -292,6 +292,19 @@
             </spacer>
            </item>
            <item>
+            <widget class="QCheckBox" name="checkBox_minimize_to_tray">
+             <property name="text">
+              <string>Minimize to tray</string>
+             </property>
+             <property name="toolTip">
+              <string>Hide the window in the system tray while the practice daemon runs (KDE, XFCE, GNOME with tray support, ...)</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QPushButton" name="pushButton_2">
              <property name="text">
               <string>Start daemon</string>

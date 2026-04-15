@@ -47,6 +47,24 @@ def test_load_protect_base_vocabulary_false(tmp_path, monkeypatch):
     assert loaded.protect_base_vocabulary is False
 
 
+def test_load_minimize_to_tray_on_daemon_default_true(tmp_path, monkeypatch):
+    monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "vipa.toml")
+
+    loaded = config.load_config()
+
+    assert loaded.minimize_to_tray_on_daemon is True
+
+
+def test_load_minimize_to_tray_on_daemon_false(tmp_path, monkeypatch):
+    config_path = tmp_path / "vipa.toml"
+    config_path.write_text("minimize_to_tray_on_daemon = false\n", encoding="utf-8")
+    monkeypatch.setattr(config, "CONFIG_PATH", config_path)
+
+    loaded = config.load_config()
+
+    assert loaded.minimize_to_tray_on_daemon is False
+
+
 def test_load_ignores_invalid_theme(tmp_path, monkeypatch):
     config_path = tmp_path / "vipa.toml"
     config_path.write_text('theme = "neon"\n', encoding="utf-8")

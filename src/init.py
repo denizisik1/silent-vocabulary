@@ -9,6 +9,7 @@ from config import AppConfig, load_config, save_config
 from themes import DEFAULT_THEME
 from ui_daemon import stop_daemon, wire_daemon
 from ui_protect import apply_protect_setting, wire_protect_vocabulary
+from ui_tray import wire_tray
 from ui_retrieve import wire_retrieve
 from ui_words import apply_default_include, wire_add_remove_word, wire_get_words
 from ui_zoom import apply_appearance, wire_zoom
@@ -96,8 +97,12 @@ def _persist_window_config(window: QMainWindow, config: AppConfig) -> None:
     save_config(config)
 
 
-def _on_about_to_quit(window: QMainWindow, config: AppConfig) -> None:
-    stop_daemon(window)
+def _on_about_to_quit(
+    window: QMainWindow,
+    application: QApplication,
+    config: AppConfig,
+) -> None:
+    stop_daemon(window, application)
     _persist_window_config(window, config)
 
 
@@ -111,14 +116,15 @@ def main() -> None:
     _wire_themes(window, config)
     wire_get_words(window)
     wire_add_remove_word(window)
-    wire_daemon(window)
+    wire_tray(window, application, config)
+    wire_daemon(window, application, config)
     wire_retrieve(window)
     wire_protect_vocabulary(window, config)
     apply_default_include(window)
     _load_reference(window)
     _select_theme(window, config.theme)
     apply_appearance(window, config)
-    quit_handler = partial(_on_about_to_quit, window, config)
+    quit_handler = partial(_on_about_to_quit, window, application, config)
     application.aboutToQuit.connect(quit_handler)
     window.show()
     sys.exit(application.exec())

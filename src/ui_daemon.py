@@ -1,6 +1,7 @@
 from functools import partial
 
 from PySide6.QtWidgets import (
+    QApplication,
     QComboBox,
     QLineEdit,
     QMainWindow,
@@ -9,6 +10,7 @@ from PySide6.QtWidgets import (
     QStatusBar,
     QTextEdit,
 )
+from config import AppConfig
 from daemon import PracticeDaemon, parse_interval_minutes
 from notify import (
     NotifyBackend,
@@ -133,15 +135,23 @@ def _get_daemon(window: QMainWindow) -> PracticeDaemon:
     return daemon
 
 
-def stop_daemon(window: QMainWindow) -> None:
+def stop_daemon(window: QMainWindow, application: QApplication | None = None) -> None:
     daemon = getattr(window, _DAEMON_ATTR, None)
     if daemon is not None:
         daemon.stop()
     _update_daemon_button(window, False)
     _set_status(window, "Daemon stopped")
+    if application is not None:
+        from ui_tray import show_window_from_tray
+
+        show_window_from_tray(window, application)
 
 
-def start_daemon(window: QMainWindow) -> None:
+def start_daemon(
+    window: QMainWindow,
+    application: QApplication | None = None,
+    config: AppConfig | None = None,
+) -> None:
     backend = selected_notify_backend(window)
     if not backend_available(backend):
         message = (
@@ -171,18 +181,35 @@ def start_daemon(window: QMainWindow) -> None:
     _update_daemon_button(window, True)
     _set_status(window, f"Daemon running every {minutes} min ({backend.value})")
 
+    if application is not None and config is not None:
+        from ui_tray import try_minimize_on_daemon_start
 
-def on_daemon_toggle(window: QMainWindow) -> None:
+        if try_minimize_on_daemon_start(window, application, config):
+            _set_status(
+                window,
+                f"Daemon running every {minutes} min ({backend.value}); minimized to tray",
+            )
+
+
+def on_daemon_toggle(
+    window: QMainWindow,
+    application: QApplication,
+    config: AppConfig,
+) -> None:
     daemon = getattr(window, _DAEMON_ATTR, None)
     if daemon is not None and daemon.is_running():
-        stop_daemon(window)
+        stop_daemon(window, application)
         return
-    start_daemon(window)
+    start_daemon(window, application, config)
 
 
-def wire_daemon(window: QMainWindow) -> None:
+def wire_daemon(
+    window: QMainWindow,
+    application: QApplication,
+    config: AppConfig,
+) -> None:
     button = _daemon_button(window)
-    handler = partial(on_daemon_toggle, window)
+    handler = partial(on_daemon_toggle, window, application, config)
     button.clicked.connect(handler)
     _apply_backend_labels(window)
     _update_daemon_button(window, False)

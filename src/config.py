@@ -27,6 +27,7 @@ class AppConfig:
     theme: str = DEFAULT_THEME
     zoom_percent: int = DEFAULT_ZOOM_PERCENT
     protect_base_vocabulary: bool = True
+    minimize_to_tray_on_daemon: bool = True
     window: WindowConfig = field(default_factory=WindowConfig)
 
 
@@ -89,11 +90,16 @@ def load_config() -> AppConfig:
         config_document.get("protect_base_vocabulary", True),
         True,
     )
+    minimize_to_tray_on_daemon = _parse_bool(
+        config_document.get("minimize_to_tray_on_daemon", True),
+        True,
+    )
 
     return AppConfig(
         theme=theme,
         zoom_percent=zoom_percent,
         protect_base_vocabulary=protect_base_vocabulary,
+        minimize_to_tray_on_daemon=minimize_to_tray_on_daemon,
         window=window,
     )
 
@@ -105,6 +111,7 @@ def save_config(config: AppConfig) -> None:
         "theme": config.theme,
         "zoom_percent": clamp_zoom_percent(config.zoom_percent),
         "protect_base_vocabulary": config.protect_base_vocabulary,
+        "minimize_to_tray_on_daemon": config.minimize_to_tray_on_daemon,
         "window": {
             "width": config.window.width,
             "height": config.window.height,
