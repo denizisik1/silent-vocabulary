@@ -6,7 +6,7 @@
 - Add fonts.
 
 
-## Later
+### Later
 
 - Consider adding pyinstaller.
 - Support for Windows.
