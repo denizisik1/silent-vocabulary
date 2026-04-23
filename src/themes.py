@@ -60,6 +60,7 @@ def stylesheet(name: str, zoom_percent: int = DEFAULT_ZOOM_PERCENT) -> str:
     zoom = clamp_zoom_percent(zoom_percent)
     brand_size = scale_px(20, zoom)
     body_size = scale_px(13, zoom)
+    hint_size = scale_px(11, zoom)
     results_size = scale_px(14, zoom)
     tab_pad_y = scale_px(7, zoom)
     tab_pad_x = scale_px(14, zoom)
@@ -104,8 +105,11 @@ QLabel#label_brand {{
 }}
 QLabel#label_tagline,
 QLabel#label_vocab_hint,
-QLabel#label_6 {{
+QLabel#label_6,
+QLabel#label_tray_unavailable {{
     color: {colors["muted"]};
+    font-size: {hint_size}px;
+    font-style: italic;
 }}
 QLineEdit, QTextEdit, QComboBox, QSpinBox {{
     background-color: {colors["input"]};

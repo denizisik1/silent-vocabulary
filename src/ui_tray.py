@@ -5,6 +5,7 @@ from PySide6.QtGui import QAction, QCloseEvent, QColor, QIcon, QPainter, QPen, Q
 from PySide6.QtWidgets import (
     QApplication,
     QCheckBox,
+    QLabel,
     QMainWindow,
     QMenu,
     QSystemTrayIcon,
@@ -15,6 +16,11 @@ from config import AppConfig, save_config
 _TRAY_ATTR = "_vipa_tray_icon"
 _DAEMON_ATTR = "_vipa_practice_daemon"
 _CHECKBOX_NAME = "checkBox_minimize_to_tray"
+_UNAVAILABLE_LABEL_NAME = "label_tray_unavailable"
+_TRAY_UNAVAILABLE_REASON = (
+    "System tray is not available in this desktop session "
+    "(common on GNOME without a tray extension)."
+)
 
 
 def system_tray_available() -> bool:
@@ -46,6 +52,14 @@ def _is_daemon_running(window: QMainWindow) -> bool:
 
 def _minimize_checkbox(window: QMainWindow) -> QCheckBox | None:
     return window.findChild(QCheckBox, _CHECKBOX_NAME)
+
+
+def _tray_unavailable_label(window: QMainWindow) -> QLabel | None:
+    return window.findChild(QLabel, _UNAVAILABLE_LABEL_NAME)
+
+
+def tray_unavailable_reason() -> str:
+    return _TRAY_UNAVAILABLE_REASON
 
 
 def minimize_to_tray_enabled(window: QMainWindow, config: AppConfig) -> bool:
@@ -171,16 +185,29 @@ def _apply_minimize_to_tray_checkbox(window: QMainWindow, config: AppConfig) -> 
     if checkbox is None:
         raise RuntimeError(f"Missing tray control: {_CHECKBOX_NAME}")
 
+    reason_label = _tray_unavailable_label(window)
+    if reason_label is None:
+        raise RuntimeError(f"Missing tray control: {_UNAVAILABLE_LABEL_NAME}")
+
     available = system_tray_available()
     checkbox.setEnabled(available)
-    if not available:
+    if available:
         checkbox.setToolTip(
-            "System tray is not available in this desktop session "
-            "(common on GNOME without a tray extension)"
+            "Hide the window in the system tray while the practice daemon runs "
+            "(KDE, XFCE, GNOME with tray support, ...)"
         )
+        reason_label.clear()
+        reason_label.hide()
+        checkbox.blockSignals(True)
+        checkbox.setChecked(config.minimize_to_tray_on_daemon)
+        checkbox.blockSignals(False)
+        return
 
+    checkbox.setToolTip("")
+    reason_label.setText(tray_unavailable_reason())
+    reason_label.show()
     checkbox.blockSignals(True)
-    checkbox.setChecked(config.minimize_to_tray_on_daemon)
+    checkbox.setChecked(False)
     checkbox.blockSignals(False)
 
 
