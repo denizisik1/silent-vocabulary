@@ -21,6 +21,19 @@ def test_save_and_load_round_trip(tmp_path, monkeypatch):
         theme="dark",
         zoom_percent=125,
         protect_base_vocabulary=False,
+        minimize_to_tray_on_daemon=False,
+        daemon_interval_minutes=30,
+        notify_backend="desktop",
+        language="german",
+        include_fields={
+            "article": False,
+            "word": True,
+            "meaning": True,
+            "pronunciation": False,
+            "example": True,
+            "translation": False,
+            "plural": True,
+        },
         window=WindowConfig(width=960, height=720),
     )
     config.save_config(saved)
@@ -63,6 +76,75 @@ def test_load_minimize_to_tray_on_daemon_false(tmp_path, monkeypatch):
     loaded = config.load_config()
 
     assert loaded.minimize_to_tray_on_daemon is False
+
+
+def test_load_daemon_interval_minutes_default(tmp_path, monkeypatch):
+    monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "vipa.toml")
+
+    loaded = config.load_config()
+
+    assert loaded.daemon_interval_minutes == config.DEFAULT_DAEMON_INTERVAL_MINUTES
+
+
+def test_load_daemon_interval_minutes_invalid_uses_default(tmp_path, monkeypatch):
+    config_path = tmp_path / "vipa.toml"
+    config_path.write_text("daemon_interval_minutes = 0\n", encoding="utf-8")
+    monkeypatch.setattr(config, "CONFIG_PATH", config_path)
+
+    loaded = config.load_config()
+
+    assert loaded.daemon_interval_minutes == config.DEFAULT_DAEMON_INTERVAL_MINUTES
+
+
+def test_load_notify_backend_defaults_to_desktop(tmp_path, monkeypatch):
+    monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "vipa.toml")
+
+    loaded = config.load_config()
+
+    assert loaded.notify_backend == config.DEFAULT_NOTIFY_BACKEND
+
+
+def test_load_notify_backend_unknown_uses_desktop(tmp_path, monkeypatch):
+    config_path = tmp_path / "vipa.toml"
+    config_path.write_text('notify_backend = "carrier_pigeon"\n', encoding="utf-8")
+    monkeypatch.setattr(config, "CONFIG_PATH", config_path)
+
+    loaded = config.load_config()
+
+    assert loaded.notify_backend == config.DEFAULT_NOTIFY_BACKEND
+
+
+def test_load_language_defaults_to_german(tmp_path, monkeypatch):
+    monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "vipa.toml")
+
+    loaded = config.load_config()
+
+    assert loaded.language == config.DEFAULT_LANGUAGE
+
+
+def test_load_language_invalid_uses_default(tmp_path, monkeypatch):
+    config_path = tmp_path / "vipa.toml"
+    config_path.write_text('language = "klingon"\n', encoding="utf-8")
+    monkeypatch.setattr(config, "CONFIG_PATH", config_path)
+
+    loaded = config.load_config()
+
+    assert loaded.language == config.DEFAULT_LANGUAGE
+
+
+def test_load_include_fields_partial_merge(tmp_path, monkeypatch):
+    config_path = tmp_path / "vipa.toml"
+    config_path.write_text(
+        "[include]\narticle = false\nexample = true\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(config, "CONFIG_PATH", config_path)
+
+    loaded = config.load_config()
+
+    assert loaded.include_fields["article"] is False
+    assert loaded.include_fields["word"] is True
+    assert loaded.include_fields["example"] is True
 
 
 def test_load_ignores_invalid_theme(tmp_path, monkeypatch):

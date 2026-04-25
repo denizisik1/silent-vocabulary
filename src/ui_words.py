@@ -10,6 +10,7 @@ from PySide6.QtWidgets import (
     QSpinBox,
     QTextEdit,
 )
+from config import AppConfig, save_config
 from words import (
     DEFAULT_INCLUDE,
     WordFields,
@@ -55,16 +56,76 @@ def include_flags(window: QMainWindow) -> dict[str, bool]:
     return flags
 
 
-def apply_default_include(window: QMainWindow) -> None:
+def apply_include_from_config(window: QMainWindow, include_fields: dict[str, bool]) -> None:
     for field_name, object_name in _INCLUDE_CHECKBOXES.items():
         checkbox = window.findChild(QCheckBox, object_name)
         if checkbox is None:
             raise RuntimeError(f"Missing include control: {object_name}")
-        checkbox.setChecked(DEFAULT_INCLUDE[field_name])
+        checkbox.blockSignals(True)
+        checkbox.setChecked(include_fields.get(field_name, DEFAULT_INCLUDE[field_name]))
+        checkbox.blockSignals(False)
 
     include_group = window.findChild(QGroupBox, "groupBox_13")
     if include_group is not None:
         include_group.setChecked(True)
+
+
+def apply_language_from_config(window: QMainWindow, language_key: str) -> None:
+    language_combo = window.findChild(QComboBox, "comboBox")
+    if language_combo is None:
+        raise RuntimeError("Missing language control: comboBox")
+
+    for index in range(language_combo.count()):
+        item_text = language_combo.itemText(index)
+        if language_key_from_combo(item_text) == language_key:
+            language_combo.blockSignals(True)
+            language_combo.setCurrentIndex(index)
+            language_combo.blockSignals(False)
+            return
+
+
+def apply_session_config(window: QMainWindow, config: AppConfig) -> None:
+    apply_include_from_config(window, config.include_fields)
+    apply_language_from_config(window, config.language)
+
+
+def _on_include_toggled(
+    window: QMainWindow,
+    config: AppConfig,
+    field_name: str,
+    checked: bool,
+) -> None:
+    config.include_fields[field_name] = checked
+    save_config(config)
+
+
+def _on_language_changed(window: QMainWindow, config: AppConfig, index: int) -> None:
+    if index < 0:
+        return
+    language_combo = window.findChild(QComboBox, "comboBox")
+    if language_combo is None:
+        raise RuntimeError("Missing language control: comboBox")
+    config.language = language_key_from_combo(language_combo.itemText(index))
+    save_config(config)
+
+
+def wire_session_config(window: QMainWindow, config: AppConfig) -> None:
+    for field_name, object_name in _INCLUDE_CHECKBOXES.items():
+        checkbox = window.findChild(QCheckBox, object_name)
+        if checkbox is None:
+            raise RuntimeError(f"Missing include control: {object_name}")
+        handler = partial(_on_include_toggled, window, config, field_name)
+        checkbox.toggled.connect(handler)
+
+    language_combo = window.findChild(QComboBox, "comboBox")
+    if language_combo is None:
+        raise RuntimeError("Missing language control: comboBox")
+    language_handler = partial(_on_language_changed, window, config)
+    language_combo.currentIndexChanged.connect(language_handler)
+
+
+def apply_default_include(window: QMainWindow) -> None:
+    apply_include_from_config(window, DEFAULT_INCLUDE)
 
 
 def on_get_words(window: QMainWindow) -> None:

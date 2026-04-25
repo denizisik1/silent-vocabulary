@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (
     QStatusBar,
     QTextEdit,
 )
-from config import AppConfig
+from config import AppConfig, save_config
 from daemon import PracticeDaemon, parse_interval_minutes
 from notify import (
     NotifyBackend,
@@ -80,6 +80,51 @@ def selected_notify_backend(window: QMainWindow) -> NotifyBackend:
         if button is not None and button.isChecked():
             return backend
     return NotifyBackend.DESKTOP
+
+
+def _select_notify_backend(window: QMainWindow, backend: NotifyBackend) -> None:
+    for notify_backend, object_name in _BACKEND_RADIOS.items():
+        button = window.findChild(QRadioButton, object_name)
+        if button is None:
+            continue
+        button.blockSignals(True)
+        button.setChecked(notify_backend == backend)
+        button.blockSignals(False)
+
+
+def _resolve_notify_backend(backend_name: str) -> NotifyBackend:
+    backend = NotifyBackend(backend_name)
+    if backend_available(backend):
+        return backend
+    if backend_available(NotifyBackend.DESKTOP):
+        return NotifyBackend.DESKTOP
+    return backend
+
+
+def _apply_session_config(window: QMainWindow, config: AppConfig) -> None:
+    _interval_input(window).setText(str(config.daemon_interval_minutes))
+    _select_notify_backend(window, _resolve_notify_backend(config.notify_backend))
+
+
+def _on_interval_saved(window: QMainWindow, config: AppConfig) -> None:
+    try:
+        minutes = parse_interval_minutes(_interval_input(window).text())
+    except ValueError:
+        return
+    config.daemon_interval_minutes = minutes
+    save_config(config)
+
+
+def _on_notify_backend_toggled(
+    window: QMainWindow,
+    config: AppConfig,
+    backend: NotifyBackend,
+    checked: bool,
+) -> None:
+    if not checked:
+        return
+    config.notify_backend = backend.value
+    save_config(config)
 
 
 def _apply_backend_labels(window: QMainWindow) -> None:
@@ -212,4 +257,12 @@ def wire_daemon(
     handler = partial(on_daemon_toggle, window, application, config)
     button.clicked.connect(handler)
     _apply_backend_labels(window)
+    _apply_session_config(window, config)
+    _interval_input(window).editingFinished.connect(partial(_on_interval_saved, window, config))
+    for backend, object_name in _BACKEND_RADIOS.items():
+        radio_button = window.findChild(QRadioButton, object_name)
+        if radio_button is None:
+            continue
+        toggle_handler = partial(_on_notify_backend_toggled, window, config, backend)
+        radio_button.toggled.connect(toggle_handler)
     _update_daemon_button(window, False)

@@ -4,7 +4,10 @@ from pathlib import Path
 import tomlkit
 from platformdirs import user_config_dir
 
+from daemon import parse_interval_minutes
+from notify import NotifyBackend
 from themes import DEFAULT_THEME, THEMES
+from words.constants import DEFAULT_INCLUDE, LANGUAGE_VOCABULARY_FILES
 from zoom import DEFAULT_ZOOM_PERCENT, clamp_zoom_percent
 
 CONFIG_DIR = Path(user_config_dir("vipa", appauthor=False))
@@ -14,6 +17,10 @@ DEFAULT_WINDOW_WIDTH = 720
 DEFAULT_WINDOW_HEIGHT = 560
 MIN_WINDOW_WIDTH = 560
 MIN_WINDOW_HEIGHT = 420
+DEFAULT_DAEMON_INTERVAL_MINUTES = 15
+DEFAULT_NOTIFY_BACKEND = NotifyBackend.DESKTOP.value
+DEFAULT_LANGUAGE = "german"
+INCLUDE_FIELD_NAMES = tuple(DEFAULT_INCLUDE.keys())
 
 
 @dataclass
@@ -28,6 +35,10 @@ class AppConfig:
     zoom_percent: int = DEFAULT_ZOOM_PERCENT
     protect_base_vocabulary: bool = True
     minimize_to_tray_on_daemon: bool = True
+    daemon_interval_minutes: int = DEFAULT_DAEMON_INTERVAL_MINUTES
+    notify_backend: str = DEFAULT_NOTIFY_BACKEND
+    language: str = DEFAULT_LANGUAGE
+    include_fields: dict[str, bool] = field(default_factory=lambda: dict(DEFAULT_INCLUDE))
     window: WindowConfig = field(default_factory=WindowConfig)
 
 
@@ -76,6 +87,46 @@ def _parse_bool(value, default: bool) -> bool:
     return default
 
 
+def _parse_daemon_interval_minutes(value) -> int:
+    if isinstance(value, int):
+        try:
+            return parse_interval_minutes(str(value))
+        except ValueError:
+            return DEFAULT_DAEMON_INTERVAL_MINUTES
+    if isinstance(value, str):
+        try:
+            return parse_interval_minutes(value)
+        except ValueError:
+            return DEFAULT_DAEMON_INTERVAL_MINUTES
+    return DEFAULT_DAEMON_INTERVAL_MINUTES
+
+
+def _parse_notify_backend(value) -> str:
+    if value == NotifyBackend.WINDOWS.value:
+        return NotifyBackend.WINDOWS.value
+    return NotifyBackend.DESKTOP.value
+
+
+def _parse_language(value) -> str:
+    if not isinstance(value, str):
+        return DEFAULT_LANGUAGE
+    language_key = value.strip().lower()
+    if language_key in LANGUAGE_VOCABULARY_FILES:
+        return language_key
+    return DEFAULT_LANGUAGE
+
+
+def _parse_include_fields(include_table) -> dict[str, bool]:
+    include_fields = dict(DEFAULT_INCLUDE)
+    if not isinstance(include_table, dict):
+        return include_fields
+    for field_name in INCLUDE_FIELD_NAMES:
+        value = include_table.get(field_name)
+        if isinstance(value, bool):
+            include_fields[field_name] = value
+    return include_fields
+
+
 def load_config() -> AppConfig:
     if not CONFIG_PATH.is_file():
         return AppConfig()
@@ -94,12 +145,24 @@ def load_config() -> AppConfig:
         config_document.get("minimize_to_tray_on_daemon", True),
         True,
     )
+    daemon_interval_minutes = _parse_daemon_interval_minutes(
+        config_document.get("daemon_interval_minutes", DEFAULT_DAEMON_INTERVAL_MINUTES)
+    )
+    notify_backend = _parse_notify_backend(
+        config_document.get("notify_backend", DEFAULT_NOTIFY_BACKEND)
+    )
+    language = _parse_language(config_document.get("language", DEFAULT_LANGUAGE))
+    include_fields = _parse_include_fields(config_document.get("include"))
 
     return AppConfig(
         theme=theme,
         zoom_percent=zoom_percent,
         protect_base_vocabulary=protect_base_vocabulary,
         minimize_to_tray_on_daemon=minimize_to_tray_on_daemon,
+        daemon_interval_minutes=daemon_interval_minutes,
+        notify_backend=notify_backend,
+        language=language,
+        include_fields=include_fields,
         window=window,
     )
 
@@ -112,6 +175,10 @@ def save_config(config: AppConfig) -> None:
         "zoom_percent": clamp_zoom_percent(config.zoom_percent),
         "protect_base_vocabulary": config.protect_base_vocabulary,
         "minimize_to_tray_on_daemon": config.minimize_to_tray_on_daemon,
+        "daemon_interval_minutes": config.daemon_interval_minutes,
+        "notify_backend": config.notify_backend,
+        "language": config.language,
+        "include": {field_name: config.include_fields[field_name] for field_name in INCLUDE_FIELD_NAMES},
         "window": {
             "width": config.window.width,
             "height": config.window.height,
