@@ -5,6 +5,7 @@ from PySide6.QtWidgets import (
     QComboBox,
     QLineEdit,
     QMainWindow,
+    QMessageBox,
     QPushButton,
     QRadioButton,
     QStatusBar,
@@ -21,7 +22,10 @@ from notify import (
 from ui_words import include_flags, language_key_from_combo
 from words import format_word_row, get_random_words
 
+_MAX_CONSECUTIVE_NOTIFY_FAILURES = 3
 _DAEMON_ATTR = "_vipa_practice_daemon"
+_NOTIFY_FAILURE_COUNT_ATTR = "_vipa_notify_failure_count"
+_APPLICATION_ATTR = "_vipa_application"
 
 _BACKEND_RADIOS = {
     NotifyBackend.DESKTOP: "radioButton",
@@ -143,6 +147,129 @@ def _apply_backend_labels(window: QMainWindow) -> None:
         windows_button.setToolTip("Windows toast notifications (not implemented yet)")
 
 
+def consecutive_notify_failures_after(current_count: int, *, succeeded: bool) -> int:
+    if succeeded:
+        return 0
+    return current_count + 1
+
+
+def should_stop_daemon_after_notify_failures(
+    failure_count: int,
+    *,
+    max_failures: int = _MAX_CONSECUTIVE_NOTIFY_FAILURES,
+) -> bool:
+    return failure_count >= max_failures
+
+
+def _get_notify_failure_count(window: QMainWindow) -> int:
+    return int(getattr(window, _NOTIFY_FAILURE_COUNT_ATTR, 0))
+
+
+def _set_notify_failure_count(window: QMainWindow, count: int) -> None:
+    setattr(window, _NOTIFY_FAILURE_COUNT_ATTR, count)
+
+
+def _reset_notify_failure_count(window: QMainWindow) -> None:
+    _set_notify_failure_count(window, 0)
+
+
+def _application_for_window(window: QMainWindow) -> QApplication | None:
+    application = getattr(window, _APPLICATION_ATTR, None)
+    if isinstance(application, QApplication):
+        return application
+    instance = QApplication.instance()
+    if isinstance(instance, QApplication):
+        return instance
+    return None
+
+
+def prompt_notify_failure_dialog(
+    window: QMainWindow,
+    application: QApplication | None,
+    error_message: str,
+    failure_count: int,
+) -> bool:
+    window.show()
+    window.raise_()
+    window.activateWindow()
+
+    dialog = QMessageBox(window)
+    dialog.setIcon(QMessageBox.Icon.Warning)
+    dialog.setWindowTitle("vipa - notification failed")
+    dialog.setText("The practice daemon could not send a notification.")
+    dialog.setInformativeText(
+        f"{error_message}\n\nFailure {failure_count} of "
+        f"{_MAX_CONSECUTIVE_NOTIFY_FAILURES}. "
+        f"The daemon stops after {_MAX_CONSECUTIVE_NOTIFY_FAILURES} "
+        "consecutive failures."
+    )
+    dialog.addButton("OK", QMessageBox.ButtonRole.AcceptRole)
+    exit_button = dialog.addButton("Exit program", QMessageBox.ButtonRole.RejectRole)
+    dialog.exec()
+
+    if dialog.clickedButton() == exit_button:
+        if application is not None:
+            application.quit()
+        return False
+    return True
+
+
+def _surface_notify_failure_alert(
+    window: QMainWindow,
+    application: QApplication | None,
+    error_message: str,
+    failure_count: int,
+) -> str:
+    title = "vipa - notification failed"
+    body = f"{error_message} ({failure_count}/{_MAX_CONSECUTIVE_NOTIFY_FAILURES})"
+    if backend_available(NotifyBackend.DESKTOP):
+        try:
+            send_notification(title, body, backend=NotifyBackend.DESKTOP)
+            return "background"
+        except (ValueError, RuntimeError, OSError):
+            pass
+
+    if application is not None:
+        from ui_tray import show_tray_message
+
+        if show_tray_message(window, application, title, body):
+            return "background"
+
+    if prompt_notify_failure_dialog(window, application, error_message, failure_count):
+        return "continue"
+    return "exit"
+
+
+def _handle_notify_failure(
+    window: QMainWindow,
+    application: QApplication | None,
+    error: Exception,
+) -> None:
+    failure_count = consecutive_notify_failures_after(
+        _get_notify_failure_count(window),
+        succeeded=False,
+    )
+    _set_notify_failure_count(window, failure_count)
+    error_message = str(error)
+    _set_status(window, error_message)
+    _append_result_line(window, f"Notify error: {error_message}")
+    alert_result = _surface_notify_failure_alert(
+        window,
+        application,
+        error_message,
+        failure_count,
+    )
+    if alert_result == "exit":
+        return
+
+    if should_stop_daemon_after_notify_failures(failure_count):
+        stop_message = (
+            f"Daemon stopped after {failure_count} consecutive notification failures."
+        )
+        _append_result_line(window, stop_message)
+        stop_daemon(window, application, status_message=stop_message)
+
+
 def fire_practice_notification(window: QMainWindow) -> None:
     language_combo = window.findChild(QComboBox, "comboBox")
     if language_combo is None:
@@ -164,10 +291,10 @@ def fire_practice_notification(window: QMainWindow) -> None:
     try:
         send_notification(title, body, backend=backend)
     except (ValueError, RuntimeError, OSError) as error:
-        _set_status(window, str(error))
-        _append_result_line(window, f"Notify error: {error}")
+        _handle_notify_failure(window, _application_for_window(window), error)
         return
 
+    _reset_notify_failure_count(window)
     _append_result_line(window, body)
     _set_status(window, f"Notified ({backend.value}): {body}")
 
@@ -180,12 +307,17 @@ def _get_daemon(window: QMainWindow) -> PracticeDaemon:
     return daemon
 
 
-def stop_daemon(window: QMainWindow, application: QApplication | None = None) -> None:
+def stop_daemon(
+    window: QMainWindow,
+    application: QApplication | None = None,
+    *,
+    status_message: str | None = None,
+) -> None:
     daemon = getattr(window, _DAEMON_ATTR, None)
     if daemon is not None:
         daemon.stop()
     _update_daemon_button(window, False)
-    _set_status(window, "Daemon stopped")
+    _set_status(window, status_message or "Daemon stopped")
     if application is not None:
         from ui_tray import show_window_from_tray
 
@@ -223,6 +355,7 @@ def start_daemon(
         _set_status(window, str(error))
         return
 
+    _reset_notify_failure_count(window)
     _update_daemon_button(window, True)
     _set_status(window, f"Daemon running every {minutes} min ({backend.value})")
 
@@ -253,6 +386,7 @@ def wire_daemon(
     application: QApplication,
     config: AppConfig,
 ) -> None:
+    setattr(window, _APPLICATION_ATTR, application)
     button = _daemon_button(window)
     handler = partial(on_daemon_toggle, window, application, config)
     button.clicked.connect(handler)

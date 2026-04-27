@@ -139,6 +139,24 @@ def show_window_from_tray(window: QMainWindow, application: QApplication) -> Non
     _sync_quit_on_last_window_closed(window, application)
 
 
+def show_tray_message(
+    window: QMainWindow,
+    application: QApplication,
+    title: str,
+    message: str,
+    *,
+    icon: QSystemTrayIcon.MessageIcon = QSystemTrayIcon.MessageIcon.Warning,
+    duration_ms: int = 10000,
+) -> bool:
+    if not system_tray_available():
+        return False
+
+    tray = _get_tray(window, application)
+    tray.show()
+    tray.showMessage(title, message, icon, duration_ms)
+    return True
+
+
 def try_minimize_on_daemon_start(
     window: QMainWindow,
     application: QApplication,
