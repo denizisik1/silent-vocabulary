@@ -8,6 +8,7 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QRadioButton, QTextEdit
 from config import AppConfig, load_config, save_config
 from themes import DEFAULT_THEME
 from ui_daemon import stop_daemon, wire_daemon
+from ui_export import wire_export_overlay
 from ui_protect import apply_protect_setting, wire_protect_vocabulary
 from ui_tray import wire_tray
 from ui_retrieve import wire_retrieve
@@ -122,6 +123,7 @@ def main() -> None:
     wire_daemon(window, application, config)
     wire_retrieve(window)
     wire_protect_vocabulary(window, config)
+    wire_export_overlay(window)
     _load_reference(window)
     _select_theme(window, config.theme)
     apply_appearance(window, config)

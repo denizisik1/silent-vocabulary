@@ -558,6 +558,36 @@
          </widget>
         </item>
         <item>
+         <layout class="QHBoxLayout" name="vocabOverlayActionsLayout">
+          <property name="spacing">
+           <number>8</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="pushButton_export_overlay">
+            <property name="text">
+             <string>Export overlay</string>
+            </property>
+            <property name="toolTip">
+             <string>Save your additions and removals as a zip backup</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="vocabOverlayActionsSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
          <widget class="QGroupBox" name="groupBox_3">
           <property name="title">
            <string>Add or remove</string>

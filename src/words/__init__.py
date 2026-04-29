@@ -8,6 +8,7 @@ from words.constants import (
 from words.format import format_word_row
 from words.load import get_random_words
 from words.mutate import WordFields, add_word, remove_word, upsert_pronunciation
+from words.export import default_export_filename, export_user_vocabulary
 from words.paths import user_vocabulary_dir, vocabulary_dir
 
 __all__ = [
@@ -18,6 +19,8 @@ __all__ = [
     "LANGUAGE_VOCABULARY_FILES",
     "WordFields",
     "add_word",
+    "default_export_filename",
+    "export_user_vocabulary",
     "format_word_row",
     "get_random_words",
     "remove_word",
