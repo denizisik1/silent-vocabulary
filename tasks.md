@@ -8,6 +8,8 @@
 ### Possible Changes
 
 - IPA (only the relevant letters) in the toast notification too?
+- Progressbar delete and instead use coloring of button.
+- Debug console.
 
 ### Decide
 
@@ -22,5 +24,4 @@
 
 - Use env file.
 - Test in KDE, what can fail in the background?
-- Remove async button and merge logic.
 - Check rebase note.

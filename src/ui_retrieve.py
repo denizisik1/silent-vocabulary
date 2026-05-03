@@ -63,11 +63,8 @@ class RetrieveController(QObject):
         buttons: list[QPushButton] = []
         for object_name in (
             "pushButton_6",
-            "pushButton_7",
             "pushButton_8",
-            "pushButton_5",
-            "pushButton_vocab_backup",
-            "pushButton_vocab_async",
+            "pushButton_vocab_fetch",
         ):
             button = self._window.findChild(QPushButton, object_name)
             if button is not None:
@@ -190,31 +187,23 @@ def _wire_word_field_sync(window: QMainWindow) -> None:
 
 
 def wire_retrieve(window: QMainWindow) -> None:
-    primary = window.findChild(QPushButton, "pushButton_6")
-    backup = window.findChild(QPushButton, "pushButton_7")
+    fetch = window.findChild(QPushButton, "pushButton_6")
     check = window.findChild(QPushButton, "pushButton_8")
-    pull_async = window.findChild(QPushButton, "pushButton_5")
-    vocab_backup = window.findChild(QPushButton, "pushButton_vocab_backup")
-    vocab_async = window.findChild(QPushButton, "pushButton_vocab_async")
-    if primary is None or backup is None or check is None:
+    vocab_fetch = window.findChild(QPushButton, "pushButton_vocab_fetch")
+    if fetch is None or check is None:
         raise RuntimeError("Missing retrieve buttons")
 
     controller = RetrieveController(window)
     setattr(window, _CONTROLLER_ATTR, controller)
     _wire_word_field_sync(window)
 
-    primary.clicked.connect(partial(controller.start, "primary"))
-    backup.clicked.connect(partial(controller.start, "backup"))
+    fetch.clicked.connect(partial(controller.start, "retrieve"))
     check.clicked.connect(partial(controller.start, "check"))
-    if pull_async is not None:
-        pull_async.clicked.connect(partial(controller.start, "async"))
-    if vocab_backup is not None:
-        vocab_backup.clicked.connect(partial(controller.start, "backup"))
-    if vocab_async is not None:
-        vocab_async.clicked.connect(partial(controller.start, "async"))
+    if vocab_fetch is not None:
+        vocab_fetch.clicked.connect(partial(controller.start, "retrieve"))
 
     retrieve_word = window.findChild(QLineEdit, "lineEdit_retrieve_word")
     if retrieve_word is not None:
-        retrieve_word.returnPressed.connect(partial(controller.start, "backup"))
+        retrieve_word.returnPressed.connect(partial(controller.start, "retrieve"))
 
     controller._progress().setValue(0)

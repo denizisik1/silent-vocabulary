@@ -727,23 +727,13 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="4">
-            <widget class="QPushButton" name="pushButton_vocab_backup">
+           <item row="3" column="4" colspan="2">
+            <widget class="QPushButton" name="pushButton_vocab_fetch">
              <property name="text">
               <string>Fetch IPA</string>
              </property>
              <property name="toolTip">
-              <string>Fetch pronunciation via backup source (PONS)</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="5">
-            <widget class="QPushButton" name="pushButton_vocab_async">
-             <property name="text">
-              <string>Fetch IPA (async)</string>
-             </property>
-             <property name="toolTip">
-              <string>Try primary, then backup</string>
+              <string>Try primary source, then backup if it fails</string>
              </property>
             </widget>
            </item>
@@ -941,14 +931,10 @@
            <item>
             <widget class="QPushButton" name="pushButton_6">
              <property name="text">
-              <string>Primary</string>
+              <string>Fetch IPA</string>
              </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_7">
-             <property name="text">
-              <string>Backup</string>
+             <property name="toolTip">
+              <string>Try primary source, then backup if it fails</string>
              </property>
             </widget>
            </item>
@@ -1072,33 +1058,6 @@
            </item>
           </layout>
          </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="retrieveButtonsLayout">
-          <property name="spacing">
-           <number>8</number>
-          </property>
-          <item>
-           <widget class="QPushButton" name="pushButton_5">
-            <property name="text">
-             <string>Pull async</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="retrieveButtonsSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
         </item>
         <item>
          <widget class="QLabel" name="label_4">

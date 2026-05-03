@@ -69,15 +69,10 @@ class RetrieveWorker(QObject):
         self.finished_ok.emit("\n".join(lines), None)
 
     def _run_retrieve(self) -> None:
-        if self._mode == "primary":
-            sources = [("primary", self._primary_url, self._primary_find)]
-        elif self._mode == "backup":
-            sources = [("backup", self._backup_url, self._backup_find)]
-        else:
-            sources = [
-                ("primary", self._primary_url, self._primary_find),
-                ("backup", self._backup_url, self._backup_find),
-            ]
+        sources = [
+            ("primary", self._primary_url, self._primary_find),
+            ("backup", self._backup_url, self._backup_find),
+        ]
 
         errors: list[str] = []
         total = len(sources)
