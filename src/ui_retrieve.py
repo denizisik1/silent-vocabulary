@@ -1,11 +1,10 @@
 from functools import partial
 
-from PySide6.QtCore import QObject, Qt, QThread, Slot
+from PySide6.QtCore import QObject, Qt, QThread, QTimer, Slot
 from PySide6.QtWidgets import (
     QComboBox,
     QLineEdit,
     QMainWindow,
-    QProgressBar,
     QPushButton,
     QStatusBar,
     QTextEdit,
@@ -16,6 +15,7 @@ from words import format_word_row
 
 _CONTROLLER_ATTR = "_vipa_retrieve_controller"
 _SYNCING_ATTR = "_vipa_word_fields_syncing"
+_RESULT_FLASH_MS = 1200
 
 
 class RetrieveController(QObject):
@@ -24,6 +24,10 @@ class RetrieveController(QObject):
         self._window = window
         self._thread: QThread | None = None
         self._worker: RetrieveWorker | None = None
+        self._active_button: QPushButton | None = None
+        self._flash_timer = QTimer(self)
+        self._flash_timer.setSingleShot(True)
+        self._flash_timer.timeout.connect(self._clear_button_state)
 
     def _line(self, object_name: str) -> QLineEdit:
         editor = self._window.findChild(QLineEdit, object_name)
@@ -39,12 +43,6 @@ class RetrieveController(QObject):
         if results is None:
             raise RuntimeError("Missing results view: textEdit_3")
         return results
-
-    def _progress(self) -> QProgressBar:
-        bar = self._window.findChild(QProgressBar, "progressBar")
-        if bar is None:
-            raise RuntimeError("Missing progress bar: progressBar")
-        return bar
 
     def _set_status(self, message: str) -> None:
         status = self._window.findChild(QStatusBar, "statusbar")
@@ -75,6 +73,24 @@ class RetrieveController(QObject):
         for button in self._retrieve_buttons():
             button.setEnabled(not busy)
 
+    def _apply_button_state(self, button: QPushButton | None, state: str | None) -> None:
+        if button is None:
+            return
+        button.setProperty("retrieveState", state)
+        style = button.style()
+        style.unpolish(button)
+        style.polish(button)
+        button.update()
+
+    def _clear_button_state(self) -> None:
+        self._apply_button_state(self._active_button, None)
+        self._active_button = None
+
+    def _flash_result(self, succeeded: bool) -> None:
+        state = "ok" if succeeded else "error"
+        self._apply_button_state(self._active_button, state)
+        self._flash_timer.start(_RESULT_FLASH_MS)
+
     def _cleanup_worker(self) -> None:
         if self._thread is not None:
             self._thread.quit()
@@ -89,10 +105,6 @@ class RetrieveController(QObject):
             return retrieve_word.text().strip()
         return self._line("lineEdit_2").text().strip()
 
-    @Slot(int)
-    def on_progress(self, value: int) -> None:
-        self._progress().setValue(value)
-
     @Slot(str, object)
     def on_worker_ok(self, message: str, row: object) -> None:
         include = include_flags(self._window)
@@ -102,14 +114,16 @@ class RetrieveController(QObject):
             self._append_results(message)
         self._set_status(message)
         self._cleanup_worker()
+        self._flash_result(True)
 
     @Slot(str)
     def on_worker_error(self, message: str) -> None:
         self._append_results(f"Retrieve error: {message}")
         self._set_status(f"Retrieve error: {message}")
         self._cleanup_worker()
+        self._flash_result(False)
 
-    def start(self, mode: str) -> None:
+    def start(self, mode: str, button: QPushButton | None = None) -> None:
         if self._thread is not None:
             self._set_status("Retrieve already running")
             return
@@ -125,6 +139,9 @@ class RetrieveController(QObject):
             self._set_status(message)
             return
 
+        self._flash_timer.stop()
+        self._clear_button_state()
+
         language_key = language_key_from_combo(language_combo.currentText())
         worker = RetrieveWorker(
             mode=mode,
@@ -138,7 +155,6 @@ class RetrieveController(QObject):
         thread = QThread(self._window)
         worker.moveToThread(thread)
         thread.started.connect(worker.run)
-        worker.progress.connect(self.on_progress, Qt.ConnectionType.QueuedConnection)
         worker.finished_ok.connect(self.on_worker_ok, Qt.ConnectionType.QueuedConnection)
         worker.finished_error.connect(self.on_worker_error, Qt.ConnectionType.QueuedConnection)
         worker.finished_ok.connect(thread.quit)
@@ -148,8 +164,9 @@ class RetrieveController(QObject):
 
         self._worker = worker
         self._thread = thread
+        self._active_button = button
         self._set_busy(True)
-        self._progress().setValue(0)
+        self._apply_button_state(button, "running")
         self._set_status(f"Retrieve {mode} started")
         thread.start()
 
@@ -197,13 +214,11 @@ def wire_retrieve(window: QMainWindow) -> None:
     setattr(window, _CONTROLLER_ATTR, controller)
     _wire_word_field_sync(window)
 
-    fetch.clicked.connect(partial(controller.start, "retrieve"))
-    check.clicked.connect(partial(controller.start, "check"))
+    fetch.clicked.connect(partial(controller.start, "retrieve", fetch))
+    check.clicked.connect(partial(controller.start, "check", check))
     if vocab_fetch is not None:
-        vocab_fetch.clicked.connect(partial(controller.start, "retrieve"))
+        vocab_fetch.clicked.connect(partial(controller.start, "retrieve", vocab_fetch))
 
     retrieve_word = window.findChild(QLineEdit, "lineEdit_retrieve_word")
     if retrieve_word is not None:
-        retrieve_word.returnPressed.connect(partial(controller.start, "retrieve"))
-
-    controller._progress().setValue(0)
+        retrieve_word.returnPressed.connect(partial(controller.start, "retrieve", fetch))

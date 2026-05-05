@@ -8,7 +8,6 @@
 ### Possible Changes
 
 - IPA (only the relevant letters) in the toast notification too?
-- Progressbar delete and instead use coloring of button.
 - Debug console.
 
 ### Decide

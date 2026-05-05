@@ -17,6 +17,12 @@ _PALETTE = {
         "accent_hover": "#185853",
         "accent_pressed": "#124540",
         "brand": "#143d3a",
+        "running": "#b8860b",
+        "running_text": "#ffffff",
+        "ok": "#2e7d4f",
+        "ok_text": "#ffffff",
+        "error": "#a33b3b",
+        "error_text": "#ffffff",
     },
     "gray": {
         "window": "#c8cbc8",
@@ -34,6 +40,12 @@ _PALETTE = {
         "accent_hover": "#185853",
         "accent_pressed": "#124540",
         "brand": "#143d3a",
+        "running": "#b8860b",
+        "running_text": "#ffffff",
+        "ok": "#2e7d4f",
+        "ok_text": "#ffffff",
+        "error": "#a33b3b",
+        "error_text": "#ffffff",
     },
     "dark": {
         "window": "#1e2322",
@@ -51,6 +63,12 @@ _PALETTE = {
         "accent_hover": "#4aada5",
         "accent_pressed": "#2f7f79",
         "brand": "#d7ebe8",
+        "running": "#d4a017",
+        "running_text": "#1e2322",
+        "ok": "#3d9b6a",
+        "ok_text": "#1e2322",
+        "error": "#c45c5c",
+        "error_text": "#1e2322",
     },
 }
 
@@ -142,6 +160,21 @@ QPushButton:disabled {{
     background-color: {colors["border"]};
     color: {colors["muted"]};
 }}
+QPushButton[retrieveState="running"],
+QPushButton[retrieveState="running"]:disabled {{
+    background-color: {colors["running"]};
+    color: {colors["running_text"]};
+}}
+QPushButton[retrieveState="ok"],
+QPushButton[retrieveState="ok"]:disabled {{
+    background-color: {colors["ok"]};
+    color: {colors["ok_text"]};
+}}
+QPushButton[retrieveState="error"],
+QPushButton[retrieveState="error"]:disabled {{
+    background-color: {colors["error"]};
+    color: {colors["error_text"]};
+}}
 QStatusBar {{ background-color: {colors["status"]}; color: {colors["text"]}; }}
 QGroupBox {{
     border: 1px solid {colors["border"]};
@@ -163,15 +196,6 @@ QGroupBox[flat="true"] {{
     padding: 8px 0 0 0;
     font-weight: 600;
 }}
-QProgressBar {{
-    border: 1px solid {colors["border"]};
-    border-radius: 3px;
-    text-align: center;
-    background-color: {colors["input"]};
-    max-height: 16px;
-    color: {colors["text"]};
-}}
-QProgressBar::chunk {{ background-color: {colors["accent"]}; border-radius: 2px; }}
 QSlider::groove:horizontal {{
     height: 4px;
     background: {colors["input"]};

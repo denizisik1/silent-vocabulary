@@ -5,7 +5,6 @@ from words import upsert_pronunciation
 
 
 class RetrieveWorker(QObject):
-    progress = Signal(int)
     finished_ok = Signal(str, object)
     finished_error = Signal(str)
 
@@ -39,21 +38,18 @@ class RetrieveWorker(QObject):
             self.finished_error.emit(str(error))
 
     def _run_check(self) -> None:
-        self.progress.emit(20)
         primary = check_source_capabilities(
             base_url=self._primary_url,
             find_by=self._primary_find,
             sample_word=self._word or "Abend",
             source_label="primary",
         )
-        self.progress.emit(60)
         backup = check_source_capabilities(
             base_url=self._backup_url,
             find_by=self._backup_find,
             sample_word=self._word or "Abend",
             source_label="backup",
         )
-        self.progress.emit(100)
         lines = [
             (
                 f"Primary: reachable={primary.reachable} "
@@ -75,9 +71,7 @@ class RetrieveWorker(QObject):
         ]
 
         errors: list[str] = []
-        total = len(sources)
-        for index, (label, url, find_by) in enumerate(sources, start=1):
-            self.progress.emit(int((index - 1) / total * 100))
+        for label, url, find_by in sources:
             try:
                 result = retrieve_ipa(
                     base_url=url,
@@ -91,12 +85,10 @@ class RetrieveWorker(QObject):
                     result.pronunciation,
                     source=result.url,
                 )
-                self.progress.emit(100)
                 message = f"Retrieved via {label}: {result.word} {result.pronunciation}"
                 self.finished_ok.emit(message, row)
                 return
             except (ValueError, RuntimeError, OSError) as error:
                 errors.append(f"{label}: {error}")
 
-        self.progress.emit(100)
         self.finished_error.emit(" | ".join(errors) if errors else "Retrieve failed")
