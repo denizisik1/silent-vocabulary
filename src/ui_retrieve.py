@@ -25,9 +25,10 @@ class RetrieveController(QObject):
         self._thread: QThread | None = None
         self._worker: RetrieveWorker | None = None
         self._active_button: QPushButton | None = None
+        self._busy = False
         self._flash_timer = QTimer(self)
         self._flash_timer.setSingleShot(True)
-        self._flash_timer.timeout.connect(self._clear_button_state)
+        self._flash_timer.timeout.connect(self._finish_feedback)
 
     def _line(self, object_name: str) -> QLineEdit:
         editor = self._window.findChild(QLineEdit, object_name)
@@ -69,9 +70,9 @@ class RetrieveController(QObject):
                 buttons.append(button)
         return buttons
 
-    def _set_busy(self, busy: bool) -> None:
+    def _set_buttons_enabled(self, enabled: bool) -> None:
         for button in self._retrieve_buttons():
-            button.setEnabled(not busy)
+            button.setEnabled(enabled)
 
     def _apply_button_state(self, button: QPushButton | None, state: str | None) -> None:
         if button is None:
@@ -82,11 +83,15 @@ class RetrieveController(QObject):
         style.polish(button)
         button.update()
 
-    def _clear_button_state(self) -> None:
+    def _finish_feedback(self) -> None:
         self._apply_button_state(self._active_button, None)
         self._active_button = None
 
     def _flash_result(self, succeeded: bool) -> None:
+        self._busy = False
+        self._set_buttons_enabled(True)
+        if self._active_button is None:
+            return
         state = "ok" if succeeded else "error"
         self._apply_button_state(self._active_button, state)
         self._flash_timer.start(_RESULT_FLASH_MS)
@@ -97,7 +102,6 @@ class RetrieveController(QObject):
             self._thread.wait(1000)
         self._thread = None
         self._worker = None
-        self._set_busy(False)
 
     def _word_text(self) -> str:
         retrieve_word = self._optional_line("lineEdit_retrieve_word")
@@ -124,7 +128,7 @@ class RetrieveController(QObject):
         self._flash_result(False)
 
     def start(self, mode: str, button: QPushButton | None = None) -> None:
-        if self._thread is not None:
+        if self._busy:
             self._set_status("Retrieve already running")
             return
 
@@ -140,7 +144,9 @@ class RetrieveController(QObject):
             return
 
         self._flash_timer.stop()
-        self._clear_button_state()
+        self._apply_button_state(self._active_button, None)
+        self._busy = True
+        self._set_buttons_enabled(False)
 
         language_key = language_key_from_combo(language_combo.currentText())
         worker = RetrieveWorker(
@@ -165,7 +171,6 @@ class RetrieveController(QObject):
         self._worker = worker
         self._thread = thread
         self._active_button = button
-        self._set_busy(True)
         self._apply_button_state(button, "running")
         self._set_status(f"Retrieve {mode} started")
         thread.start()
