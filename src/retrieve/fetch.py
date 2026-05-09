@@ -1,15 +1,29 @@
+import os
+
 import requests  # type: ignore[import-untyped]
 
 from retrieve.playwright_fetch import fetch_html_playwright, playwright_available
 
 DEFAULT_HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+    "User-Agent": os.environ.get(
+        "VIPA_HTTP_USER_AGENT",
+        (
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+            "(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+        ),
     ),
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    "Accept-Language": "en-US,en;q=0.9",
+    "Accept": os.environ.get(
+        "VIPA_HTTP_ACCEPT",
+        "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    ),
+    "Accept-Language": os.environ.get("VIPA_HTTP_ACCEPT_LANGUAGE", "en-US,en;q=0.9"),
 }
+
+_FETCH_TIMEOUT_SECONDS = float(os.environ.get("VIPA_FETCH_TIMEOUT_SECONDS", "20"))
+_PROBE_TIMEOUT_SECONDS = float(os.environ.get("VIPA_PROBE_TIMEOUT_SECONDS", "10"))
+_PLAYWRIGHT_EXTRA_TIMEOUT_SECONDS = float(
+    os.environ.get("VIPA_PLAYWRIGHT_EXTRA_TIMEOUT_SECONDS", "10")
+)
 
 
 def _fetch_html_requests(url: str, *, timeout_seconds: float) -> str:
@@ -26,7 +40,7 @@ def _fetch_html_requests(url: str, *, timeout_seconds: float) -> str:
     return response.content.decode(encoding, errors="replace")
 
 
-def fetch_html(url: str, *, timeout_seconds: float = 20.0) -> str:
+def fetch_html(url: str, *, timeout_seconds: float = _FETCH_TIMEOUT_SECONDS) -> str:
     requests_error: Exception | None = None
     try:
         return _fetch_html_requests(url, timeout_seconds=timeout_seconds)
@@ -38,7 +52,10 @@ def fetch_html(url: str, *, timeout_seconds: float = 20.0) -> str:
         raise RuntimeError(f"Fetch failed via requests ({detail})") from requests_error
 
     try:
-        return fetch_html_playwright(url, timeout_seconds=timeout_seconds + 10.0)
+        return fetch_html_playwright(
+            url,
+            timeout_seconds=timeout_seconds + _PLAYWRIGHT_EXTRA_TIMEOUT_SECONDS,
+        )
     except Exception as playwright_error:
         requests_detail = str(requests_error) if requests_error else "unknown"
         raise RuntimeError(
@@ -47,7 +64,7 @@ def fetch_html(url: str, *, timeout_seconds: float = 20.0) -> str:
         ) from playwright_error
 
 
-def probe_url(url: str, *, timeout_seconds: float = 10.0) -> tuple[bool, str]:
+def probe_url(url: str, *, timeout_seconds: float = _PROBE_TIMEOUT_SECONDS) -> tuple[bool, str]:
     try:
         response = requests.get(
             url,
@@ -76,7 +93,10 @@ def _probe_with_playwright(
         return False, requests_detail
 
     try:
-        fetch_html_playwright(url, timeout_seconds=timeout_seconds + 10.0)
+        fetch_html_playwright(
+            url,
+            timeout_seconds=timeout_seconds + _PLAYWRIGHT_EXTRA_TIMEOUT_SECONDS,
+        )
     except Exception as error:
         return False, f"{requests_detail}; playwright: {error}"
     return True, f"{requests_detail}; playwright: ok"

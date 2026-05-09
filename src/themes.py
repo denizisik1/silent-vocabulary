@@ -1,3 +1,5 @@
+import os
+
 from zoom import DEFAULT_ZOOM_PERCENT, clamp_zoom_percent, scale_px
 
 _PALETTE = {
@@ -215,4 +217,4 @@ QCheckBox, QRadioButton {{
 
 
 THEMES = frozenset(_PALETTE)
-DEFAULT_THEME = "white"
+DEFAULT_THEME = os.environ.get("VIPA_DEFAULT_THEME", "white")

@@ -2,20 +2,29 @@ import sys
 from functools import partial
 from pathlib import Path
 
-from PySide6.QtCore import QFile, QIODevice
-from PySide6.QtUiTools import QUiLoader
-from PySide6.QtWidgets import QApplication, QMainWindow, QRadioButton, QTextEdit
-from config import AppConfig, load_config, save_config
-from themes import DEFAULT_THEME
-from ui_daemon import stop_daemon, wire_daemon
-from ui_export import wire_export_overlay
-from ui_protect import apply_protect_setting, wire_protect_vocabulary
-from ui_tray import wire_tray
-from ui_retrieve import wire_retrieve
-from ui_words import apply_session_config, wire_add_remove_word, wire_get_words, wire_session_config
-from ui_zoom import apply_appearance, wire_zoom
+from dotenv import load_dotenv
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+load_dotenv(PROJECT_ROOT / ".env")
+
+from PySide6.QtCore import QFile, QIODevice  # noqa: E402
+from PySide6.QtUiTools import QUiLoader  # noqa: E402
+from PySide6.QtWidgets import QApplication, QMainWindow, QRadioButton, QTextEdit  # noqa: E402
+from config import AppConfig, load_config, save_config  # noqa: E402
+from themes import DEFAULT_THEME  # noqa: E402
+from ui_daemon import stop_daemon, wire_daemon  # noqa: E402
+from ui_export import wire_export_overlay  # noqa: E402
+from ui_protect import apply_protect_setting, wire_protect_vocabulary  # noqa: E402
+from ui_tray import wire_tray  # noqa: E402
+from ui_retrieve import wire_retrieve  # noqa: E402
+from ui_words import (  # noqa: E402
+    apply_session_config,
+    wire_add_remove_word,
+    wire_get_words,
+    wire_session_config,
+)
+from ui_zoom import apply_appearance, wire_zoom  # noqa: E402
+
 UI_PATH = PROJECT_ROOT / "ui" / "main_window.ui"
 REFERENCE_DIR = PROJECT_ROOT / "data" / "reference"
 

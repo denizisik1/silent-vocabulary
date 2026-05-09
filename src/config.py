@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from pathlib import Path
+import os
 
 import tomlkit
 from platformdirs import user_config_dir
@@ -13,13 +14,18 @@ from zoom import DEFAULT_ZOOM_PERCENT, clamp_zoom_percent
 CONFIG_DIR = Path(user_config_dir("vipa", appauthor=False))
 CONFIG_PATH = CONFIG_DIR / "vipa.toml"
 
-DEFAULT_WINDOW_WIDTH = 720
-DEFAULT_WINDOW_HEIGHT = 560
-MIN_WINDOW_WIDTH = 560
-MIN_WINDOW_HEIGHT = 420
-DEFAULT_DAEMON_INTERVAL_MINUTES = 15
-DEFAULT_NOTIFY_BACKEND = NotifyBackend.DESKTOP.value
-DEFAULT_LANGUAGE = "german"
+DEFAULT_WINDOW_WIDTH = int(os.environ.get("VIPA_DEFAULT_WINDOW_WIDTH", "720"))
+DEFAULT_WINDOW_HEIGHT = int(os.environ.get("VIPA_DEFAULT_WINDOW_HEIGHT", "560"))
+MIN_WINDOW_WIDTH = int(os.environ.get("VIPA_MIN_WINDOW_WIDTH", "560"))
+MIN_WINDOW_HEIGHT = int(os.environ.get("VIPA_MIN_WINDOW_HEIGHT", "420"))
+DEFAULT_DAEMON_INTERVAL_MINUTES = int(
+    os.environ.get("VIPA_DEFAULT_DAEMON_INTERVAL_MINUTES", "15")
+)
+DEFAULT_NOTIFY_BACKEND = os.environ.get(
+    "VIPA_DEFAULT_NOTIFY_BACKEND",
+    NotifyBackend.DESKTOP.value,
+)
+DEFAULT_LANGUAGE = os.environ.get("VIPA_DEFAULT_LANGUAGE", "german")
 INCLUDE_FIELD_NAMES = tuple(DEFAULT_INCLUDE.keys())
 
 
@@ -178,7 +184,10 @@ def save_config(config: AppConfig) -> None:
         "daemon_interval_minutes": config.daemon_interval_minutes,
         "notify_backend": config.notify_backend,
         "language": config.language,
-        "include": {field_name: config.include_fields[field_name] for field_name in INCLUDE_FIELD_NAMES},
+        "include": {
+            field_name: config.include_fields[field_name]
+            for field_name in INCLUDE_FIELD_NAMES
+        },
         "window": {
             "width": config.window.width,
             "height": config.window.height,

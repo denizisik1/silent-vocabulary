@@ -1,3 +1,5 @@
+import os
+
 from PySide6.QtCore import QObject, Signal
 
 from retrieve import check_source_capabilities, retrieve_ipa
@@ -38,16 +40,17 @@ class RetrieveWorker(QObject):
             self.finished_error.emit(str(error))
 
     def _run_check(self) -> None:
+        word = self._word or os.environ.get("VIPA_SAMPLE_WORD", "Abend")
         primary = check_source_capabilities(
             base_url=self._primary_url,
             find_by=self._primary_find,
-            sample_word=self._word or "Abend",
+            sample_word=word,
             source_label="primary",
         )
         backup = check_source_capabilities(
             base_url=self._backup_url,
             find_by=self._backup_find,
-            sample_word=self._word or "Abend",
+            sample_word=word,
             source_label="backup",
         )
         lines = [

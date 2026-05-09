@@ -1,4 +1,5 @@
 from functools import partial
+import os
 
 from PySide6.QtCore import QObject, Qt, QThread, QTimer, Slot
 from PySide6.QtWidgets import (
@@ -15,7 +16,7 @@ from words import format_word_row
 
 _CONTROLLER_ATTR = "_vipa_retrieve_controller"
 _SYNCING_ATTR = "_vipa_word_fields_syncing"
-_RESULT_FLASH_MS = 1200
+_RESULT_FLASH_MS = int(os.environ.get("VIPA_RETRIEVE_FLASH_MS", "1200"))
 
 
 class RetrieveController(QObject):
@@ -152,7 +153,7 @@ class RetrieveController(QObject):
         worker = RetrieveWorker(
             mode=mode,
             language_key=language_key,
-            word=word or "Abend",
+            word=word or os.environ.get("VIPA_SAMPLE_WORD", "Abend"),
             primary_url=self._line("lineEdit_6").text(),
             primary_find=self._line("lineEdit_8").text(),
             backup_url=self._line("lineEdit_9").text(),
@@ -208,6 +209,25 @@ def _wire_word_field_sync(window: QMainWindow) -> None:
     )
 
 
+def _apply_source_defaults(window: QMainWindow) -> None:
+    defaults = {
+        "lineEdit_6": os.environ.get(
+            "VIPA_PRIMARY_SOURCE_URL",
+            "https://www.collinsdictionary.com/dictionary/german-english/",
+        ),
+        "lineEdit_8": os.environ.get("VIPA_PRIMARY_FIND_BY", "pron"),
+        "lineEdit_9": os.environ.get(
+            "VIPA_BACKUP_SOURCE_URL",
+            "https://en.pons.com/translate/german-english/",
+        ),
+        "lineEdit_7": os.environ.get("VIPA_BACKUP_FIND_BY", "phonetics"),
+    }
+    for object_name, value in defaults.items():
+        editor = window.findChild(QLineEdit, object_name)
+        if editor is not None:
+            editor.setText(value)
+
+
 def wire_retrieve(window: QMainWindow) -> None:
     fetch = window.findChild(QPushButton, "pushButton_6")
     check = window.findChild(QPushButton, "pushButton_8")
@@ -217,6 +237,7 @@ def wire_retrieve(window: QMainWindow) -> None:
 
     controller = RetrieveController(window)
     setattr(window, _CONTROLLER_ATTR, controller)
+    _apply_source_defaults(window)
     _wire_word_field_sync(window)
 
     fetch.clicked.connect(partial(controller.start, "retrieve", fetch))

@@ -1,3 +1,4 @@
+import os
 import shutil
 import subprocess
 from enum import Enum
@@ -158,8 +159,10 @@ def send_notification(
     body: str,
     *,
     backend: NotifyBackend = NotifyBackend.DESKTOP,
-    expire_ms: int = 10000,
+    expire_ms: int | None = None,
 ) -> None:
+    if expire_ms is None:
+        expire_ms = int(os.environ.get("VIPA_NOTIFY_EXPIRE_MS", "10000"))
     if not title.strip():
         raise ValueError("Notification title is empty.")
 
