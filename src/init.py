@@ -5,6 +5,12 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from universal.env_check import check_env_files  # noqa: E402
+
+check_env_files(PROJECT_ROOT)
 load_dotenv(PROJECT_ROOT / ".env")
 
 from PySide6.QtCore import QFile, QIODevice  # noqa: E402

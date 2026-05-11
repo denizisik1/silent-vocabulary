@@ -17,7 +17,7 @@ e security:
 	bandit -r src tests
 
 f test:
-	PYTHONPATH=src pytest
+	PYTHONPATH=.:src pytest
 
 
 x: format tidy lint typecheck security test
