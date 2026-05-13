@@ -7,7 +7,6 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QMainWindow,
     QPushButton,
-    QStatusBar,
     QTextEdit,
 )
 from retrieve.worker import RetrieveWorker
@@ -17,6 +16,7 @@ from words import format_word_row
 _CONTROLLER_ATTR = "_vipa_retrieve_controller"
 _SYNCING_ATTR = "_vipa_word_fields_syncing"
 _RESULT_FLASH_MS = int(os.environ.get("VIPA_RETRIEVE_FLASH_MS", "1200"))
+_RESULTS_OBJECT_NAME = "textEdit_retrieve_results"
 
 
 class RetrieveController(QObject):
@@ -41,15 +41,10 @@ class RetrieveController(QObject):
         return self._window.findChild(QLineEdit, object_name)
 
     def _results(self) -> QTextEdit:
-        results = self._window.findChild(QTextEdit, "textEdit_3")
+        results = self._window.findChild(QTextEdit, _RESULTS_OBJECT_NAME)
         if results is None:
-            raise RuntimeError("Missing results view: textEdit_3")
+            raise RuntimeError(f"Missing results view: {_RESULTS_OBJECT_NAME}")
         return results
-
-    def _set_status(self, message: str) -> None:
-        status = self._window.findChild(QStatusBar, "statusbar")
-        if status is not None:
-            status.showMessage(message)
 
     def _append_results(self, message: str) -> None:
         results = self._results()
@@ -117,20 +112,18 @@ class RetrieveController(QObject):
             self._append_results(f"{message}\n{format_word_row(row, include)}")
         else:
             self._append_results(message)
-        self._set_status(message)
         self._cleanup_worker()
         self._flash_result(True)
 
     @Slot(str)
     def on_worker_error(self, message: str) -> None:
         self._append_results(f"Retrieve error: {message}")
-        self._set_status(f"Retrieve error: {message}")
         self._cleanup_worker()
         self._flash_result(False)
 
     def start(self, mode: str, button: QPushButton | None = None) -> None:
         if self._busy:
-            self._set_status("Retrieve already running")
+            self._append_results("Retrieve already running")
             return
 
         language_combo = self._window.findChild(QComboBox, "comboBox")
@@ -141,7 +134,6 @@ class RetrieveController(QObject):
         if mode != "check" and not word:
             message = "Enter a word on Sources or Vocabulary before retrieving IPA."
             self._append_results(message)
-            self._set_status(message)
             return
 
         self._flash_timer.stop()
@@ -173,7 +165,7 @@ class RetrieveController(QObject):
         self._thread = thread
         self._active_button = button
         self._apply_button_state(button, "running")
-        self._set_status(f"Retrieve {mode} started")
+        self._append_results(f"Retrieve {mode} started")
         thread.start()
 
 
