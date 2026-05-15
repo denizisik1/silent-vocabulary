@@ -16,7 +16,10 @@ from words import format_word_row
 _CONTROLLER_ATTR = "_vipa_retrieve_controller"
 _SYNCING_ATTR = "_vipa_word_fields_syncing"
 _RESULT_FLASH_MS = int(os.environ.get("VIPA_RETRIEVE_FLASH_MS", "1200"))
-_RESULTS_OBJECT_NAME = "textEdit_retrieve_results"
+_RESULTS_OBJECT_NAMES = (
+    "textEdit_retrieve_results",
+    "textEdit_vocab_retrieve_results",
+)
 
 
 class RetrieveController(QObject):
@@ -40,19 +43,25 @@ class RetrieveController(QObject):
     def _optional_line(self, object_name: str) -> QLineEdit | None:
         return self._window.findChild(QLineEdit, object_name)
 
-    def _results(self) -> QTextEdit:
-        results = self._window.findChild(QTextEdit, _RESULTS_OBJECT_NAME)
-        if results is None:
-            raise RuntimeError(f"Missing results view: {_RESULTS_OBJECT_NAME}")
-        return results
+    def _result_views(self) -> list[QTextEdit]:
+        views: list[QTextEdit] = []
+        for object_name in _RESULTS_OBJECT_NAMES:
+            results = self._window.findChild(QTextEdit, object_name)
+            if results is not None:
+                views.append(results)
+        if not views:
+            raise RuntimeError(
+                f"Missing results view: one of {_RESULTS_OBJECT_NAMES}"
+            )
+        return views
 
     def _append_results(self, message: str) -> None:
-        results = self._results()
-        existing = results.toPlainText().strip()
-        if existing:
-            results.setPlainText(f"{existing}\n{message}")
-        else:
-            results.setPlainText(message)
+        for results in self._result_views():
+            existing = results.toPlainText().strip()
+            if existing:
+                results.setPlainText(f"{existing}\n{message}")
+            else:
+                results.setPlainText(message)
 
     def _retrieve_buttons(self) -> list[QPushButton]:
         buttons: list[QPushButton] = []

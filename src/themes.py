@@ -144,7 +144,8 @@ QLineEdit:focus, QTextEdit:focus, QComboBox:focus, QSpinBox:focus {{
     border: 1px solid {colors["accent"]};
 }}
 QTextEdit#textEdit_3,
-QTextEdit#textEdit_retrieve_results {{
+QTextEdit#textEdit_retrieve_results,
+QTextEdit#textEdit_vocab_retrieve_results {{
     font-size: {results_size}px;
     padding: 8px;
 }}
