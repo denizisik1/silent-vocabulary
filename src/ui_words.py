@@ -19,6 +19,7 @@ from words import (
     get_random_words,
     remove_word,
 )
+from words.parse import normalize_row
 
 _INCLUDE_CHECKBOXES = {
     "article": "checkBox",
@@ -192,6 +193,44 @@ def clear_add_word_fields(window: QMainWindow) -> None:
     if classification is None:
         raise RuntimeError("Missing Add Word control: comboBox_add_classification")
     classification.setCurrentIndex(0)
+
+
+def populate_add_form_from_row(window: QMainWindow, row: tuple) -> None:
+    (
+        article,
+        word,
+        meaning,
+        pronunciation,
+        classification,
+        source,
+        example,
+        translation,
+        plural,
+    ) = normalize_row(row)
+
+    field_values = {
+        "lineEdit_add_article": article,
+        "lineEdit_2": word,
+        "lineEdit_add_meaning": meaning,
+        "lineEdit_add_pronunciation": pronunciation,
+        "lineEdit_add_source": source,
+        "lineEdit_add_example": example,
+        "lineEdit_add_translation": translation,
+        "lineEdit_add_plural": plural,
+    }
+    for object_name, value in field_values.items():
+        editor = window.findChild(QLineEdit, object_name)
+        if editor is None:
+            raise RuntimeError(f"Missing Add Word control: {object_name}")
+        editor.setText(value or "")
+
+    classification_combo = window.findChild(QComboBox, "comboBox_add_classification")
+    if classification_combo is None:
+        raise RuntimeError("Missing Add Word control: comboBox_add_classification")
+    if classification:
+        index = classification_combo.findText(classification)
+        if index >= 0:
+            classification_combo.setCurrentIndex(index)
 
 
 def on_add_word(window: QMainWindow) -> None:

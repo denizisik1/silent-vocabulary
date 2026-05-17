@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (
     QTextEdit,
 )
 from retrieve.worker import RetrieveWorker
-from ui_words import include_flags, language_key_from_combo
+from ui_words import include_flags, language_key_from_combo, populate_add_form_from_row
 from words import format_word_row
 
 _CONTROLLER_ATTR = "_vipa_retrieve_controller"
@@ -119,6 +119,7 @@ class RetrieveController(QObject):
         include = include_flags(self._window)
         if isinstance(row, tuple):
             self._append_results(f"{message}\n{format_word_row(row, include)}")
+            populate_add_form_from_row(self._window, row)
         else:
             self._append_results(message)
         self._cleanup_worker()
