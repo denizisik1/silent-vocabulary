@@ -7,6 +7,10 @@ from platformdirs import user_config_dir
 
 from daemon import parse_interval_minutes
 from notify import NotifyBackend
+from retrieve.strategy import (
+    DEFAULT_RETRIEVE_STRATEGY,
+    normalize_retrieve_strategy,
+)
 from themes import DEFAULT_THEME, THEMES
 from words.constants import DEFAULT_INCLUDE, LANGUAGE_VOCABULARY_FILES
 from zoom import DEFAULT_ZOOM_PERCENT, clamp_zoom_percent
@@ -44,6 +48,7 @@ class AppConfig:
     daemon_interval_minutes: int = DEFAULT_DAEMON_INTERVAL_MINUTES
     notify_backend: str = DEFAULT_NOTIFY_BACKEND
     language: str = DEFAULT_LANGUAGE
+    retrieve_strategy: str = DEFAULT_RETRIEVE_STRATEGY
     include_fields: dict[str, bool] = field(default_factory=lambda: dict(DEFAULT_INCLUDE))
     window: WindowConfig = field(default_factory=WindowConfig)
 
@@ -122,6 +127,12 @@ def _parse_language(value) -> str:
     return DEFAULT_LANGUAGE
 
 
+def _parse_retrieve_strategy(value) -> str:
+    if not isinstance(value, str):
+        return DEFAULT_RETRIEVE_STRATEGY
+    return normalize_retrieve_strategy(value)
+
+
 def _parse_include_fields(include_table) -> dict[str, bool]:
     include_fields = dict(DEFAULT_INCLUDE)
     if not isinstance(include_table, dict):
@@ -158,6 +169,9 @@ def load_config() -> AppConfig:
         config_document.get("notify_backend", DEFAULT_NOTIFY_BACKEND)
     )
     language = _parse_language(config_document.get("language", DEFAULT_LANGUAGE))
+    retrieve_strategy = _parse_retrieve_strategy(
+        config_document.get("retrieve_strategy", DEFAULT_RETRIEVE_STRATEGY)
+    )
     include_fields = _parse_include_fields(config_document.get("include"))
 
     return AppConfig(
@@ -168,6 +182,7 @@ def load_config() -> AppConfig:
         daemon_interval_minutes=daemon_interval_minutes,
         notify_backend=notify_backend,
         language=language,
+        retrieve_strategy=retrieve_strategy,
         include_fields=include_fields,
         window=window,
     )
@@ -184,6 +199,7 @@ def save_config(config: AppConfig) -> None:
         "daemon_interval_minutes": config.daemon_interval_minutes,
         "notify_backend": config.notify_backend,
         "language": config.language,
+        "retrieve_strategy": normalize_retrieve_strategy(config.retrieve_strategy),
         "include": {
             field_name: config.include_fields[field_name]
             for field_name in INCLUDE_FIELD_NAMES

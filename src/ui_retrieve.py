@@ -7,7 +7,14 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QMainWindow,
     QPushButton,
+    QRadioButton,
     QTextEdit,
+)
+from config import AppConfig, save_config
+from retrieve.strategy import (
+    STRATEGY_BASIC_FIRST,
+    STRATEGY_PRIMARY_FIRST,
+    normalize_retrieve_strategy,
 )
 from retrieve.worker import RetrieveWorker
 from ui_words import include_flags, language_key_from_combo, populate_add_form_from_row
@@ -20,12 +27,17 @@ _RESULTS_OBJECT_NAMES = (
     "textEdit_retrieve_results",
     "textEdit_vocab_retrieve_results",
 )
+_STRATEGY_RADIOS = {
+    STRATEGY_PRIMARY_FIRST: "radioButton_retrievePrimaryFirst",
+    STRATEGY_BASIC_FIRST: "radioButton_retrieveBasicFirst",
+}
 
 
 class RetrieveController(QObject):
-    def __init__(self, window: QMainWindow) -> None:
+    def __init__(self, window: QMainWindow, config: AppConfig) -> None:
         super().__init__(window)
         self._window = window
+        self._config = config
         self._thread: QThread | None = None
         self._worker: RetrieveWorker | None = None
         self._active_button: QPushButton | None = None
@@ -160,6 +172,7 @@ class RetrieveController(QObject):
             primary_find=self._line("lineEdit_8").text(),
             backup_url=self._line("lineEdit_9").text(),
             backup_find=self._line("lineEdit_7").text(),
+            retrieve_strategy=self._config.retrieve_strategy,
         )
         thread = QThread(self._window)
         worker.moveToThread(thread)
@@ -230,17 +243,59 @@ def _apply_source_defaults(window: QMainWindow) -> None:
             editor.setText(value)
 
 
-def wire_retrieve(window: QMainWindow) -> None:
+def selected_retrieve_strategy(window: QMainWindow) -> str:
+    for strategy, object_name in _STRATEGY_RADIOS.items():
+        button = window.findChild(QRadioButton, object_name)
+        if button is not None and button.isChecked():
+            return strategy
+    return STRATEGY_PRIMARY_FIRST
+
+
+def _select_retrieve_strategy(window: QMainWindow, strategy: str) -> None:
+    normalized = normalize_retrieve_strategy(strategy)
+    for retrieve_strategy, object_name in _STRATEGY_RADIOS.items():
+        button = window.findChild(QRadioButton, object_name)
+        if button is None:
+            continue
+        button.blockSignals(True)
+        button.setChecked(retrieve_strategy == normalized)
+        button.blockSignals(False)
+
+
+def _on_retrieve_strategy_toggled(
+    window: QMainWindow,
+    config: AppConfig,
+    strategy: str,
+    checked: bool,
+) -> None:
+    if not checked:
+        return
+    config.retrieve_strategy = strategy
+    save_config(config)
+
+
+def _wire_retrieve_strategy(window: QMainWindow, config: AppConfig) -> None:
+    _select_retrieve_strategy(window, config.retrieve_strategy)
+    for strategy, object_name in _STRATEGY_RADIOS.items():
+        button = window.findChild(QRadioButton, object_name)
+        if button is None:
+            raise RuntimeError(f"Missing retrieve strategy control: {object_name}")
+        handler = partial(_on_retrieve_strategy_toggled, window, config, strategy)
+        button.toggled.connect(handler)
+
+
+def wire_retrieve(window: QMainWindow, config: AppConfig) -> None:
     fetch = window.findChild(QPushButton, "pushButton_6")
     check = window.findChild(QPushButton, "pushButton_8")
     vocab_fetch = window.findChild(QPushButton, "pushButton_vocab_fetch")
     if fetch is None or check is None:
         raise RuntimeError("Missing retrieve buttons")
 
-    controller = RetrieveController(window)
+    controller = RetrieveController(window, config)
     setattr(window, _CONTROLLER_ATTR, controller)
     _apply_source_defaults(window)
     _wire_word_field_sync(window)
+    _wire_retrieve_strategy(window, config)
 
     fetch.clicked.connect(partial(controller.start, "retrieve", fetch))
     check.clicked.connect(partial(controller.start, "check", check))

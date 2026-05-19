@@ -25,6 +25,7 @@ def test_save_and_load_round_trip(tmp_path, monkeypatch):
         daemon_interval_minutes=30,
         notify_backend="desktop",
         language="german",
+        retrieve_strategy="basic_first",
         include_fields={
             "article": False,
             "word": True,
@@ -130,6 +131,34 @@ def test_load_language_invalid_uses_default(tmp_path, monkeypatch):
     loaded = config.load_config()
 
     assert loaded.language == config.DEFAULT_LANGUAGE
+
+
+def test_load_retrieve_strategy_default(tmp_path, monkeypatch):
+    monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "vipa.toml")
+
+    loaded = config.load_config()
+
+    assert loaded.retrieve_strategy == config.DEFAULT_RETRIEVE_STRATEGY
+
+
+def test_load_retrieve_strategy_basic_first(tmp_path, monkeypatch):
+    config_path = tmp_path / "vipa.toml"
+    config_path.write_text('retrieve_strategy = "basic_first"\n', encoding="utf-8")
+    monkeypatch.setattr(config, "CONFIG_PATH", config_path)
+
+    loaded = config.load_config()
+
+    assert loaded.retrieve_strategy == "basic_first"
+
+
+def test_load_retrieve_strategy_invalid_uses_default(tmp_path, monkeypatch):
+    config_path = tmp_path / "vipa.toml"
+    config_path.write_text('retrieve_strategy = "chaos"\n', encoding="utf-8")
+    monkeypatch.setattr(config, "CONFIG_PATH", config_path)
+
+    loaded = config.load_config()
+
+    assert loaded.retrieve_strategy == config.DEFAULT_RETRIEVE_STRATEGY
 
 
 def test_load_include_fields_partial_merge(tmp_path, monkeypatch):

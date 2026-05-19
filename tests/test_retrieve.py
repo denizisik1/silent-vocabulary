@@ -43,15 +43,15 @@ def test_extract_ipa_from_html_missing_raises():
 def test_fetch_html_falls_back_to_playwright(monkeypatch):
     calls: list[str] = []
 
-    def fake_requests(url: str, *, timeout_seconds: float) -> str:
-        calls.append("requests")
+    def fake_basic(url: str, *, timeout_seconds: float) -> str:
+        calls.append("basic")
         raise RuntimeError("HTTP 403 for https://example.com/word")
 
     def fake_playwright(url: str, *, timeout_seconds: float) -> str:
         calls.append("playwright")
         return "<html><span class='phonetics'>[ˈa:bn̩t]</span></html>"
 
-    monkeypatch.setattr("retrieve.fetch._fetch_html_requests", fake_requests)
+    monkeypatch.setattr("retrieve.fetch.fetch_html_basic", fake_basic)
     monkeypatch.setattr("retrieve.fetch.playwright_available", lambda: True)
     monkeypatch.setattr("retrieve.fetch.fetch_html_playwright", fake_playwright)
 
@@ -59,13 +59,13 @@ def test_fetch_html_falls_back_to_playwright(monkeypatch):
 
     html = fetch_html("https://example.com/word")
 
-    assert calls == ["requests", "playwright"]
+    assert calls == ["basic", "playwright"]
     assert "phonetics" in html
 
 
 def test_fetch_html_reports_both_failures(monkeypatch):
     monkeypatch.setattr(
-        "retrieve.fetch._fetch_html_requests",
+        "retrieve.fetch.fetch_html_basic",
         lambda url, timeout_seconds: (_ for _ in ()).throw(RuntimeError("HTTP 403")),
     )
     monkeypatch.setattr("retrieve.fetch.playwright_available", lambda: True)
@@ -80,5 +80,109 @@ def test_fetch_html_reports_both_failures(monkeypatch):
         fetch_html("https://example.com/word")
         assert False, "expected RuntimeError"
     except RuntimeError as error:
-        assert "requests" in str(error)
+        assert "basic" in str(error)
         assert "playwright" in str(error)
+
+
+def test_retrieve_attempt_order_primary_first():
+    from retrieve.strategy import STRATEGY_PRIMARY_FIRST, retrieve_attempt_order
+
+    assert retrieve_attempt_order(STRATEGY_PRIMARY_FIRST) == [
+        ("primary", "basic"),
+        ("primary", "playwright"),
+        ("backup", "basic"),
+        ("backup", "playwright"),
+    ]
+
+
+def test_retrieve_attempt_order_basic_first():
+    from retrieve.strategy import STRATEGY_BASIC_FIRST, retrieve_attempt_order
+
+    assert retrieve_attempt_order(STRATEGY_BASIC_FIRST) == [
+        ("primary", "basic"),
+        ("backup", "basic"),
+        ("primary", "playwright"),
+        ("backup", "playwright"),
+    ]
+
+
+def test_retrieve_ipa_with_strategy_primary_first(monkeypatch):
+    calls: list[tuple[str, str]] = []
+
+    def fake_fetch(url: str, method: str, *, timeout_seconds: float = 20) -> str:
+        calls.append((url, method))
+        if "collins" in url and method == "basic":
+            raise RuntimeError("HTTP 403")
+        if "collins" in url and method == "playwright":
+            return "<html><span class='pron'>[ˈa:bn̩t]</span></html>"
+        raise RuntimeError("unexpected")
+
+    monkeypatch.setattr("retrieve.service.fetch_html_with_method", fake_fetch)
+
+    from retrieve.service import SourceEndpoint, retrieve_ipa_with_strategy
+    from retrieve.strategy import STRATEGY_PRIMARY_FIRST
+
+    result = retrieve_ipa_with_strategy(
+        word="Abend",
+        primary=SourceEndpoint(
+            "primary",
+            "https://www.collinsdictionary.com/dictionary/german-english/",
+            "pron",
+        ),
+        backup=SourceEndpoint(
+            "backup",
+            "https://en.pons.com/translate/german-english/",
+            "phonetics",
+        ),
+        strategy=STRATEGY_PRIMARY_FIRST,
+    )
+
+    assert result.source_label == "primary"
+    assert result.fetch_method == "playwright"
+    assert result.pronunciation == "[ˈa:bn̩t]"
+    assert calls == [
+        ("https://www.collinsdictionary.com/dictionary/german-english/Abend", "basic"),
+        (
+            "https://www.collinsdictionary.com/dictionary/german-english/Abend",
+            "playwright",
+        ),
+    ]
+
+
+def test_retrieve_ipa_with_strategy_basic_first(monkeypatch):
+    calls: list[tuple[str, str]] = []
+
+    def fake_fetch(url: str, method: str, *, timeout_seconds: float = 20) -> str:
+        calls.append((url, method))
+        if "collins" in url:
+            raise RuntimeError("HTTP 403")
+        if "pons" in url and method == "basic":
+            return "<html><span class='phonetics'>[ˈa:bn̩t]</span></html>"
+        raise RuntimeError("unexpected")
+
+    monkeypatch.setattr("retrieve.service.fetch_html_with_method", fake_fetch)
+
+    from retrieve.service import SourceEndpoint, retrieve_ipa_with_strategy
+    from retrieve.strategy import STRATEGY_BASIC_FIRST
+
+    result = retrieve_ipa_with_strategy(
+        word="Abend",
+        primary=SourceEndpoint(
+            "primary",
+            "https://www.collinsdictionary.com/dictionary/german-english/",
+            "pron",
+        ),
+        backup=SourceEndpoint(
+            "backup",
+            "https://en.pons.com/translate/german-english/",
+            "phonetics",
+        ),
+        strategy=STRATEGY_BASIC_FIRST,
+    )
+
+    assert result.source_label == "backup"
+    assert result.fetch_method == "basic"
+    assert calls == [
+        ("https://www.collinsdictionary.com/dictionary/german-english/Abend", "basic"),
+        ("https://en.pons.com/translate/german-english/Abend", "basic"),
+    ]

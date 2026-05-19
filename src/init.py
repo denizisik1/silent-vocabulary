@@ -136,7 +136,7 @@ def main() -> None:
     wire_session_config(window, config)
     wire_tray(window, application, config)
     wire_daemon(window, application, config)
-    wire_retrieve(window)
+    wire_retrieve(window, config)
     wire_protect_vocabulary(window, config)
     wire_export_overlay(window)
     _load_reference(window)

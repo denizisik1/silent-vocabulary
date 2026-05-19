@@ -2,7 +2,9 @@ import os
 
 from PySide6.QtCore import QObject, Signal
 
-from retrieve import check_source_capabilities, retrieve_ipa
+from retrieve import check_source_capabilities
+from retrieve.service import SourceEndpoint, retrieve_ipa_with_strategy
+from retrieve.strategy import DEFAULT_RETRIEVE_STRATEGY, normalize_retrieve_strategy
 from words import upsert_pronunciation
 
 
@@ -20,6 +22,7 @@ class RetrieveWorker(QObject):
         primary_find: str,
         backup_url: str,
         backup_find: str,
+        retrieve_strategy: str = DEFAULT_RETRIEVE_STRATEGY,
     ) -> None:
         super().__init__()
         self._mode = mode
@@ -29,6 +32,7 @@ class RetrieveWorker(QObject):
         self._primary_find = primary_find
         self._backup_url = backup_url
         self._backup_find = backup_find
+        self._retrieve_strategy = normalize_retrieve_strategy(retrieve_strategy)
 
     def run(self) -> None:
         try:
@@ -64,34 +68,38 @@ class RetrieveWorker(QObject):
                 f"ipa={backup.ipa_found} detail={backup.detail}"
                 + (f" sample={backup.sample_ipa}" if backup.sample_ipa else "")
             ),
+            f"Strategy: {self._retrieve_strategy}",
         ]
         self.finished_ok.emit("\n".join(lines), None)
 
     def _run_retrieve(self) -> None:
-        sources = [
-            ("primary", self._primary_url, self._primary_find),
-            ("backup", self._backup_url, self._backup_find),
-        ]
+        try:
+            result = retrieve_ipa_with_strategy(
+                word=self._word,
+                primary=SourceEndpoint(
+                    label="primary",
+                    base_url=self._primary_url,
+                    find_by=self._primary_find,
+                ),
+                backup=SourceEndpoint(
+                    label="backup",
+                    base_url=self._backup_url,
+                    find_by=self._backup_find,
+                ),
+                strategy=self._retrieve_strategy,
+            )
+        except (ValueError, RuntimeError, OSError) as error:
+            self.finished_error.emit(str(error))
+            return
 
-        errors: list[str] = []
-        for label, url, find_by in sources:
-            try:
-                result = retrieve_ipa(
-                    base_url=url,
-                    find_by=find_by,
-                    word=self._word,
-                    source_label=label,
-                )
-                row = upsert_pronunciation(
-                    self._language_key,
-                    result.word,
-                    result.pronunciation,
-                    source=result.url,
-                )
-                message = f"Retrieved via {label}: {result.word} {result.pronunciation}"
-                self.finished_ok.emit(message, row)
-                return
-            except (ValueError, RuntimeError, OSError) as error:
-                errors.append(f"{label}: {error}")
-
-        self.finished_error.emit(" | ".join(errors) if errors else "Retrieve failed")
+        row = upsert_pronunciation(
+            self._language_key,
+            result.word,
+            result.pronunciation,
+            source=result.url,
+        )
+        message = (
+            f"Retrieved via {result.source_label} ({result.fetch_method}): "
+            f"{result.word} {result.pronunciation}"
+        )
+        self.finished_ok.emit(message, row)

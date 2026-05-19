@@ -3,6 +3,7 @@ import os
 import requests  # type: ignore[import-untyped]
 
 from retrieve.playwright_fetch import fetch_html_playwright, playwright_available
+from retrieve.strategy import FETCH_METHOD_BASIC, FETCH_METHOD_PLAYWRIGHT
 
 DEFAULT_HEADERS = {
     "User-Agent": os.environ.get(
@@ -26,7 +27,7 @@ _PLAYWRIGHT_EXTRA_TIMEOUT_SECONDS = float(
 )
 
 
-def _fetch_html_requests(url: str, *, timeout_seconds: float) -> str:
+def fetch_html_basic(url: str, *, timeout_seconds: float = _FETCH_TIMEOUT_SECONDS) -> str:
     response = requests.get(
         url,
         headers=DEFAULT_HEADERS,
@@ -40,27 +41,48 @@ def _fetch_html_requests(url: str, *, timeout_seconds: float) -> str:
     return response.content.decode(encoding, errors="replace")
 
 
-def fetch_html(url: str, *, timeout_seconds: float = _FETCH_TIMEOUT_SECONDS) -> str:
-    requests_error: Exception | None = None
-    try:
-        return _fetch_html_requests(url, timeout_seconds=timeout_seconds)
-    except (RuntimeError, requests.RequestException) as error:
-        requests_error = error
-
+def fetch_html_browser(
+    url: str,
+    *,
+    timeout_seconds: float = _FETCH_TIMEOUT_SECONDS,
+) -> str:
     if not playwright_available():
-        detail = str(requests_error) if requests_error else "requests failed"
-        raise RuntimeError(f"Fetch failed via requests ({detail})") from requests_error
+        raise RuntimeError(
+            "Playwright is not installed. Install it with: pip install playwright"
+        )
+    return fetch_html_playwright(
+        url,
+        timeout_seconds=timeout_seconds + _PLAYWRIGHT_EXTRA_TIMEOUT_SECONDS,
+    )
+
+
+def fetch_html_with_method(
+    url: str,
+    method: str,
+    *,
+    timeout_seconds: float = _FETCH_TIMEOUT_SECONDS,
+) -> str:
+    if method == FETCH_METHOD_BASIC:
+        return fetch_html_basic(url, timeout_seconds=timeout_seconds)
+    if method == FETCH_METHOD_PLAYWRIGHT:
+        return fetch_html_browser(url, timeout_seconds=timeout_seconds)
+    raise ValueError(f"Unknown fetch method: {method}")
+
+
+def fetch_html(url: str, *, timeout_seconds: float = _FETCH_TIMEOUT_SECONDS) -> str:
+    basic_error: Exception | None = None
+    try:
+        return fetch_html_basic(url, timeout_seconds=timeout_seconds)
+    except (RuntimeError, requests.RequestException) as error:
+        basic_error = error
 
     try:
-        return fetch_html_playwright(
-            url,
-            timeout_seconds=timeout_seconds + _PLAYWRIGHT_EXTRA_TIMEOUT_SECONDS,
-        )
+        return fetch_html_browser(url, timeout_seconds=timeout_seconds)
     except Exception as playwright_error:
-        requests_detail = str(requests_error) if requests_error else "unknown"
+        basic_detail = str(basic_error) if basic_error else "unknown"
         raise RuntimeError(
-            "Fetch failed via requests "
-            f"({requests_detail}) and playwright ({playwright_error})"
+            "Fetch failed via basic "
+            f"({basic_detail}) and playwright ({playwright_error})"
         ) from playwright_error
 
 
