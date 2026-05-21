@@ -1,3 +1,4 @@
+from retrieve.http_headers import browser_headers, browser_locale, origin_url
 from retrieve.parse import clean_ipa_text, extract_ipa_from_html
 from retrieve.url import build_entry_url
 
@@ -6,6 +7,26 @@ def test_build_entry_url_appends_word():
     url = build_entry_url("https://en.pons.com/translate/german-english", "Abend")
 
     assert url == "https://en.pons.com/translate/german-english/Abend"
+
+
+def test_origin_url():
+    assert (
+        origin_url("https://www.collinsdictionary.com/dictionary/german-english/daten")
+        == "https://www.collinsdictionary.com/"
+    )
+
+
+def test_browser_headers_include_referer_and_sec_fetch():
+    headers = browser_headers(
+        "https://www.collinsdictionary.com/dictionary/german-english/daten"
+    )
+
+    assert headers["Referer"] == "https://www.collinsdictionary.com/"
+    assert headers["Sec-Fetch-Dest"] == "document"
+    assert headers["Sec-Fetch-Mode"] == "navigate"
+    assert headers["Sec-Fetch-User"] == "?1"
+    assert "Sec-CH-UA" in headers
+    assert browser_locale(headers["Accept-Language"]) == "en-US"
 
 
 def test_build_entry_url_quotes_spaces():
@@ -40,26 +61,26 @@ def test_extract_ipa_from_html_missing_raises():
         assert "No IPA found" in str(error)
 
 
-def test_fetch_html_falls_back_to_playwright(monkeypatch):
+def test_fetch_html_falls_back_to_stealth(monkeypatch):
     calls: list[str] = []
 
     def fake_basic(url: str, *, timeout_seconds: float) -> str:
         calls.append("basic")
         raise RuntimeError("HTTP 403 for https://example.com/word")
 
-    def fake_playwright(url: str, *, timeout_seconds: float) -> str:
-        calls.append("playwright")
+    def fake_stealth(url: str, *, timeout_seconds: float) -> str:
+        calls.append("stealth")
         return "<html><span class='phonetics'>[ˈa:bn̩t]</span></html>"
 
     monkeypatch.setattr("retrieve.fetch.fetch_html_basic", fake_basic)
-    monkeypatch.setattr("retrieve.fetch.playwright_available", lambda: True)
-    monkeypatch.setattr("retrieve.fetch.fetch_html_playwright", fake_playwright)
+    monkeypatch.setattr("retrieve.fetch.stealth_available", lambda: True)
+    monkeypatch.setattr("retrieve.fetch.fetch_html_stealth", fake_stealth)
 
     from retrieve.fetch import fetch_html
 
     html = fetch_html("https://example.com/word")
 
-    assert calls == ["basic", "playwright"]
+    assert calls == ["basic", "stealth"]
     assert "phonetics" in html
 
 
@@ -68,9 +89,9 @@ def test_fetch_html_reports_both_failures(monkeypatch):
         "retrieve.fetch.fetch_html_basic",
         lambda url, timeout_seconds: (_ for _ in ()).throw(RuntimeError("HTTP 403")),
     )
-    monkeypatch.setattr("retrieve.fetch.playwright_available", lambda: True)
+    monkeypatch.setattr("retrieve.fetch.stealth_available", lambda: True)
     monkeypatch.setattr(
-        "retrieve.fetch.fetch_html_playwright",
+        "retrieve.fetch.fetch_html_stealth",
         lambda url, timeout_seconds: (_ for _ in ()).throw(RuntimeError("browser missing")),
     )
 
@@ -81,7 +102,7 @@ def test_fetch_html_reports_both_failures(monkeypatch):
         assert False, "expected RuntimeError"
     except RuntimeError as error:
         assert "basic" in str(error)
-        assert "playwright" in str(error)
+        assert "stealth" in str(error)
 
 
 def test_retrieve_attempt_order_primary_first():
@@ -89,9 +110,9 @@ def test_retrieve_attempt_order_primary_first():
 
     assert retrieve_attempt_order(STRATEGY_PRIMARY_FIRST) == [
         ("primary", "basic"),
-        ("primary", "playwright"),
+        ("primary", "stealth"),
         ("backup", "basic"),
-        ("backup", "playwright"),
+        ("backup", "stealth"),
     ]
 
 
@@ -101,8 +122,8 @@ def test_retrieve_attempt_order_basic_first():
     assert retrieve_attempt_order(STRATEGY_BASIC_FIRST) == [
         ("primary", "basic"),
         ("backup", "basic"),
-        ("primary", "playwright"),
-        ("backup", "playwright"),
+        ("primary", "stealth"),
+        ("backup", "stealth"),
     ]
 
 
@@ -113,7 +134,7 @@ def test_retrieve_ipa_with_strategy_primary_first(monkeypatch):
         calls.append((url, method))
         if "collins" in url and method == "basic":
             raise RuntimeError("HTTP 403")
-        if "collins" in url and method == "playwright":
+        if "collins" in url and method == "stealth":
             return "<html><span class='pron'>[ˈa:bn̩t]</span></html>"
         raise RuntimeError("unexpected")
 
@@ -138,13 +159,13 @@ def test_retrieve_ipa_with_strategy_primary_first(monkeypatch):
     )
 
     assert result.source_label == "primary"
-    assert result.fetch_method == "playwright"
+    assert result.fetch_method == "stealth"
     assert result.pronunciation == "[ˈa:bn̩t]"
     assert calls == [
         ("https://www.collinsdictionary.com/dictionary/german-english/Abend", "basic"),
         (
             "https://www.collinsdictionary.com/dictionary/german-english/Abend",
-            "playwright",
+            "stealth",
         ),
     ]
 
@@ -186,3 +207,13 @@ def test_retrieve_ipa_with_strategy_basic_first(monkeypatch):
         ("https://www.collinsdictionary.com/dictionary/german-english/Abend", "basic"),
         ("https://en.pons.com/translate/german-english/Abend", "basic"),
     ]
+
+
+def test_page_looks_ready_rejects_challenge():
+    from retrieve.stealth_fetch import _page_looks_ready
+
+    assert not _page_looks_ready("Just a moment...", "<html>challenge</html>")
+    assert _page_looks_ready(
+        "English Translation of DATEN",
+        '<html><span class="pron">[ˈdaːtn]</span></html>',
+    )

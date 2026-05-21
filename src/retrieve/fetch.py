@@ -2,38 +2,49 @@ import os
 
 import requests  # type: ignore[import-untyped]
 
-from retrieve.playwright_fetch import fetch_html_playwright, playwright_available
-from retrieve.strategy import FETCH_METHOD_BASIC, FETCH_METHOD_PLAYWRIGHT
-
-DEFAULT_HEADERS = {
-    "User-Agent": os.environ.get(
-        "VIPA_HTTP_USER_AGENT",
-        (
-            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-            "(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
-        ),
-    ),
-    "Accept": os.environ.get(
-        "VIPA_HTTP_ACCEPT",
-        "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    ),
-    "Accept-Language": os.environ.get("VIPA_HTTP_ACCEPT_LANGUAGE", "en-US,en;q=0.9"),
-}
+from retrieve.http_headers import browser_headers, origin_url
+from retrieve.stealth_fetch import fetch_html_stealth, stealth_available
+from retrieve.strategy import FETCH_METHOD_BASIC, FETCH_METHOD_STEALTH
 
 _FETCH_TIMEOUT_SECONDS = float(os.environ.get("VIPA_FETCH_TIMEOUT_SECONDS", "20"))
 _PROBE_TIMEOUT_SECONDS = float(os.environ.get("VIPA_PROBE_TIMEOUT_SECONDS", "10"))
-_PLAYWRIGHT_EXTRA_TIMEOUT_SECONDS = float(
-    os.environ.get("VIPA_PLAYWRIGHT_EXTRA_TIMEOUT_SECONDS", "10")
+_STEALTH_EXTRA_TIMEOUT_SECONDS = float(
+    os.environ.get("VIPA_STEALTH_EXTRA_TIMEOUT_SECONDS", "40")
 )
 
 
+def _env_bool(name: str, default: bool) -> bool:
+    raw = os.environ.get(name)
+    if raw is None:
+        return default
+    return raw.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _warmup_enabled() -> bool:
+    return _env_bool("VIPA_HTTP_WARMUP", True)
+
+
 def fetch_html_basic(url: str, *, timeout_seconds: float = _FETCH_TIMEOUT_SECONDS) -> str:
-    response = requests.get(
-        url,
-        headers=DEFAULT_HEADERS,
-        timeout=timeout_seconds,
-        allow_redirects=True,
-    )
+    headers = browser_headers(url)
+    with requests.Session() as session:
+        session.headers.update(headers)
+        if _warmup_enabled():
+            try:
+                session.get(
+                    origin_url(url),
+                    timeout=min(timeout_seconds, 10.0),
+                    allow_redirects=True,
+                )
+            except requests.RequestException:
+                pass
+            session.headers["Sec-Fetch-Site"] = "same-origin"
+            session.headers["Referer"] = origin_url(url)
+
+        response = session.get(
+            url,
+            timeout=timeout_seconds,
+            allow_redirects=True,
+        )
     if response.status_code >= 400:
         raise RuntimeError(f"HTTP {response.status_code} for {url}")
 
@@ -46,13 +57,13 @@ def fetch_html_browser(
     *,
     timeout_seconds: float = _FETCH_TIMEOUT_SECONDS,
 ) -> str:
-    if not playwright_available():
+    if not stealth_available():
         raise RuntimeError(
-            "Playwright is not installed. Install it with: pip install playwright"
+            "zendriver is not installed. Install it with: pip install zendriver"
         )
-    return fetch_html_playwright(
+    return fetch_html_stealth(
         url,
-        timeout_seconds=timeout_seconds + _PLAYWRIGHT_EXTRA_TIMEOUT_SECONDS,
+        timeout_seconds=timeout_seconds + _STEALTH_EXTRA_TIMEOUT_SECONDS,
     )
 
 
@@ -64,7 +75,7 @@ def fetch_html_with_method(
 ) -> str:
     if method == FETCH_METHOD_BASIC:
         return fetch_html_basic(url, timeout_seconds=timeout_seconds)
-    if method == FETCH_METHOD_PLAYWRIGHT:
+    if method == FETCH_METHOD_STEALTH:
         return fetch_html_browser(url, timeout_seconds=timeout_seconds)
     raise ValueError(f"Unknown fetch method: {method}")
 
@@ -78,27 +89,27 @@ def fetch_html(url: str, *, timeout_seconds: float = _FETCH_TIMEOUT_SECONDS) -> 
 
     try:
         return fetch_html_browser(url, timeout_seconds=timeout_seconds)
-    except Exception as playwright_error:
+    except Exception as stealth_error:
         basic_detail = str(basic_error) if basic_error else "unknown"
         raise RuntimeError(
             "Fetch failed via basic "
-            f"({basic_detail}) and playwright ({playwright_error})"
-        ) from playwright_error
+            f"({basic_detail}) and stealth ({stealth_error})"
+        ) from stealth_error
 
 
 def probe_url(url: str, *, timeout_seconds: float = _PROBE_TIMEOUT_SECONDS) -> tuple[bool, str]:
     try:
         response = requests.get(
             url,
-            headers=DEFAULT_HEADERS,
+            headers=browser_headers(url),
             timeout=timeout_seconds,
             allow_redirects=True,
         )
     except requests.RequestException as error:
-        return _probe_with_playwright(url, timeout_seconds, f"requests: {error}")
+        return _probe_with_stealth(url, timeout_seconds, f"requests: {error}")
 
     if response.status_code >= 400:
-        return _probe_with_playwright(
+        return _probe_with_stealth(
             url,
             timeout_seconds,
             f"requests: HTTP {response.status_code}",
@@ -106,19 +117,19 @@ def probe_url(url: str, *, timeout_seconds: float = _PROBE_TIMEOUT_SECONDS) -> t
     return True, f"HTTP {response.status_code}"
 
 
-def _probe_with_playwright(
+def _probe_with_stealth(
     url: str,
     timeout_seconds: float,
     requests_detail: str,
 ) -> tuple[bool, str]:
-    if not playwright_available():
+    if not stealth_available():
         return False, requests_detail
 
     try:
-        fetch_html_playwright(
+        fetch_html_stealth(
             url,
-            timeout_seconds=timeout_seconds + _PLAYWRIGHT_EXTRA_TIMEOUT_SECONDS,
+            timeout_seconds=timeout_seconds + _STEALTH_EXTRA_TIMEOUT_SECONDS,
         )
     except Exception as error:
-        return False, f"{requests_detail}; playwright: {error}"
-    return True, f"{requests_detail}; playwright: ok"
+        return False, f"{requests_detail}; stealth: {error}"
+    return True, f"{requests_detail}; stealth: ok"

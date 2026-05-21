@@ -969,7 +969,7 @@
               <string>Primary first</string>
              </property>
              <property name="toolTip">
-              <string>Primary basic, primary browser, backup basic, backup browser</string>
+              <string>Primary basic, primary stealth, backup basic, backup stealth</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -982,7 +982,7 @@
               <string>Basic first</string>
              </property>
              <property name="toolTip">
-              <string>Primary basic, backup basic, primary browser, backup browser</string>
+              <string>Primary basic, backup basic, primary stealth, backup stealth</string>
              </property>
             </widget>
            </item>
