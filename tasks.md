@@ -22,4 +22,3 @@
 ### Next
 
 - Test in KDE, what can fail in the background?
-- Check rebase note.
