@@ -18,7 +18,3 @@
 
 - Consider adding pyinstaller.
 - Support for Windows.
-
-### Next
-
-- Test in KDE, what can fail in the background?
