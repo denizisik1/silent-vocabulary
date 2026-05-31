@@ -123,7 +123,6 @@ QLabel#label_brand {{
     font-weight: 700;
     letter-spacing: 0.5px;
 }}
-QLabel#label_tagline,
 QLabel#label_vocab_hint,
 QLabel#label_6,
 QLabel#label_tray_unavailable {{

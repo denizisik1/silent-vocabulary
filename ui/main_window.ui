@@ -62,13 +62,6 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_tagline">
-         <property name="text">
-          <string>silent IPA drills</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <spacer name="headerSpacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -741,6 +734,70 @@
          </widget>
         </item>
         <item>
+         <widget class="QWidget" name="vocabRetrieveStrategyWidget">
+          <layout class="QHBoxLayout" name="vocabRetrieveStrategyLayout">
+           <property name="spacing">
+            <number>8</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="label_vocab_retrieve_strategy">
+             <property name="text">
+              <string>Fallback order</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioButton_vocabRetrievePrimaryFirst">
+             <property name="text">
+              <string>Primary first</string>
+             </property>
+             <property name="toolTip">
+              <string>Primary basic, primary stealth, backup basic, backup stealth</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioButton_vocabRetrieveBasicFirst">
+             <property name="text">
+              <string>Basic first</string>
+             </property>
+             <property name="toolTip">
+              <string>Primary basic, backup basic, primary stealth, backup stealth</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="vocabRetrieveStrategySpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
          <widget class="QTextEdit" name="textEdit_vocab_retrieve_results">
           <property name="readOnly">
            <bool>true</bool>
@@ -1017,7 +1074,7 @@
            <item>
             <widget class="QLineEdit" name="lineEdit_6">
              <property name="text">
-              <string>https://www.collinsdictionary.com/dictionary/german-english/</string>
+              <string>https://en.pons.com/translate/german-english/</string>
              </property>
             </widget>
            </item>
@@ -1033,7 +1090,7 @@
              <item>
               <widget class="QLineEdit" name="lineEdit_8">
                <property name="text">
-                <string>pron</string>
+                <string>phonetics</string>
                </property>
                <property name="maximumSize">
                 <size>
@@ -1076,7 +1133,7 @@
            <item>
             <widget class="QLineEdit" name="lineEdit_9">
              <property name="text">
-              <string>https://en.pons.com/translate/german-english/</string>
+              <string>https://www.collinsdictionary.com/dictionary/german-english/</string>
              </property>
             </widget>
            </item>
@@ -1092,7 +1149,7 @@
              <item>
               <widget class="QLineEdit" name="lineEdit_7">
                <property name="text">
-                <string>phonetics</string>
+                <string>pron</string>
                </property>
                <property name="maximumSize">
                 <size>

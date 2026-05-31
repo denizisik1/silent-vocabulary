@@ -29,7 +29,4 @@
 - Resultbox should have a seperator for seperating results.
 - Resultbox should have a clear button for clearing results, although cleared results should not be truly removed but rather hidden and could be seen when clicked on a conveniently placed button.
 - When "fetch ipa" button is clicked resultsbox automatically scrolls to the top, it should stick to the bottom like a regular bash terminal would since newer results pile at the bottom.
-- Vocabulary tab also accomodate a fetch button therefore should have a stategy selector.
-- Remove silent ipa thing, slogan is not needed.
-- Swap primary and backup websites since pons work with basic strategy.
 - The "pip install -r requirements" alone won't install all the needed components like zendriver, when zendriver is called if it is not installed a GUI popup should appear and ask user approval and if given install it.

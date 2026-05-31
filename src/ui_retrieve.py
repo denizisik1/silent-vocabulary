@@ -28,8 +28,14 @@ _RESULTS_OBJECT_NAMES = (
     "textEdit_vocab_retrieve_results",
 )
 _STRATEGY_RADIOS = {
-    STRATEGY_PRIMARY_FIRST: "radioButton_retrievePrimaryFirst",
-    STRATEGY_BASIC_FIRST: "radioButton_retrieveBasicFirst",
+    STRATEGY_PRIMARY_FIRST: (
+        "radioButton_retrievePrimaryFirst",
+        "radioButton_vocabRetrievePrimaryFirst",
+    ),
+    STRATEGY_BASIC_FIRST: (
+        "radioButton_retrieveBasicFirst",
+        "radioButton_vocabRetrieveBasicFirst",
+    ),
 }
 
 
@@ -228,14 +234,14 @@ def _apply_source_defaults(window: QMainWindow) -> None:
     defaults = {
         "lineEdit_6": os.environ.get(
             "VIPA_PRIMARY_SOURCE_URL",
-            "https://www.collinsdictionary.com/dictionary/german-english/",
-        ),
-        "lineEdit_8": os.environ.get("VIPA_PRIMARY_FIND_BY", "pron"),
-        "lineEdit_9": os.environ.get(
-            "VIPA_BACKUP_SOURCE_URL",
             "https://en.pons.com/translate/german-english/",
         ),
-        "lineEdit_7": os.environ.get("VIPA_BACKUP_FIND_BY", "phonetics"),
+        "lineEdit_8": os.environ.get("VIPA_PRIMARY_FIND_BY", "phonetics"),
+        "lineEdit_9": os.environ.get(
+            "VIPA_BACKUP_SOURCE_URL",
+            "https://www.collinsdictionary.com/dictionary/german-english/",
+        ),
+        "lineEdit_7": os.environ.get("VIPA_BACKUP_FIND_BY", "pron"),
     }
     for object_name, value in defaults.items():
         editor = window.findChild(QLineEdit, object_name)
@@ -244,22 +250,25 @@ def _apply_source_defaults(window: QMainWindow) -> None:
 
 
 def selected_retrieve_strategy(window: QMainWindow) -> str:
-    for strategy, object_name in _STRATEGY_RADIOS.items():
-        button = window.findChild(QRadioButton, object_name)
-        if button is not None and button.isChecked():
-            return strategy
+    for strategy, object_names in _STRATEGY_RADIOS.items():
+        for object_name in object_names:
+            button = window.findChild(QRadioButton, object_name)
+            if button is not None and button.isChecked():
+                return strategy
     return STRATEGY_PRIMARY_FIRST
 
 
 def _select_retrieve_strategy(window: QMainWindow, strategy: str) -> None:
     normalized = normalize_retrieve_strategy(strategy)
-    for retrieve_strategy, object_name in _STRATEGY_RADIOS.items():
-        button = window.findChild(QRadioButton, object_name)
-        if button is None:
-            continue
-        button.blockSignals(True)
-        button.setChecked(retrieve_strategy == normalized)
-        button.blockSignals(False)
+    for retrieve_strategy, object_names in _STRATEGY_RADIOS.items():
+        checked = retrieve_strategy == normalized
+        for object_name in object_names:
+            button = window.findChild(QRadioButton, object_name)
+            if button is None:
+                continue
+            button.blockSignals(True)
+            button.setChecked(checked)
+            button.blockSignals(False)
 
 
 def _on_retrieve_strategy_toggled(
@@ -271,17 +280,19 @@ def _on_retrieve_strategy_toggled(
     if not checked:
         return
     config.retrieve_strategy = strategy
+    _select_retrieve_strategy(window, strategy)
     save_config(config)
 
 
 def _wire_retrieve_strategy(window: QMainWindow, config: AppConfig) -> None:
     _select_retrieve_strategy(window, config.retrieve_strategy)
-    for strategy, object_name in _STRATEGY_RADIOS.items():
-        button = window.findChild(QRadioButton, object_name)
-        if button is None:
-            raise RuntimeError(f"Missing retrieve strategy control: {object_name}")
-        handler = partial(_on_retrieve_strategy_toggled, window, config, strategy)
-        button.toggled.connect(handler)
+    for strategy, object_names in _STRATEGY_RADIOS.items():
+        for object_name in object_names:
+            button = window.findChild(QRadioButton, object_name)
+            if button is None:
+                raise RuntimeError(f"Missing retrieve strategy control: {object_name}")
+            handler = partial(_on_retrieve_strategy_toggled, window, config, strategy)
+            button.toggled.connect(handler)
 
 
 def wire_retrieve(window: QMainWindow, config: AppConfig) -> None:
