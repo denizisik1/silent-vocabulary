@@ -798,6 +798,49 @@
          </widget>
         </item>
         <item>
+         <layout class="QHBoxLayout" name="vocabRetrieveResultsActionsLayout">
+          <property name="spacing">
+           <number>8</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="pushButton_vocab_retrieve_clear">
+            <property name="text">
+             <string>Clear</string>
+            </property>
+            <property name="toolTip">
+             <string>Hide current results. Cleared output can be shown again.</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_vocab_retrieve_show_cleared">
+            <property name="text">
+             <string>Show cleared</string>
+            </property>
+            <property name="toolTip">
+             <string>Show or hide previously cleared results</string>
+            </property>
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="vocabRetrieveResultsActionsSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
          <widget class="QTextEdit" name="textEdit_vocab_retrieve_results">
           <property name="readOnly">
            <bool>true</bool>
@@ -1176,6 +1219,49 @@
            </item>
           </layout>
          </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="retrieveResultsActionsLayout">
+          <property name="spacing">
+           <number>8</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="pushButton_retrieve_clear">
+            <property name="text">
+             <string>Clear</string>
+            </property>
+            <property name="toolTip">
+             <string>Hide current results. Cleared output can be shown again.</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_retrieve_show_cleared">
+            <property name="text">
+             <string>Show cleared</string>
+            </property>
+            <property name="toolTip">
+             <string>Show or hide previously cleared results</string>
+            </property>
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="retrieveResultsActionsSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
         </item>
         <item>
          <widget class="QTextEdit" name="textEdit_retrieve_results">

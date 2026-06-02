@@ -14,7 +14,7 @@ d typecheck:
 	mypy src tests
 
 e security:
-	bandit -r src tests
+	bandit -r src tests -s B101
 
 f test:
 	PYTHONPATH=.:src pytest

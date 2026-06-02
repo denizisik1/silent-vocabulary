@@ -2,6 +2,7 @@ from functools import partial
 import os
 
 from PySide6.QtCore import QObject, Qt, QThread, QTimer, Slot
+from PySide6.QtGui import QTextCursor
 from PySide6.QtWidgets import (
     QComboBox,
     QLineEdit,
@@ -17,6 +18,7 @@ from retrieve.strategy import (
     normalize_retrieve_strategy,
 )
 from retrieve.worker import RetrieveWorker
+from ui_retrieve_log import RetrieveResultsLog
 from ui_words import include_flags, language_key_from_combo, populate_add_form_from_row
 from words import format_word_row
 
@@ -26,6 +28,14 @@ _RESULT_FLASH_MS = int(os.environ.get("VIPA_RETRIEVE_FLASH_MS", "1200"))
 _RESULTS_OBJECT_NAMES = (
     "textEdit_retrieve_results",
     "textEdit_vocab_retrieve_results",
+)
+_CLEAR_BUTTON_NAMES = (
+    "pushButton_retrieve_clear",
+    "pushButton_vocab_retrieve_clear",
+)
+_SHOW_CLEARED_BUTTON_NAMES = (
+    "pushButton_retrieve_show_cleared",
+    "pushButton_vocab_retrieve_show_cleared",
 )
 _STRATEGY_RADIOS = {
     STRATEGY_PRIMARY_FIRST: (
@@ -48,6 +58,7 @@ class RetrieveController(QObject):
         self._worker: RetrieveWorker | None = None
         self._active_button: QPushButton | None = None
         self._busy = False
+        self._results_log = RetrieveResultsLog()
         self._flash_timer = QTimer(self)
         self._flash_timer.setSingleShot(True)
         self._flash_timer.timeout.connect(self._finish_feedback)
@@ -73,13 +84,52 @@ class RetrieveController(QObject):
             )
         return views
 
-    def _append_results(self, message: str) -> None:
+    def _show_cleared_buttons(self) -> list[QPushButton]:
+        buttons: list[QPushButton] = []
+        for object_name in _SHOW_CLEARED_BUTTON_NAMES:
+            button = self._window.findChild(QPushButton, object_name)
+            if button is not None:
+                buttons.append(button)
+        return buttons
+
+    def _scroll_results_to_bottom(self, results: QTextEdit) -> None:
+        cursor = results.textCursor()
+        cursor.movePosition(QTextCursor.MoveOperation.End)
+        results.setTextCursor(cursor)
+        scrollbar = results.verticalScrollBar()
+        scrollbar.setValue(scrollbar.maximum())
+
+    def _refresh_results_views(self) -> None:
+        text = self._results_log.display_text()
         for results in self._result_views():
-            existing = results.toPlainText().strip()
-            if existing:
-                results.setPlainText(f"{existing}\n{message}")
-            else:
-                results.setPlainText(message)
+            results.setPlainText(text)
+            self._scroll_results_to_bottom(results)
+        QTimer.singleShot(0, self._scroll_all_results_to_bottom)
+        self._sync_show_cleared_buttons()
+
+    def _scroll_all_results_to_bottom(self) -> None:
+        for results in self._result_views():
+            self._scroll_results_to_bottom(results)
+
+    def _sync_show_cleared_buttons(self) -> None:
+        has_archive = self._results_log.has_archive()
+        showing = self._results_log.showing_archive()
+        label = "Hide cleared" if showing else "Show cleared"
+        for button in self._show_cleared_buttons():
+            button.setEnabled(has_archive)
+            button.setText(label)
+
+    def _append_results(self, message: str, *, begin_session: bool = False) -> None:
+        self._results_log.append(message, begin_session=begin_session)
+        self._refresh_results_views()
+
+    def clear_results(self) -> None:
+        self._results_log.clear()
+        self._refresh_results_views()
+
+    def toggle_show_cleared(self) -> None:
+        self._results_log.toggle_show_cleared()
+        self._refresh_results_views()
 
     def _retrieve_buttons(self) -> list[QPushButton]:
         buttons: list[QPushButton] = []
@@ -151,7 +201,7 @@ class RetrieveController(QObject):
 
     def start(self, mode: str, button: QPushButton | None = None) -> None:
         if self._busy:
-            self._append_results("Retrieve already running")
+            self._append_results("Retrieve already running", begin_session=True)
             return
 
         language_combo = self._window.findChild(QComboBox, "comboBox")
@@ -161,7 +211,7 @@ class RetrieveController(QObject):
         word = self._word_text()
         if mode != "check" and not word:
             message = "Enter a word on Sources or Vocabulary before retrieving IPA."
-            self._append_results(message)
+            self._append_results(message, begin_session=True)
             return
 
         self._flash_timer.stop()
@@ -194,7 +244,7 @@ class RetrieveController(QObject):
         self._thread = thread
         self._active_button = button
         self._apply_button_state(button, "running")
-        self._append_results(f"Retrieve {mode} started")
+        self._append_results(f"Retrieve {mode} started", begin_session=True)
         thread.start()
 
 
@@ -295,6 +345,20 @@ def _wire_retrieve_strategy(window: QMainWindow, config: AppConfig) -> None:
             button.toggled.connect(handler)
 
 
+def _wire_results_actions(window: QMainWindow, controller: RetrieveController) -> None:
+    for object_name in _CLEAR_BUTTON_NAMES:
+        button = window.findChild(QPushButton, object_name)
+        if button is None:
+            raise RuntimeError(f"Missing results control: {object_name}")
+        button.clicked.connect(controller.clear_results)
+    for object_name in _SHOW_CLEARED_BUTTON_NAMES:
+        button = window.findChild(QPushButton, object_name)
+        if button is None:
+            raise RuntimeError(f"Missing results control: {object_name}")
+        button.clicked.connect(controller.toggle_show_cleared)
+    controller._sync_show_cleared_buttons()
+
+
 def wire_retrieve(window: QMainWindow, config: AppConfig) -> None:
     fetch = window.findChild(QPushButton, "pushButton_6")
     check = window.findChild(QPushButton, "pushButton_8")
@@ -307,6 +371,7 @@ def wire_retrieve(window: QMainWindow, config: AppConfig) -> None:
     _apply_source_defaults(window)
     _wire_word_field_sync(window)
     _wire_retrieve_strategy(window, config)
+    _wire_results_actions(window, controller)
 
     fetch.clicked.connect(partial(controller.start, "retrieve", fetch))
     check.clicked.connect(partial(controller.start, "check", check))
