@@ -3,7 +3,7 @@ import os
 import requests  # type: ignore[import-untyped]
 
 from retrieve.http_headers import browser_headers, origin_url
-from retrieve.stealth_fetch import fetch_html_stealth, stealth_available
+from retrieve.stealth_fetch import ensure_stealth_ready, fetch_html_stealth
 from retrieve.strategy import FETCH_METHOD_BASIC, FETCH_METHOD_STEALTH
 
 _FETCH_TIMEOUT_SECONDS = float(os.environ.get("VIPA_FETCH_TIMEOUT_SECONDS", "20"))
@@ -57,9 +57,10 @@ def fetch_html_browser(
     *,
     timeout_seconds: float = _FETCH_TIMEOUT_SECONDS,
 ) -> str:
-    if not stealth_available():
+    if not ensure_stealth_ready():
         raise RuntimeError(
-            "zendriver is not installed. Install it with: pip install zendriver"
+            "Stealth fetch needs Chrome, Chromium, or Brave. "
+            "Install one, or set VIPA_STEALTH_BROWSER_PATH."
         )
     return fetch_html_stealth(
         url,
@@ -122,7 +123,7 @@ def _probe_with_stealth(
     timeout_seconds: float,
     requests_detail: str,
 ) -> tuple[bool, str]:
-    if not stealth_available():
+    if not ensure_stealth_ready():
         return False, requests_detail
 
     try:

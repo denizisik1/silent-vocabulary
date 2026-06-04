@@ -24,7 +24,3 @@
 
 - Consider adding pyinstaller.
 - Support for Windows.
-
-### Next
-
-- The "pip install -r requirements" alone won't install all the needed components like zendriver, when zendriver is called if it is not installed a GUI popup should appear and ask user approval and if given install it.

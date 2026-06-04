@@ -19,6 +19,7 @@ from retrieve.strategy import (
 )
 from retrieve.worker import RetrieveWorker
 from ui_retrieve_log import RetrieveResultsLog
+from ui_stealth_browser import wire_stealth_browser_prompt
 from ui_words import include_flags, language_key_from_combo, populate_add_form_from_row
 from words import format_word_row
 
@@ -299,6 +300,28 @@ def _apply_source_defaults(window: QMainWindow) -> None:
             editor.setText(value)
 
 
+def _swap_line_edit_text(window: QMainWindow, first_name: str, second_name: str) -> None:
+    first = window.findChild(QLineEdit, first_name)
+    second = window.findChild(QLineEdit, second_name)
+    if first is None or second is None:
+        raise RuntimeError(f"Missing source fields: {first_name}, {second_name}")
+    first_text = first.text()
+    first.setText(second.text())
+    second.setText(first_text)
+
+
+def swap_primary_backup_sources(window: QMainWindow) -> None:
+    _swap_line_edit_text(window, "lineEdit_6", "lineEdit_9")
+    _swap_line_edit_text(window, "lineEdit_8", "lineEdit_7")
+
+
+def _wire_swap_sources(window: QMainWindow) -> None:
+    button = window.findChild(QPushButton, "pushButton_swap_sources")
+    if button is None:
+        raise RuntimeError("Missing control: pushButton_swap_sources")
+    button.clicked.connect(partial(swap_primary_backup_sources, window))
+
+
 def selected_retrieve_strategy(window: QMainWindow) -> str:
     for strategy, object_names in _STRATEGY_RADIOS.items():
         for object_name in object_names:
@@ -371,7 +394,9 @@ def wire_retrieve(window: QMainWindow, config: AppConfig) -> None:
     _apply_source_defaults(window)
     _wire_word_field_sync(window)
     _wire_retrieve_strategy(window, config)
+    _wire_swap_sources(window)
     _wire_results_actions(window, controller)
+    wire_stealth_browser_prompt(window)
 
     fetch.clicked.connect(partial(controller.start, "retrieve", fetch))
     check.clicked.connect(partial(controller.start, "check", check))

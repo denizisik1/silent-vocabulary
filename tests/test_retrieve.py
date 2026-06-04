@@ -73,7 +73,7 @@ def test_fetch_html_falls_back_to_stealth(monkeypatch):
         return "<html><span class='phonetics'>[ˈa:bn̩t]</span></html>"
 
     monkeypatch.setattr("retrieve.fetch.fetch_html_basic", fake_basic)
-    monkeypatch.setattr("retrieve.fetch.stealth_available", lambda: True)
+    monkeypatch.setattr("retrieve.fetch.ensure_stealth_ready", lambda: True)
     monkeypatch.setattr("retrieve.fetch.fetch_html_stealth", fake_stealth)
 
     from retrieve.fetch import fetch_html
@@ -89,7 +89,7 @@ def test_fetch_html_reports_both_failures(monkeypatch):
         "retrieve.fetch.fetch_html_basic",
         lambda url, timeout_seconds: (_ for _ in ()).throw(RuntimeError("HTTP 403")),
     )
-    monkeypatch.setattr("retrieve.fetch.stealth_available", lambda: True)
+    monkeypatch.setattr("retrieve.fetch.ensure_stealth_ready", lambda: True)
     monkeypatch.setattr(
         "retrieve.fetch.fetch_html_stealth",
         lambda url, timeout_seconds: (_ for _ in ()).throw(RuntimeError("browser missing")),

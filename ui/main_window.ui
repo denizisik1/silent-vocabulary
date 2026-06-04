@@ -1162,6 +1162,49 @@
          </widget>
         </item>
         <item>
+         <layout class="QHBoxLayout" name="retrieveSourcesSwapLayout">
+          <property name="spacing">
+           <number>8</number>
+          </property>
+          <item>
+           <spacer name="retrieveSourcesSwapLeftSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_swap_sources">
+            <property name="text">
+             <string>Swap primary / backup</string>
+            </property>
+            <property name="toolTip">
+             <string>Temporarily swap Primary and Backup URLs and Find by values</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="retrieveSourcesSwapRightSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
          <widget class="QGroupBox" name="groupBox_8">
           <property name="title">
            <string>Backup</string>
