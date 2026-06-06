@@ -3,14 +3,9 @@ import os
 import requests  # type: ignore[import-untyped]
 
 from retrieve.http_headers import browser_headers, origin_url
+from stealth_config import get_stealth_config
 from retrieve.stealth_fetch import ensure_stealth_ready, fetch_html_stealth
 from retrieve.strategy import FETCH_METHOD_BASIC, FETCH_METHOD_STEALTH
-
-_FETCH_TIMEOUT_SECONDS = float(os.environ.get("VIPA_FETCH_TIMEOUT_SECONDS", "20"))
-_PROBE_TIMEOUT_SECONDS = float(os.environ.get("VIPA_PROBE_TIMEOUT_SECONDS", "10"))
-_STEALTH_EXTRA_TIMEOUT_SECONDS = float(
-    os.environ.get("VIPA_STEALTH_EXTRA_TIMEOUT_SECONDS", "40")
-)
 
 
 def _env_bool(name: str, default: bool) -> bool:
@@ -24,7 +19,17 @@ def _warmup_enabled() -> bool:
     return _env_bool("VIPA_HTTP_WARMUP", True)
 
 
-def fetch_html_basic(url: str, *, timeout_seconds: float = _FETCH_TIMEOUT_SECONDS) -> str:
+def _fetch_timeout_seconds() -> float:
+    return get_stealth_config().fetch_timeout_seconds
+
+
+def _probe_timeout_seconds() -> float:
+    return get_stealth_config().probe_timeout_seconds
+
+
+def fetch_html_basic(url: str, *, timeout_seconds: float | None = None) -> str:
+    if timeout_seconds is None:
+        timeout_seconds = _fetch_timeout_seconds()
     headers = browser_headers(url)
     with requests.Session() as session:
         session.headers.update(headers)
@@ -55,16 +60,19 @@ def fetch_html_basic(url: str, *, timeout_seconds: float = _FETCH_TIMEOUT_SECOND
 def fetch_html_browser(
     url: str,
     *,
-    timeout_seconds: float = _FETCH_TIMEOUT_SECONDS,
+    timeout_seconds: float | None = None,
 ) -> str:
+    if timeout_seconds is None:
+        timeout_seconds = _fetch_timeout_seconds()
     if not ensure_stealth_ready():
         raise RuntimeError(
             "Stealth fetch needs Chrome, Chromium, or Brave. "
-            "Install one, or set VIPA_STEALTH_BROWSER_PATH."
+            "Install one from Settings, or set a browser path there."
         )
+    extra = get_stealth_config().extra_timeout_seconds
     return fetch_html_stealth(
         url,
-        timeout_seconds=timeout_seconds + _STEALTH_EXTRA_TIMEOUT_SECONDS,
+        timeout_seconds=timeout_seconds + extra,
     )
 
 
@@ -72,7 +80,7 @@ def fetch_html_with_method(
     url: str,
     method: str,
     *,
-    timeout_seconds: float = _FETCH_TIMEOUT_SECONDS,
+    timeout_seconds: float | None = None,
 ) -> str:
     if method == FETCH_METHOD_BASIC:
         return fetch_html_basic(url, timeout_seconds=timeout_seconds)
@@ -81,7 +89,7 @@ def fetch_html_with_method(
     raise ValueError(f"Unknown fetch method: {method}")
 
 
-def fetch_html(url: str, *, timeout_seconds: float = _FETCH_TIMEOUT_SECONDS) -> str:
+def fetch_html(url: str, *, timeout_seconds: float | None = None) -> str:
     basic_error: Exception | None = None
     try:
         return fetch_html_basic(url, timeout_seconds=timeout_seconds)
@@ -98,7 +106,9 @@ def fetch_html(url: str, *, timeout_seconds: float = _FETCH_TIMEOUT_SECONDS) -> 
         ) from stealth_error
 
 
-def probe_url(url: str, *, timeout_seconds: float = _PROBE_TIMEOUT_SECONDS) -> tuple[bool, str]:
+def probe_url(url: str, *, timeout_seconds: float | None = None) -> tuple[bool, str]:
+    if timeout_seconds is None:
+        timeout_seconds = _probe_timeout_seconds()
     try:
         response = requests.get(
             url,
@@ -129,7 +139,7 @@ def _probe_with_stealth(
     try:
         fetch_html_stealth(
             url,
-            timeout_seconds=timeout_seconds + _STEALTH_EXTRA_TIMEOUT_SECONDS,
+            timeout_seconds=timeout_seconds + get_stealth_config().extra_timeout_seconds,
         )
     except Exception as error:
         return False, f"{requests_detail}; stealth: {error}"

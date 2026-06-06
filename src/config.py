@@ -12,6 +12,16 @@ from retrieve.strategy import (
     normalize_retrieve_strategy,
 )
 from themes import DEFAULT_THEME, THEMES
+from stealth_config import (
+    DEFAULT_FETCH_TIMEOUT_SECONDS,
+    DEFAULT_PROBE_TIMEOUT_SECONDS,
+    DEFAULT_STEALTH_CONNECT_TIMEOUT_SECONDS,
+    DEFAULT_STEALTH_CONNECT_TRIES,
+    DEFAULT_STEALTH_EXTRA_TIMEOUT_SECONDS,
+    DEFAULT_STEALTH_WAIT_SECONDS,
+    StealthConfig,
+    apply_stealth_config,
+)
 from words.constants import DEFAULT_INCLUDE, LANGUAGE_VOCABULARY_FILES
 from zoom import DEFAULT_ZOOM_PERCENT, clamp_zoom_percent
 
@@ -51,6 +61,7 @@ class AppConfig:
     retrieve_strategy: str = DEFAULT_RETRIEVE_STRATEGY
     include_fields: dict[str, bool] = field(default_factory=lambda: dict(DEFAULT_INCLUDE))
     window: WindowConfig = field(default_factory=WindowConfig)
+    stealth: StealthConfig = field(default_factory=StealthConfig)
 
 
 def _clamp_dimension(value: int, minimum: int, default: int) -> int:
@@ -96,6 +107,67 @@ def _parse_bool(value, default: bool) -> bool:
     if isinstance(value, bool):
         return value
     return default
+
+
+def _parse_positive_float(value, default: float) -> float:
+    if isinstance(value, bool):
+        return default
+    if isinstance(value, (int, float)):
+        number = float(value)
+        if number > 0:
+            return number
+    return default
+
+
+def _parse_positive_int(value, default: int) -> int:
+    if isinstance(value, bool):
+        return default
+    if isinstance(value, int) and value > 0:
+        return value
+    return default
+
+
+def _parse_stealth_table(stealth_table) -> StealthConfig:
+    if not isinstance(stealth_table, dict):
+        return StealthConfig()
+    browser_path = stealth_table.get("browser_path", "")
+    if not isinstance(browser_path, str):
+        browser_path = ""
+    return StealthConfig(
+        headless=_parse_bool(stealth_table.get("headless", False), False),
+        sandbox=_parse_bool(stealth_table.get("sandbox", False), False),
+        wait_seconds=_parse_positive_float(
+            stealth_table.get("wait_seconds", DEFAULT_STEALTH_WAIT_SECONDS),
+            DEFAULT_STEALTH_WAIT_SECONDS,
+        ),
+        extra_timeout_seconds=_parse_positive_float(
+            stealth_table.get(
+                "extra_timeout_seconds",
+                DEFAULT_STEALTH_EXTRA_TIMEOUT_SECONDS,
+            ),
+            DEFAULT_STEALTH_EXTRA_TIMEOUT_SECONDS,
+        ),
+        connect_timeout_seconds=_parse_positive_float(
+            stealth_table.get(
+                "connect_timeout_seconds",
+                DEFAULT_STEALTH_CONNECT_TIMEOUT_SECONDS,
+            ),
+            DEFAULT_STEALTH_CONNECT_TIMEOUT_SECONDS,
+        ),
+        connect_tries=_parse_positive_int(
+            stealth_table.get("connect_tries", DEFAULT_STEALTH_CONNECT_TRIES),
+            DEFAULT_STEALTH_CONNECT_TRIES,
+        ),
+        browser_path=browser_path.strip(),
+        fetch_timeout_seconds=_parse_positive_float(
+            stealth_table.get("fetch_timeout_seconds", DEFAULT_FETCH_TIMEOUT_SECONDS),
+            DEFAULT_FETCH_TIMEOUT_SECONDS,
+        ),
+        probe_timeout_seconds=_parse_positive_float(
+            stealth_table.get("probe_timeout_seconds", DEFAULT_PROBE_TIMEOUT_SECONDS),
+            DEFAULT_PROBE_TIMEOUT_SECONDS,
+        ),
+    )
 
 
 def _parse_daemon_interval_minutes(value) -> int:
@@ -146,7 +218,9 @@ def _parse_include_fields(include_table) -> dict[str, bool]:
 
 def load_config() -> AppConfig:
     if not CONFIG_PATH.is_file():
-        return AppConfig()
+        config = AppConfig()
+        apply_stealth_config(config.stealth)
+        return config
 
     config_document = tomlkit.parse(CONFIG_PATH.read_text(encoding="utf-8"))
     window = _parse_window_table(config_document.get("window"))
@@ -173,8 +247,9 @@ def load_config() -> AppConfig:
         config_document.get("retrieve_strategy", DEFAULT_RETRIEVE_STRATEGY)
     )
     include_fields = _parse_include_fields(config_document.get("include"))
+    stealth = _parse_stealth_table(config_document.get("stealth"))
 
-    return AppConfig(
+    config = AppConfig(
         theme=theme,
         zoom_percent=zoom_percent,
         protect_base_vocabulary=protect_base_vocabulary,
@@ -185,7 +260,10 @@ def load_config() -> AppConfig:
         retrieve_strategy=retrieve_strategy,
         include_fields=include_fields,
         window=window,
+        stealth=stealth,
     )
+    apply_stealth_config(config.stealth)
+    return config
 
 
 def save_config(config: AppConfig) -> None:
@@ -208,5 +286,17 @@ def save_config(config: AppConfig) -> None:
             "width": config.window.width,
             "height": config.window.height,
         },
+        "stealth": {
+            "headless": config.stealth.headless,
+            "sandbox": config.stealth.sandbox,
+            "wait_seconds": config.stealth.wait_seconds,
+            "extra_timeout_seconds": config.stealth.extra_timeout_seconds,
+            "connect_timeout_seconds": config.stealth.connect_timeout_seconds,
+            "connect_tries": config.stealth.connect_tries,
+            "browser_path": config.stealth.browser_path,
+            "fetch_timeout_seconds": config.stealth.fetch_timeout_seconds,
+            "probe_timeout_seconds": config.stealth.probe_timeout_seconds,
+        },
     }
     CONFIG_PATH.write_text(tomlkit.dumps(config_data), encoding="utf-8")
+    apply_stealth_config(config.stealth)

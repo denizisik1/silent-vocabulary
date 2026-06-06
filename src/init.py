@@ -23,6 +23,7 @@ from ui_export import wire_export_overlay  # noqa: E402
 from ui_protect import apply_protect_setting, wire_protect_vocabulary  # noqa: E402
 from ui_tray import wire_tray  # noqa: E402
 from ui_retrieve import wire_retrieve  # noqa: E402
+from ui_settings import wire_settings  # noqa: E402
 from ui_words import (  # noqa: E402
     apply_session_config,
     wire_add_remove_word,
@@ -137,6 +138,7 @@ def main() -> None:
     wire_tray(window, application, config)
     wire_daemon(window, application, config)
     wire_retrieve(window, config)
+    wire_settings(window, config)
     wire_protect_vocabulary(window, config)
     wire_export_overlay(window)
     _load_reference(window)

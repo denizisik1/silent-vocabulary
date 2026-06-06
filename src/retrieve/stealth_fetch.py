@@ -1,8 +1,8 @@
 import asyncio
-import os
 import time
 from collections.abc import Callable
 
+from stealth_config import get_stealth_config
 from stealth_browser import find_stealth_browser_path
 
 _EnsureCallback = Callable[[], bool]
@@ -11,7 +11,7 @@ _install_declined = False
 
 _MISSING_BROWSER_MESSAGE = (
     "No Chrome/Chromium/Brave browser binary was found for stealth fetch. "
-    "Install one, or set VIPA_STEALTH_BROWSER_PATH."
+    "Install one from Settings, or set a browser path there."
 )
 
 
@@ -44,36 +44,6 @@ def ensure_stealth_ready() -> bool:
     return stealth_browser_available()
 
 
-def _env_bool(name: str, default: bool) -> bool:
-    raw = os.environ.get(name)
-    if raw is None:
-        return default
-    return raw.strip().lower() in {"1", "true", "yes", "on"}
-
-
-def _stealth_headless() -> bool:
-    return _env_bool("VIPA_STEALTH_HEADLESS", False)
-
-
-def _stealth_sandbox() -> bool:
-    return _env_bool("VIPA_STEALTH_SANDBOX", False)
-
-
-def _stealth_wait_seconds(timeout_seconds: float) -> float:
-    configured = os.environ.get("VIPA_STEALTH_WAIT_SECONDS")
-    if configured is None:
-        return max(timeout_seconds, 60.0)
-    return float(configured)
-
-
-def _stealth_connect_timeout_seconds() -> float:
-    return float(os.environ.get("VIPA_STEALTH_BROWSER_CONNECT_TIMEOUT", "1.0"))
-
-
-def _stealth_connect_tries() -> int:
-    return int(os.environ.get("VIPA_STEALTH_BROWSER_CONNECT_TRIES", "40"))
-
-
 def _page_looks_ready(title: str | None, html: str) -> bool:
     cleaned_title = (title or "").strip().lower()
     if "just a moment" in cleaned_title:
@@ -91,12 +61,13 @@ def _page_looks_ready(title: str | None, html: str) -> bool:
 async def _fetch_html_stealth_async(url: str, *, timeout_seconds: float) -> str:
     import zendriver as zd
 
+    stealth = get_stealth_config()
     browser_path = find_stealth_browser_path()
     start_kwargs: dict[str, object] = {
-        "headless": _stealth_headless(),
-        "sandbox": _stealth_sandbox(),
-        "browser_connection_timeout": _stealth_connect_timeout_seconds(),
-        "browser_connection_max_tries": _stealth_connect_tries(),
+        "headless": stealth.headless,
+        "sandbox": stealth.sandbox,
+        "browser_connection_timeout": stealth.connect_timeout_seconds,
+        "browser_connection_max_tries": stealth.connect_tries,
     }
     if browser_path is not None:
         start_kwargs["browser_executable_path"] = browser_path
@@ -129,10 +100,15 @@ async def _fetch_html_stealth_async(url: str, *, timeout_seconds: float) -> str:
         await browser.stop()
 
 
-def fetch_html_stealth(url: str, *, timeout_seconds: float = 60.0) -> str:
+def fetch_html_stealth(url: str, *, timeout_seconds: float | None = None) -> str:
     if not ensure_stealth_ready():
         raise RuntimeError(_MISSING_BROWSER_MESSAGE)
-    wait_seconds = _stealth_wait_seconds(timeout_seconds)
+    stealth = get_stealth_config()
+    wait_seconds = (
+        stealth.wait_seconds
+        if timeout_seconds is None
+        else max(timeout_seconds, stealth.wait_seconds)
+    )
     try:
         return asyncio.run(
             _fetch_html_stealth_async(url, timeout_seconds=wait_seconds)

@@ -1,5 +1,11 @@
 import config
 from config import AppConfig, WindowConfig
+from stealth_config import (
+    DEFAULT_STEALTH_WAIT_SECONDS,
+    StealthConfig,
+    apply_stealth_config,
+    get_stealth_config,
+)
 from themes import stylesheet
 from zoom import clamp_zoom_percent, scale_px
 
@@ -36,11 +42,54 @@ def test_save_and_load_round_trip(tmp_path, monkeypatch):
             "plural": True,
         },
         window=WindowConfig(width=960, height=720),
+        stealth=StealthConfig(
+            headless=True,
+            sandbox=True,
+            wait_seconds=120.0,
+            extra_timeout_seconds=50.0,
+            connect_timeout_seconds=2.0,
+            connect_tries=25,
+            browser_path="/usr/bin/chromium-browser",
+            fetch_timeout_seconds=30.0,
+            probe_timeout_seconds=15.0,
+        ),
     )
     config.save_config(saved)
     loaded = config.load_config()
 
     assert loaded == saved
+
+
+def test_load_stealth_defaults(tmp_path, monkeypatch):
+    monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "vipa.toml")
+
+    loaded = config.load_config()
+
+    assert loaded.stealth == StealthConfig()
+
+
+def test_load_stealth_partial(tmp_path, monkeypatch):
+    config_path = tmp_path / "vipa.toml"
+    config_path.write_text(
+        "[stealth]\nheadless = true\nsandbox = true\nconnect_tries = 12\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(config, "CONFIG_PATH", config_path)
+
+    loaded = config.load_config()
+
+    assert loaded.stealth.headless is True
+    assert loaded.stealth.sandbox is True
+    assert loaded.stealth.connect_tries == 12
+    assert loaded.stealth.wait_seconds == DEFAULT_STEALTH_WAIT_SECONDS
+
+
+def test_apply_stealth_config_updates_runtime(monkeypatch):
+    apply_stealth_config(StealthConfig(sandbox=True, connect_tries=7))
+    assert get_stealth_config().sandbox is True
+    assert get_stealth_config().connect_tries == 7
+    apply_stealth_config(StealthConfig())
+
 
 
 def test_load_protect_base_vocabulary_default_true(tmp_path, monkeypatch):
