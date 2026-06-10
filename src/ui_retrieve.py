@@ -322,15 +322,6 @@ def _wire_swap_sources(window: QMainWindow) -> None:
     button.clicked.connect(partial(swap_primary_backup_sources, window))
 
 
-def selected_retrieve_strategy(window: QMainWindow) -> str:
-    for strategy, object_names in _STRATEGY_RADIOS.items():
-        for object_name in object_names:
-            button = window.findChild(QRadioButton, object_name)
-            if button is not None and button.isChecked():
-                return strategy
-    return STRATEGY_PRIMARY_FIRST
-
-
 def _select_retrieve_strategy(window: QMainWindow, strategy: str) -> None:
     normalized = normalize_retrieve_strategy(strategy)
     for retrieve_strategy, object_names in _STRATEGY_RADIOS.items():
