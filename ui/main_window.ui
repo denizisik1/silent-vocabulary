@@ -764,7 +764,7 @@
               <string>Primary first</string>
              </property>
              <property name="toolTip">
-              <string>Primary basic, primary stealth, backup basic, backup stealth</string>
+              <string>Primary basic, primary browser, backup basic, backup browser</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -777,7 +777,7 @@
               <string>Basic first</string>
              </property>
              <property name="toolTip">
-              <string>Primary basic, backup basic, primary stealth, backup stealth</string>
+              <string>Primary basic, backup basic, primary browser, backup browser</string>
              </property>
             </widget>
            </item>
@@ -1069,7 +1069,7 @@
               <string>Primary first</string>
              </property>
              <property name="toolTip">
-              <string>Primary basic, primary stealth, backup basic, backup stealth</string>
+              <string>Primary basic, primary browser, backup basic, backup browser</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -1082,7 +1082,7 @@
               <string>Basic first</string>
              </property>
              <property name="toolTip">
-              <string>Primary basic, backup basic, primary stealth, backup stealth</string>
+              <string>Primary basic, backup basic, primary browser, backup browser</string>
              </property>
             </widget>
            </item>
@@ -1339,14 +1339,14 @@
          <number>8</number>
         </property>
         <item>
-         <widget class="QGroupBox" name="groupBox_settings_stealth">
+         <widget class="QGroupBox" name="groupBox_settings_browser">
           <property name="title">
-           <string>Stealth fetch</string>
+           <string>Browser fetch</string>
           </property>
           <property name="flat">
            <bool>true</bool>
           </property>
-          <layout class="QFormLayout" name="settingsStealthFormLayout">
+          <layout class="QFormLayout" name="settingsBrowserFormLayout">
            <property name="horizontalSpacing">
             <number>12</number>
            </property>
@@ -1361,7 +1361,7 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QCheckBox" name="checkBox_stealth_headless">
+            <widget class="QCheckBox" name="checkBox_browser_headless">
              <property name="text">
               <string>Run Chromium without a visible window</string>
              </property>
@@ -1375,7 +1375,7 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QCheckBox" name="checkBox_stealth_sandbox">
+            <widget class="QCheckBox" name="checkBox_browser_sandbox">
              <property name="text">
               <string>Enable Chromium sandbox</string>
              </property>
@@ -1392,7 +1392,7 @@
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="QSpinBox" name="spinBox_stealth_wait_seconds">
+            <widget class="QSpinBox" name="spinBox_browser_wait_seconds">
              <property name="minimum">
               <number>10</number>
              </property>
@@ -1412,7 +1412,7 @@
             </widget>
            </item>
            <item row="3" column="1">
-            <widget class="QDoubleSpinBox" name="doubleSpinBox_stealth_extra_timeout">
+            <widget class="QDoubleSpinBox" name="doubleSpinBox_browser_extra_timeout">
              <property name="decimals">
               <number>1</number>
              </property>
@@ -1435,7 +1435,7 @@
             </widget>
            </item>
            <item row="4" column="1">
-            <widget class="QDoubleSpinBox" name="doubleSpinBox_stealth_connect_timeout">
+            <widget class="QDoubleSpinBox" name="doubleSpinBox_browser_connect_timeout">
              <property name="decimals">
               <number>1</number>
              </property>
@@ -1461,7 +1461,7 @@
             </widget>
            </item>
            <item row="5" column="1">
-            <widget class="QSpinBox" name="spinBox_stealth_connect_tries">
+            <widget class="QSpinBox" name="spinBox_browser_connect_tries">
              <property name="minimum">
               <number>1</number>
              </property>
@@ -1527,7 +1527,7 @@
             </widget>
            </item>
            <item row="8" column="1">
-            <widget class="QLineEdit" name="lineEdit_stealth_browser_path">
+            <widget class="QLineEdit" name="lineEdit_browser_path">
              <property name="placeholderText">
               <string>Optional override; leave empty to autodetect</string>
              </property>

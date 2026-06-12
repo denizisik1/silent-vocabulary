@@ -3,9 +3,9 @@ import os
 import requests  # type: ignore[import-untyped]
 
 from retrieve.http_headers import browser_headers, origin_url
-from stealth_config import get_stealth_config
-from retrieve.stealth_fetch import ensure_stealth_ready, fetch_html_stealth
-from retrieve.strategy import FETCH_METHOD_BASIC, FETCH_METHOD_STEALTH
+from browser_config import get_browser_config
+from retrieve.browser_fetch import ensure_browser_ready, fetch_html_via_browser
+from retrieve.strategy import FETCH_METHOD_BASIC, FETCH_METHOD_BROWSER
 
 
 def _env_bool(name: str, default: bool) -> bool:
@@ -20,11 +20,11 @@ def _warmup_enabled() -> bool:
 
 
 def _fetch_timeout_seconds() -> float:
-    return get_stealth_config().fetch_timeout_seconds
+    return get_browser_config().fetch_timeout_seconds
 
 
 def _probe_timeout_seconds() -> float:
-    return get_stealth_config().probe_timeout_seconds
+    return get_browser_config().probe_timeout_seconds
 
 
 def fetch_html_basic(url: str, *, timeout_seconds: float | None = None) -> str:
@@ -64,13 +64,13 @@ def fetch_html_browser(
 ) -> str:
     if timeout_seconds is None:
         timeout_seconds = _fetch_timeout_seconds()
-    if not ensure_stealth_ready():
+    if not ensure_browser_ready():
         raise RuntimeError(
-            "Stealth fetch needs Chrome, Chromium, or Brave. "
+            "Browser fetch needs Chrome, Chromium, or Brave. "
             "Install one from Settings, or set a browser path there."
         )
-    extra = get_stealth_config().extra_timeout_seconds
-    return fetch_html_stealth(
+    extra = get_browser_config().extra_timeout_seconds
+    return fetch_html_via_browser(
         url,
         timeout_seconds=timeout_seconds + extra,
     )
@@ -84,7 +84,7 @@ def fetch_html_with_method(
 ) -> str:
     if method == FETCH_METHOD_BASIC:
         return fetch_html_basic(url, timeout_seconds=timeout_seconds)
-    if method == FETCH_METHOD_STEALTH:
+    if method == FETCH_METHOD_BROWSER:
         return fetch_html_browser(url, timeout_seconds=timeout_seconds)
     raise ValueError(f"Unknown fetch method: {method}")
 
@@ -98,12 +98,12 @@ def fetch_html(url: str, *, timeout_seconds: float | None = None) -> str:
 
     try:
         return fetch_html_browser(url, timeout_seconds=timeout_seconds)
-    except Exception as stealth_error:
+    except Exception as browser_error:
         basic_detail = str(basic_error) if basic_error else "unknown"
         raise RuntimeError(
             "Fetch failed via basic "
-            f"({basic_detail}) and stealth ({stealth_error})"
-        ) from stealth_error
+            f"({basic_detail}) and browser ({browser_error})"
+        ) from browser_error
 
 
 def probe_url(url: str, *, timeout_seconds: float | None = None) -> tuple[bool, str]:
@@ -117,10 +117,10 @@ def probe_url(url: str, *, timeout_seconds: float | None = None) -> tuple[bool, 
             allow_redirects=True,
         )
     except requests.RequestException as error:
-        return _probe_with_stealth(url, timeout_seconds, f"requests: {error}")
+        return _probe_with_browser(url, timeout_seconds, f"requests: {error}")
 
     if response.status_code >= 400:
-        return _probe_with_stealth(
+        return _probe_with_browser(
             url,
             timeout_seconds,
             f"requests: HTTP {response.status_code}",
@@ -128,19 +128,19 @@ def probe_url(url: str, *, timeout_seconds: float | None = None) -> tuple[bool, 
     return True, f"HTTP {response.status_code}"
 
 
-def _probe_with_stealth(
+def _probe_with_browser(
     url: str,
     timeout_seconds: float,
     requests_detail: str,
 ) -> tuple[bool, str]:
-    if not ensure_stealth_ready():
+    if not ensure_browser_ready():
         return False, requests_detail
 
     try:
-        fetch_html_stealth(
+        fetch_html_via_browser(
             url,
-            timeout_seconds=timeout_seconds + get_stealth_config().extra_timeout_seconds,
+            timeout_seconds=timeout_seconds + get_browser_config().extra_timeout_seconds,
         )
     except Exception as error:
-        return False, f"{requests_detail}; stealth: {error}"
-    return True, f"{requests_detail}; stealth: ok"
+        return False, f"{requests_detail}; browser: {error}"
+    return True, f"{requests_detail}; browser: ok"

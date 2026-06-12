@@ -19,7 +19,7 @@ from retrieve.strategy import (
 )
 from retrieve.worker import RetrieveWorker
 from ui_retrieve_log import RetrieveResultsLog
-from ui_stealth_browser import wire_stealth_browser_prompt
+from ui_browser import wire_browser_prompt
 from ui_words import include_flags, language_key_from_combo, populate_add_form_from_row
 from words import format_word_row
 
@@ -387,7 +387,7 @@ def wire_retrieve(window: QMainWindow, config: AppConfig) -> None:
     _wire_retrieve_strategy(window, config)
     _wire_swap_sources(window)
     _wire_results_actions(window, controller)
-    wire_stealth_browser_prompt(window)
+    wire_browser_prompt(window)
 
     fetch.clicked.connect(partial(controller.start, "retrieve", fetch))
     check.clicked.connect(partial(controller.start, "check", check))

@@ -12,15 +12,15 @@ from retrieve.strategy import (
     normalize_retrieve_strategy,
 )
 from themes import DEFAULT_THEME, THEMES
-from stealth_config import (
+from browser_config import (
+    DEFAULT_BROWSER_CONNECT_TIMEOUT_SECONDS,
+    DEFAULT_BROWSER_CONNECT_TRIES,
+    DEFAULT_BROWSER_EXTRA_TIMEOUT_SECONDS,
+    DEFAULT_BROWSER_WAIT_SECONDS,
     DEFAULT_FETCH_TIMEOUT_SECONDS,
     DEFAULT_PROBE_TIMEOUT_SECONDS,
-    DEFAULT_STEALTH_CONNECT_TIMEOUT_SECONDS,
-    DEFAULT_STEALTH_CONNECT_TRIES,
-    DEFAULT_STEALTH_EXTRA_TIMEOUT_SECONDS,
-    DEFAULT_STEALTH_WAIT_SECONDS,
-    StealthConfig,
-    apply_stealth_config,
+    BrowserConfig,
+    apply_browser_config,
 )
 from words.constants import DEFAULT_INCLUDE, LANGUAGE_VOCABULARY_FILES
 from zoom import DEFAULT_ZOOM_PERCENT, clamp_zoom_percent
@@ -61,7 +61,7 @@ class AppConfig:
     retrieve_strategy: str = DEFAULT_RETRIEVE_STRATEGY
     include_fields: dict[str, bool] = field(default_factory=lambda: dict(DEFAULT_INCLUDE))
     window: WindowConfig = field(default_factory=WindowConfig)
-    stealth: StealthConfig = field(default_factory=StealthConfig)
+    browser: BrowserConfig = field(default_factory=BrowserConfig)
 
 
 def _clamp_dimension(value: int, minimum: int, default: int) -> int:
@@ -127,44 +127,44 @@ def _parse_positive_int(value, default: int) -> int:
     return default
 
 
-def _parse_stealth_table(stealth_table) -> StealthConfig:
-    if not isinstance(stealth_table, dict):
-        return StealthConfig()
-    browser_path = stealth_table.get("browser_path", "")
+def _parse_browser_table(browser_table) -> BrowserConfig:
+    if not isinstance(browser_table, dict):
+        return BrowserConfig()
+    browser_path = browser_table.get("browser_path", "")
     if not isinstance(browser_path, str):
         browser_path = ""
-    return StealthConfig(
-        headless=_parse_bool(stealth_table.get("headless", False), False),
-        sandbox=_parse_bool(stealth_table.get("sandbox", False), False),
+    return BrowserConfig(
+        headless=_parse_bool(browser_table.get("headless", False), False),
+        sandbox=_parse_bool(browser_table.get("sandbox", False), False),
         wait_seconds=_parse_positive_float(
-            stealth_table.get("wait_seconds", DEFAULT_STEALTH_WAIT_SECONDS),
-            DEFAULT_STEALTH_WAIT_SECONDS,
+            browser_table.get("wait_seconds", DEFAULT_BROWSER_WAIT_SECONDS),
+            DEFAULT_BROWSER_WAIT_SECONDS,
         ),
         extra_timeout_seconds=_parse_positive_float(
-            stealth_table.get(
+            browser_table.get(
                 "extra_timeout_seconds",
-                DEFAULT_STEALTH_EXTRA_TIMEOUT_SECONDS,
+                DEFAULT_BROWSER_EXTRA_TIMEOUT_SECONDS,
             ),
-            DEFAULT_STEALTH_EXTRA_TIMEOUT_SECONDS,
+            DEFAULT_BROWSER_EXTRA_TIMEOUT_SECONDS,
         ),
         connect_timeout_seconds=_parse_positive_float(
-            stealth_table.get(
+            browser_table.get(
                 "connect_timeout_seconds",
-                DEFAULT_STEALTH_CONNECT_TIMEOUT_SECONDS,
+                DEFAULT_BROWSER_CONNECT_TIMEOUT_SECONDS,
             ),
-            DEFAULT_STEALTH_CONNECT_TIMEOUT_SECONDS,
+            DEFAULT_BROWSER_CONNECT_TIMEOUT_SECONDS,
         ),
         connect_tries=_parse_positive_int(
-            stealth_table.get("connect_tries", DEFAULT_STEALTH_CONNECT_TRIES),
-            DEFAULT_STEALTH_CONNECT_TRIES,
+            browser_table.get("connect_tries", DEFAULT_BROWSER_CONNECT_TRIES),
+            DEFAULT_BROWSER_CONNECT_TRIES,
         ),
         browser_path=browser_path.strip(),
         fetch_timeout_seconds=_parse_positive_float(
-            stealth_table.get("fetch_timeout_seconds", DEFAULT_FETCH_TIMEOUT_SECONDS),
+            browser_table.get("fetch_timeout_seconds", DEFAULT_FETCH_TIMEOUT_SECONDS),
             DEFAULT_FETCH_TIMEOUT_SECONDS,
         ),
         probe_timeout_seconds=_parse_positive_float(
-            stealth_table.get("probe_timeout_seconds", DEFAULT_PROBE_TIMEOUT_SECONDS),
+            browser_table.get("probe_timeout_seconds", DEFAULT_PROBE_TIMEOUT_SECONDS),
             DEFAULT_PROBE_TIMEOUT_SECONDS,
         ),
     )
@@ -219,7 +219,7 @@ def _parse_include_fields(include_table) -> dict[str, bool]:
 def load_config() -> AppConfig:
     if not CONFIG_PATH.is_file():
         config = AppConfig()
-        apply_stealth_config(config.stealth)
+        apply_browser_config(config.browser)
         return config
 
     config_document = tomlkit.parse(CONFIG_PATH.read_text(encoding="utf-8"))
@@ -247,7 +247,10 @@ def load_config() -> AppConfig:
         config_document.get("retrieve_strategy", DEFAULT_RETRIEVE_STRATEGY)
     )
     include_fields = _parse_include_fields(config_document.get("include"))
-    stealth = _parse_stealth_table(config_document.get("stealth"))
+    browser_table = config_document.get("browser")
+    if browser_table is None:
+        browser_table = config_document.get("stealth")
+    browser = _parse_browser_table(browser_table)
 
     config = AppConfig(
         theme=theme,
@@ -260,9 +263,9 @@ def load_config() -> AppConfig:
         retrieve_strategy=retrieve_strategy,
         include_fields=include_fields,
         window=window,
-        stealth=stealth,
+        browser=browser,
     )
-    apply_stealth_config(config.stealth)
+    apply_browser_config(config.browser)
     return config
 
 
@@ -286,17 +289,17 @@ def save_config(config: AppConfig) -> None:
             "width": config.window.width,
             "height": config.window.height,
         },
-        "stealth": {
-            "headless": config.stealth.headless,
-            "sandbox": config.stealth.sandbox,
-            "wait_seconds": config.stealth.wait_seconds,
-            "extra_timeout_seconds": config.stealth.extra_timeout_seconds,
-            "connect_timeout_seconds": config.stealth.connect_timeout_seconds,
-            "connect_tries": config.stealth.connect_tries,
-            "browser_path": config.stealth.browser_path,
-            "fetch_timeout_seconds": config.stealth.fetch_timeout_seconds,
-            "probe_timeout_seconds": config.stealth.probe_timeout_seconds,
+        "browser": {
+            "headless": config.browser.headless,
+            "sandbox": config.browser.sandbox,
+            "wait_seconds": config.browser.wait_seconds,
+            "extra_timeout_seconds": config.browser.extra_timeout_seconds,
+            "connect_timeout_seconds": config.browser.connect_timeout_seconds,
+            "connect_tries": config.browser.connect_tries,
+            "browser_path": config.browser.browser_path,
+            "fetch_timeout_seconds": config.browser.fetch_timeout_seconds,
+            "probe_timeout_seconds": config.browser.probe_timeout_seconds,
         },
     }
     CONFIG_PATH.write_text(tomlkit.dumps(config_data), encoding="utf-8")
-    apply_stealth_config(config.stealth)
+    apply_browser_config(config.browser)

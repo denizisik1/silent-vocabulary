@@ -1,10 +1,10 @@
 import config
 from config import AppConfig, WindowConfig
-from stealth_config import (
-    DEFAULT_STEALTH_WAIT_SECONDS,
-    StealthConfig,
-    apply_stealth_config,
-    get_stealth_config,
+from browser_config import (
+    DEFAULT_BROWSER_WAIT_SECONDS,
+    BrowserConfig,
+    apply_browser_config,
+    get_browser_config,
 )
 from themes import stylesheet
 from zoom import clamp_zoom_percent, scale_px
@@ -42,7 +42,7 @@ def test_save_and_load_round_trip(tmp_path, monkeypatch):
             "plural": True,
         },
         window=WindowConfig(width=960, height=720),
-        stealth=StealthConfig(
+        browser=BrowserConfig(
             headless=True,
             sandbox=True,
             wait_seconds=120.0,
@@ -60,35 +60,49 @@ def test_save_and_load_round_trip(tmp_path, monkeypatch):
     assert loaded == saved
 
 
-def test_load_stealth_defaults(tmp_path, monkeypatch):
+def test_load_browser_defaults(tmp_path, monkeypatch):
     monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "vipa.toml")
 
     loaded = config.load_config()
 
-    assert loaded.stealth == StealthConfig()
+    assert loaded.browser == BrowserConfig()
 
 
-def test_load_stealth_partial(tmp_path, monkeypatch):
+def test_load_browser_partial(tmp_path, monkeypatch):
     config_path = tmp_path / "vipa.toml"
     config_path.write_text(
-        "[stealth]\nheadless = true\nsandbox = true\nconnect_tries = 12\n",
+        "[browser]\nheadless = true\nsandbox = true\nconnect_tries = 12\n",
         encoding="utf-8",
     )
     monkeypatch.setattr(config, "CONFIG_PATH", config_path)
 
     loaded = config.load_config()
 
-    assert loaded.stealth.headless is True
-    assert loaded.stealth.sandbox is True
-    assert loaded.stealth.connect_tries == 12
-    assert loaded.stealth.wait_seconds == DEFAULT_STEALTH_WAIT_SECONDS
+    assert loaded.browser.headless is True
+    assert loaded.browser.sandbox is True
+    assert loaded.browser.connect_tries == 12
+    assert loaded.browser.wait_seconds == DEFAULT_BROWSER_WAIT_SECONDS
 
 
-def test_apply_stealth_config_updates_runtime(monkeypatch):
-    apply_stealth_config(StealthConfig(sandbox=True, connect_tries=7))
-    assert get_stealth_config().sandbox is True
-    assert get_stealth_config().connect_tries == 7
-    apply_stealth_config(StealthConfig())
+def test_load_legacy_stealth_table(tmp_path, monkeypatch):
+    config_path = tmp_path / "vipa.toml"
+    config_path.write_text(
+        "[stealth]\nheadless = true\nconnect_tries = 9\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(config, "CONFIG_PATH", config_path)
+
+    loaded = config.load_config()
+
+    assert loaded.browser.headless is True
+    assert loaded.browser.connect_tries == 9
+
+
+def test_apply_browser_config_updates_runtime(monkeypatch):
+    apply_browser_config(BrowserConfig(sandbox=True, connect_tries=7))
+    assert get_browser_config().sandbox is True
+    assert get_browser_config().connect_tries == 7
+    apply_browser_config(BrowserConfig())
 
 
 

@@ -1,5 +1,5 @@
 FETCH_METHOD_BASIC = "basic"
-FETCH_METHOD_STEALTH = "stealth"
+FETCH_METHOD_BROWSER = "browser"
 
 STRATEGY_PRIMARY_FIRST = "primary_first"
 STRATEGY_BASIC_FIRST = "basic_first"
@@ -29,21 +29,21 @@ def normalize_retrieve_strategy(value: str | None) -> str:
 
 def retrieve_attempt_order(strategy: str) -> list[tuple[str, str]]:
     primary_basic = ("primary", FETCH_METHOD_BASIC)
-    primary_stealth = ("primary", FETCH_METHOD_STEALTH)
+    primary_browser = ("primary", FETCH_METHOD_BROWSER)
     backup_basic = ("backup", FETCH_METHOD_BASIC)
-    backup_stealth = ("backup", FETCH_METHOD_STEALTH)
+    backup_browser = ("backup", FETCH_METHOD_BROWSER)
 
     normalized = normalize_retrieve_strategy(strategy)
     if normalized == STRATEGY_BASIC_FIRST:
         return [
             primary_basic,
             backup_basic,
-            primary_stealth,
-            backup_stealth,
+            primary_browser,
+            backup_browser,
         ]
     return [
         primary_basic,
-        primary_stealth,
+        primary_browser,
         backup_basic,
-        backup_stealth,
+        backup_browser,
     ]

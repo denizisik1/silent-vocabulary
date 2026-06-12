@@ -3,7 +3,7 @@ import shutil
 import subprocess
 from pathlib import Path
 
-from stealth_config import get_stealth_config
+from browser_config import get_browser_config
 
 _CHROME_NAMES = (
     "google-chrome",
@@ -23,7 +23,7 @@ _PACKAGE_BY_FAMILY = {
 
 
 def _configured_browser_path() -> str | None:
-    configured = get_stealth_config().browser_path.strip()
+    configured = get_browser_config().browser_path.strip()
     if not configured:
         return None
     path = Path(configured)
@@ -32,7 +32,7 @@ def _configured_browser_path() -> str | None:
     return None
 
 
-def find_stealth_browser_path() -> str | None:
+def find_browser_path() -> str | None:
     configured = _configured_browser_path()
     if configured is not None:
         return configured
@@ -113,7 +113,7 @@ def _run_package_command(command: list[str], *, action: str) -> None:
     raise RuntimeError(detail)
 
 
-def install_stealth_browser() -> None:
+def install_browser() -> None:
     command = browser_install_command()
     if command is None:
         raise RuntimeError(
@@ -123,7 +123,7 @@ def install_stealth_browser() -> None:
     _run_package_command(command, action="browser install")
 
 
-def remove_stealth_browser() -> None:
+def remove_browser() -> None:
     command = browser_remove_command()
     if command is None:
         raise RuntimeError(
