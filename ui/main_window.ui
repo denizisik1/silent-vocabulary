@@ -81,13 +81,48 @@
          </property>
          <property name="minimumSize">
           <size>
-           <width>132</width>
+           <width>148</width>
            <height>0</height>
           </size>
          </property>
          <item>
           <property name="text">
            <string>German</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>English</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>French</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Spanish</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Italian</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Portuguese</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Dutch</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Russian</string>
           </property>
          </item>
         </widget>

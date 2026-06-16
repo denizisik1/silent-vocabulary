@@ -3,8 +3,8 @@ from PySide6.QtGui import QColor, QIcon, QPainter, QPen, QPixmap
 
 _SUN = QColor("#d4a017")
 _MOON = QColor("#b0bcc8")
-_DISK_LIGHT = QColor("#e8ebe8")
-_DISK_DARK = QColor("#2a302e")
+_DISK_LIGHT = QColor("#e8e8e8")
+_DISK_DARK = QColor("#2a2a2a")
 
 THEME_ORDER = ("white", "gray", "dark")
 THEME_BUTTON = "toolButton_theme"
