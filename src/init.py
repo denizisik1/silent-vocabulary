@@ -30,6 +30,7 @@ from ui_words import (  # noqa: E402
     wire_session_config,
 )
 from ui_zoom import apply_appearance, wire_theme, wire_zoom  # noqa: E402
+from ui_spin import install_spin_steppers  # noqa: E402
 
 UI_PATH = PROJECT_ROOT / "ui" / "main_window.ui"
 REFERENCE_DIR = PROJECT_ROOT / "data" / "reference"
@@ -88,6 +89,7 @@ def main() -> None:
     apply_protect_setting(config)
     window = _load_window()
     _apply_window_config(window, config)
+    install_spin_steppers(window)
     wire_zoom(window, config)
     wire_theme(window, config)
     wire_get_words(window)
