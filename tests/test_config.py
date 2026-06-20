@@ -287,3 +287,5 @@ def test_stylesheet_includes_scaled_font_size():
 
     assert "font-size: 30px;" in css
     assert "font-size: 21px;" in css
+    assert 'font-family: "Noto Sans", sans-serif;' in css
+    assert 'font-family: "Liberation Mono", monospace;' in css
