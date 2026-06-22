@@ -20,7 +20,7 @@ from config import AppConfig, load_config, save_config  # noqa: E402
 from ui_daemon import stop_daemon, wire_daemon  # noqa: E402
 from ui_export import wire_export_overlay  # noqa: E402
 from ui_protect import apply_protect_setting, wire_protect_vocabulary  # noqa: E402
-from ui_tray import wire_tray  # noqa: E402
+from ui_tray import app_icon, wire_tray  # noqa: E402
 from ui_retrieve import wire_retrieve  # noqa: E402
 from ui_settings import wire_settings  # noqa: E402
 from ui_words import (  # noqa: E402
@@ -85,9 +85,12 @@ def _on_about_to_quit(
 
 def main() -> None:
     application = QApplication(sys.argv)
+    application.setApplicationName("silent-vocabulary")
+    application.setWindowIcon(app_icon())
     config = load_config()
     apply_protect_setting(config)
     window = _load_window()
+    window.setWindowIcon(app_icon())
     _apply_window_config(window, config)
     install_spin_steppers(window)
     wire_zoom(window, config)

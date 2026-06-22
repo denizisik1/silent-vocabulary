@@ -23,9 +23,9 @@ from ui_words import include_flags, language_key_from_combo
 from words import format_word_row, get_random_words
 
 _MAX_CONSECUTIVE_NOTIFY_FAILURES = 3
-_DAEMON_ATTR = "_vipa_practice_daemon"
-_NOTIFY_FAILURE_COUNT_ATTR = "_vipa_notify_failure_count"
-_APPLICATION_ATTR = "_vipa_application"
+_DAEMON_ATTR = "_silent_vocabulary_practice_daemon"
+_NOTIFY_FAILURE_COUNT_ATTR = "_silent_vocabulary_notify_failure_count"
+_APPLICATION_ATTR = "_silent_vocabulary_application"
 
 _BACKEND_RADIOS = {
     NotifyBackend.DESKTOP: "radioButton",
@@ -195,7 +195,7 @@ def prompt_notify_failure_dialog(
 
     dialog = QMessageBox(window)
     dialog.setIcon(QMessageBox.Icon.Warning)
-    dialog.setWindowTitle("vipa - notification failed")
+    dialog.setWindowTitle("silent-vocabulary - notification failed")
     dialog.setText("The practice daemon could not send a notification.")
     dialog.setInformativeText(
         f"{error_message}\n\nFailure {failure_count} of "
@@ -220,7 +220,7 @@ def _surface_notify_failure_alert(
     error_message: str,
     failure_count: int,
 ) -> str:
-    title = "vipa - notification failed"
+    title = "silent-vocabulary - notification failed"
     body = f"{error_message} ({failure_count}/{_MAX_CONSECUTIVE_NOTIFY_FAILURES})"
     if backend_available(NotifyBackend.DESKTOP):
         try:
@@ -287,7 +287,7 @@ def fire_practice_notification(window: QMainWindow) -> None:
 
     row = words[0]
     body = format_word_row(row, include)
-    title = "vipa"
+    title = "silent-vocabulary"
     try:
         send_notification(title, body, backend=backend)
     except (ValueError, RuntimeError, OSError) as error:

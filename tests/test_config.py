@@ -11,7 +11,7 @@ from zoom import clamp_zoom_percent, scale_px
 
 
 def test_load_returns_defaults_when_missing(tmp_path, monkeypatch):
-    monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "vipa.toml")
+    monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "silent-vocabulary.toml")
 
     loaded = config.load_config()
 
@@ -19,7 +19,7 @@ def test_load_returns_defaults_when_missing(tmp_path, monkeypatch):
 
 
 def test_save_and_load_round_trip(tmp_path, monkeypatch):
-    config_path = tmp_path / "vipa.toml"
+    config_path = tmp_path / "silent-vocabulary.toml"
     monkeypatch.setattr(config, "CONFIG_DIR", tmp_path)
     monkeypatch.setattr(config, "CONFIG_PATH", config_path)
 
@@ -61,7 +61,7 @@ def test_save_and_load_round_trip(tmp_path, monkeypatch):
 
 
 def test_load_browser_defaults(tmp_path, monkeypatch):
-    monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "vipa.toml")
+    monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "silent-vocabulary.toml")
 
     loaded = config.load_config()
 
@@ -69,7 +69,7 @@ def test_load_browser_defaults(tmp_path, monkeypatch):
 
 
 def test_load_browser_partial(tmp_path, monkeypatch):
-    config_path = tmp_path / "vipa.toml"
+    config_path = tmp_path / "silent-vocabulary.toml"
     config_path.write_text(
         "[browser]\nheadless = true\nsandbox = true\nconnect_tries = 12\n",
         encoding="utf-8",
@@ -85,7 +85,7 @@ def test_load_browser_partial(tmp_path, monkeypatch):
 
 
 def test_load_legacy_stealth_table(tmp_path, monkeypatch):
-    config_path = tmp_path / "vipa.toml"
+    config_path = tmp_path / "silent-vocabulary.toml"
     config_path.write_text(
         "[stealth]\nheadless = true\nconnect_tries = 9\n",
         encoding="utf-8",
@@ -107,7 +107,7 @@ def test_apply_browser_config_updates_runtime(monkeypatch):
 
 
 def test_load_protect_base_vocabulary_default_true(tmp_path, monkeypatch):
-    monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "vipa.toml")
+    monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "silent-vocabulary.toml")
 
     loaded = config.load_config()
 
@@ -115,7 +115,7 @@ def test_load_protect_base_vocabulary_default_true(tmp_path, monkeypatch):
 
 
 def test_load_protect_base_vocabulary_false(tmp_path, monkeypatch):
-    config_path = tmp_path / "vipa.toml"
+    config_path = tmp_path / "silent-vocabulary.toml"
     config_path.write_text("protect_base_vocabulary = false\n", encoding="utf-8")
     monkeypatch.setattr(config, "CONFIG_PATH", config_path)
 
@@ -125,7 +125,7 @@ def test_load_protect_base_vocabulary_false(tmp_path, monkeypatch):
 
 
 def test_load_minimize_to_tray_on_daemon_default_true(tmp_path, monkeypatch):
-    monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "vipa.toml")
+    monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "silent-vocabulary.toml")
 
     loaded = config.load_config()
 
@@ -133,7 +133,7 @@ def test_load_minimize_to_tray_on_daemon_default_true(tmp_path, monkeypatch):
 
 
 def test_load_minimize_to_tray_on_daemon_false(tmp_path, monkeypatch):
-    config_path = tmp_path / "vipa.toml"
+    config_path = tmp_path / "silent-vocabulary.toml"
     config_path.write_text("minimize_to_tray_on_daemon = false\n", encoding="utf-8")
     monkeypatch.setattr(config, "CONFIG_PATH", config_path)
 
@@ -143,7 +143,7 @@ def test_load_minimize_to_tray_on_daemon_false(tmp_path, monkeypatch):
 
 
 def test_load_daemon_interval_minutes_default(tmp_path, monkeypatch):
-    monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "vipa.toml")
+    monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "silent-vocabulary.toml")
 
     loaded = config.load_config()
 
@@ -151,7 +151,7 @@ def test_load_daemon_interval_minutes_default(tmp_path, monkeypatch):
 
 
 def test_load_daemon_interval_minutes_invalid_uses_default(tmp_path, monkeypatch):
-    config_path = tmp_path / "vipa.toml"
+    config_path = tmp_path / "silent-vocabulary.toml"
     config_path.write_text("daemon_interval_minutes = 0\n", encoding="utf-8")
     monkeypatch.setattr(config, "CONFIG_PATH", config_path)
 
@@ -161,7 +161,7 @@ def test_load_daemon_interval_minutes_invalid_uses_default(tmp_path, monkeypatch
 
 
 def test_load_notify_backend_defaults_to_desktop(tmp_path, monkeypatch):
-    monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "vipa.toml")
+    monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "silent-vocabulary.toml")
 
     loaded = config.load_config()
 
@@ -169,7 +169,7 @@ def test_load_notify_backend_defaults_to_desktop(tmp_path, monkeypatch):
 
 
 def test_load_notify_backend_unknown_uses_desktop(tmp_path, monkeypatch):
-    config_path = tmp_path / "vipa.toml"
+    config_path = tmp_path / "silent-vocabulary.toml"
     config_path.write_text('notify_backend = "carrier_pigeon"\n', encoding="utf-8")
     monkeypatch.setattr(config, "CONFIG_PATH", config_path)
 
@@ -179,7 +179,7 @@ def test_load_notify_backend_unknown_uses_desktop(tmp_path, monkeypatch):
 
 
 def test_load_language_defaults_to_german(tmp_path, monkeypatch):
-    monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "vipa.toml")
+    monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "silent-vocabulary.toml")
 
     loaded = config.load_config()
 
@@ -187,7 +187,7 @@ def test_load_language_defaults_to_german(tmp_path, monkeypatch):
 
 
 def test_load_language_invalid_uses_default(tmp_path, monkeypatch):
-    config_path = tmp_path / "vipa.toml"
+    config_path = tmp_path / "silent-vocabulary.toml"
     config_path.write_text('language = "klingon"\n', encoding="utf-8")
     monkeypatch.setattr(config, "CONFIG_PATH", config_path)
 
@@ -197,7 +197,7 @@ def test_load_language_invalid_uses_default(tmp_path, monkeypatch):
 
 
 def test_load_retrieve_strategy_default(tmp_path, monkeypatch):
-    monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "vipa.toml")
+    monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "silent-vocabulary.toml")
 
     loaded = config.load_config()
 
@@ -205,7 +205,7 @@ def test_load_retrieve_strategy_default(tmp_path, monkeypatch):
 
 
 def test_load_retrieve_strategy_basic_first(tmp_path, monkeypatch):
-    config_path = tmp_path / "vipa.toml"
+    config_path = tmp_path / "silent-vocabulary.toml"
     config_path.write_text('retrieve_strategy = "basic_first"\n', encoding="utf-8")
     monkeypatch.setattr(config, "CONFIG_PATH", config_path)
 
@@ -215,7 +215,7 @@ def test_load_retrieve_strategy_basic_first(tmp_path, monkeypatch):
 
 
 def test_load_retrieve_strategy_invalid_uses_default(tmp_path, monkeypatch):
-    config_path = tmp_path / "vipa.toml"
+    config_path = tmp_path / "silent-vocabulary.toml"
     config_path.write_text('retrieve_strategy = "chaos"\n', encoding="utf-8")
     monkeypatch.setattr(config, "CONFIG_PATH", config_path)
 
@@ -225,7 +225,7 @@ def test_load_retrieve_strategy_invalid_uses_default(tmp_path, monkeypatch):
 
 
 def test_load_include_fields_partial_merge(tmp_path, monkeypatch):
-    config_path = tmp_path / "vipa.toml"
+    config_path = tmp_path / "silent-vocabulary.toml"
     config_path.write_text(
         "[include]\narticle = false\nexample = true\n",
         encoding="utf-8",
@@ -240,7 +240,7 @@ def test_load_include_fields_partial_merge(tmp_path, monkeypatch):
 
 
 def test_load_ignores_invalid_theme(tmp_path, monkeypatch):
-    config_path = tmp_path / "vipa.toml"
+    config_path = tmp_path / "silent-vocabulary.toml"
     config_path.write_text('theme = "neon"\n', encoding="utf-8")
     monkeypatch.setattr(config, "CONFIG_PATH", config_path)
 
@@ -250,7 +250,7 @@ def test_load_ignores_invalid_theme(tmp_path, monkeypatch):
 
 
 def test_load_clamps_small_window(tmp_path, monkeypatch):
-    config_path = tmp_path / "vipa.toml"
+    config_path = tmp_path / "silent-vocabulary.toml"
     config_path.write_text("[window]\nwidth = 100\nheight = 100\n", encoding="utf-8")
     monkeypatch.setattr(config, "CONFIG_PATH", config_path)
 
@@ -261,7 +261,7 @@ def test_load_clamps_small_window(tmp_path, monkeypatch):
 
 
 def test_load_clamps_zoom_percent(tmp_path, monkeypatch):
-    config_path = tmp_path / "vipa.toml"
+    config_path = tmp_path / "silent-vocabulary.toml"
     config_path.write_text("zoom_percent = 999\n", encoding="utf-8")
     monkeypatch.setattr(config, "CONFIG_PATH", config_path)
 

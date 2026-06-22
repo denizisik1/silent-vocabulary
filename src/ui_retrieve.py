@@ -23,9 +23,9 @@ from ui_browser import wire_browser_prompt
 from ui_words import include_flags, language_key_from_combo, populate_add_form_from_row
 from words import format_word_row
 
-_CONTROLLER_ATTR = "_vipa_retrieve_controller"
-_SYNCING_ATTR = "_vipa_word_fields_syncing"
-_RESULT_FLASH_MS = int(os.environ.get("VIPA_RETRIEVE_FLASH_MS", "1200"))
+_CONTROLLER_ATTR = "_silent_vocabulary_retrieve_controller"
+_SYNCING_ATTR = "_silent_vocabulary_word_fields_syncing"
+_RESULT_FLASH_MS = int(os.environ.get("SILENT_VOCABULARY_RETRIEVE_FLASH_MS", "1200"))
 _RESULTS_OBJECT_NAMES = (
     "textEdit_retrieve_results",
     "textEdit_vocab_retrieve_results",
@@ -224,7 +224,7 @@ class RetrieveController(QObject):
         worker = RetrieveWorker(
             mode=mode,
             language_key=language_key,
-            word=word or os.environ.get("VIPA_SAMPLE_WORD", "Abend"),
+            word=word or os.environ.get("SILENT_VOCABULARY_SAMPLE_WORD", "Abend"),
             primary_url=self._line("lineEdit_6").text(),
             primary_find=self._line("lineEdit_8").text(),
             backup_url=self._line("lineEdit_9").text(),
@@ -284,15 +284,15 @@ def _wire_word_field_sync(window: QMainWindow) -> None:
 def _apply_source_defaults(window: QMainWindow) -> None:
     defaults = {
         "lineEdit_6": os.environ.get(
-            "VIPA_PRIMARY_SOURCE_URL",
+            "SILENT_VOCABULARY_PRIMARY_SOURCE_URL",
             "https://en.pons.com/translate/german-english/",
         ),
-        "lineEdit_8": os.environ.get("VIPA_PRIMARY_FIND_BY", "phonetics"),
+        "lineEdit_8": os.environ.get("SILENT_VOCABULARY_PRIMARY_FIND_BY", "phonetics"),
         "lineEdit_9": os.environ.get(
-            "VIPA_BACKUP_SOURCE_URL",
+            "SILENT_VOCABULARY_BACKUP_SOURCE_URL",
             "https://www.collinsdictionary.com/dictionary/german-english/",
         ),
-        "lineEdit_7": os.environ.get("VIPA_BACKUP_FIND_BY", "pron"),
+        "lineEdit_7": os.environ.get("SILENT_VOCABULARY_BACKUP_FIND_BY", "pron"),
     }
     for object_name, value in defaults.items():
         editor = window.findChild(QLineEdit, object_name)

@@ -20,7 +20,7 @@ from browser_support import (
     remove_browser,
 )
 
-_PROMPT_ATTR = "_vipa_browser_prompt"
+_PROMPT_ATTR = "_silent_vocabulary_browser_prompt"
 
 
 def run_browser_package_action(
@@ -55,7 +55,7 @@ def run_browser_package_action(
         return False
 
     progress = QProgressDialog(progress_label, None, 0, 0, parent)
-    progress.setWindowTitle("vipa")
+    progress.setWindowTitle("silent-vocabulary")
     progress.setWindowModality(Qt.WindowModality.ApplicationModal)
     progress.setMinimumDuration(0)
     progress.setCancelButton(None)
@@ -70,7 +70,7 @@ def run_browser_package_action(
         progress.close()
         failure = QMessageBox(parent)
         failure.setIcon(QMessageBox.Icon.Critical)
-        failure.setWindowTitle("vipa - action failed")
+        failure.setWindowTitle("silent-vocabulary - action failed")
         failure.setText("Action failed")
         failure.setInformativeText(str(error))
         failure.exec()
@@ -83,7 +83,7 @@ def run_browser_package_action(
 
     failure = QMessageBox(parent)
     failure.setIcon(QMessageBox.Icon.Critical)
-    failure.setWindowTitle("vipa - action failed")
+    failure.setWindowTitle("silent-vocabulary - action failed")
     failure.setText("Action failed")
     failure.setInformativeText(success_failure_message)
     failure.exec()
@@ -126,7 +126,7 @@ class BrowserInstallPrompt(QObject):
             return True
         return run_browser_package_action(
             self._parent,
-            title="vipa - install browser",
+            title="silent-vocabulary - install browser",
             question=(
                 "Browser fetch needs Chrome, Chromium, or Brave. "
                 "Install Chromium now?"
@@ -150,7 +150,7 @@ class BrowserInstallPrompt(QObject):
 def remove_chromium_with_prompt(parent: QWidget) -> bool:
     return run_browser_package_action(
         parent,
-        title="vipa - remove browser",
+        title="silent-vocabulary - remove browser",
         question="Remove the system Chromium package?",
         progress_label="Removing Chromium…",
         command=browser_remove_command(),
@@ -170,7 +170,7 @@ def remove_chromium_with_prompt(parent: QWidget) -> bool:
 def install_chromium_with_prompt(parent: QWidget) -> bool:
     return run_browser_package_action(
         parent,
-        title="vipa - install browser",
+        title="silent-vocabulary - install browser",
         question="Install Chromium for browser fetch?",
         progress_label="Installing Chromium…",
         command=browser_install_command(),

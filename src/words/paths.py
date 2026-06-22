@@ -5,14 +5,14 @@ from words.constants import USER_VOCABULARY_DIR, VOCABULARY_DIR
 
 
 def vocabulary_dir() -> Path:
-    override = os.environ.get("VIPA_VOCABULARY_DIR")
+    override = os.environ.get("SILENT_VOCABULARY_DIR")
     if override:
         return Path(override)
     return VOCABULARY_DIR
 
 
 def user_vocabulary_dir() -> Path:
-    override = os.environ.get("VIPA_USER_VOCABULARY_DIR")
+    override = os.environ.get("SILENT_VOCABULARY_USER_DIR")
     if override:
         return Path(override)
     return USER_VOCABULARY_DIR

@@ -1,4 +1,5 @@
 from functools import partial
+from pathlib import Path
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction, QCloseEvent, QColor, QIcon, QPainter, QPen, QPixmap
@@ -13,10 +14,11 @@ from PySide6.QtWidgets import (
 
 from config import AppConfig, save_config
 
-_TRAY_ATTR = "_vipa_tray_icon"
-_DAEMON_ATTR = "_vipa_practice_daemon"
+_TRAY_ATTR = "_silent_vocabulary_tray_icon"
+_DAEMON_ATTR = "_silent_vocabulary_practice_daemon"
 _CHECKBOX_NAME = "checkBox_minimize_to_tray"
 _UNAVAILABLE_LABEL_NAME = "label_tray_unavailable"
+_ICON_PATH = Path(__file__).resolve().parent.parent / "assets" / "icon.png"
 _TRAY_UNAVAILABLE_REASON = (
     "System tray is not available in this desktop session "
     "(common on GNOME without a tray extension)."
@@ -27,22 +29,25 @@ def system_tray_available() -> bool:
     return QSystemTrayIcon.isSystemTrayAvailable()
 
 
-def _tray_icon_image() -> QIcon:
-    themed = QIcon.fromTheme("accessories-dictionary")
-    if not themed.isNull():
-        return themed
+def app_icon() -> QIcon:
+    if _ICON_PATH.is_file():
+        return QIcon(str(_ICON_PATH))
 
     pixmap = QPixmap(64, 64)
     pixmap.fill(Qt.GlobalColor.transparent)
     painter = QPainter(pixmap)
     painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-    painter.setBrush(QColor("#4a90d9"))
+    painter.setBrush(QColor("#c45c2a"))
     painter.setPen(Qt.PenStyle.NoPen)
-    painter.drawEllipse(8, 8, 48, 48)
-    painter.setPen(QPen(Qt.GlobalColor.white, 3))
-    painter.drawText(pixmap.rect(), Qt.AlignmentFlag.AlignCenter, "V")
+    painter.drawRoundedRect(4, 4, 56, 56, 12, 12)
+    painter.setPen(QPen(QColor("#f5e6d3"), 3))
+    painter.drawText(pixmap.rect(), Qt.AlignmentFlag.AlignCenter, "SV")
     painter.end()
     return QIcon(pixmap)
+
+
+def _tray_icon_image() -> QIcon:
+    return app_icon()
 
 
 def _is_daemon_running(window: QMainWindow) -> bool:
@@ -73,10 +78,10 @@ def _get_tray(window: QMainWindow, application: QApplication) -> QSystemTrayIcon
     tray = getattr(window, _TRAY_ATTR, None)
     if tray is None:
         tray = QSystemTrayIcon(_tray_icon_image(), parent=window)
-        tray.setToolTip("vipa")
+        tray.setToolTip("silent-vocabulary")
         menu = QMenu(window)
 
-        show_action = QAction("Show vipa", window)
+        show_action = QAction("Show silent-vocabulary", window)
         show_action.triggered.connect(partial(show_window_from_tray, window, application))
         menu.addAction(show_action)
 
@@ -125,7 +130,7 @@ def hide_window_to_tray(window: QMainWindow, application: QApplication) -> bool:
         return False
 
     tray = _get_tray(window, application)
-    tray.setToolTip("vipa - practice daemon running")
+    tray.setToolTip("silent-vocabulary - practice daemon running")
     tray.show()
     window.hide()
     application.setQuitOnLastWindowClosed(False)

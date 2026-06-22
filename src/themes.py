@@ -326,7 +326,7 @@ QToolButton#toolButton_theme:hover {{
 
 
 THEMES = frozenset(_PALETTE)
-DEFAULT_THEME = os.environ.get("VIPA_DEFAULT_THEME", "white")
+DEFAULT_THEME = os.environ.get("SILENT_VOCABULARY_DEFAULT_THEME", "white")
 
 
 def theme_color(name: str, key: str) -> str:

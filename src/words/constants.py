@@ -4,7 +4,7 @@ from platformdirs import user_data_dir
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 VOCABULARY_DIR = PROJECT_ROOT / "vocabulary"
-USER_DATA_DIR = Path(user_data_dir("vipa", appauthor=False))
+USER_DATA_DIR = Path(user_data_dir("silent-vocabulary", appauthor=False))
 USER_VOCABULARY_DIR = USER_DATA_DIR / "vocabulary"
 
 CSV_COLUMNS = (

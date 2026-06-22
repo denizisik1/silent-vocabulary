@@ -9,7 +9,7 @@ _OVERLAY_FILENAMES = ("additions.csv", "removals.csv")
 
 def default_export_filename(*, when: datetime | None = None) -> str:
     stamp = (when or datetime.now(timezone.utc)).strftime("%Y%m%d-%H%M%S")
-    return f"vipa-vocabulary-{stamp}.zip"
+    return f"silent-vocabulary-{stamp}.zip"
 
 
 def collect_overlay_files(user_root: Path | None = None) -> list[Path]:

@@ -19,8 +19,8 @@ def _prepare_dirs(tmp_path, monkeypatch) -> None:
     for filename in ("nouns.csv", "verbs.csv", "adjectives.csv", "adverbs.csv"):
         (vocabulary_root / filename).write_text("word,meaning\n", encoding="utf-8")
     user_root = tmp_path / "user-vocabulary"
-    monkeypatch.setenv("VIPA_VOCABULARY_DIR", str(vocabulary_root))
-    monkeypatch.setenv("VIPA_USER_VOCABULARY_DIR", str(user_root))
+    monkeypatch.setenv("SILENT_VOCABULARY_DIR", str(vocabulary_root))
+    monkeypatch.setenv("SILENT_VOCABULARY_USER_DIR", str(user_root))
 
 
 def test_add_word_writes_user_overlay_not_base(tmp_path, monkeypatch):

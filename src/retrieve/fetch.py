@@ -16,7 +16,7 @@ def _env_bool(name: str, default: bool) -> bool:
 
 
 def _warmup_enabled() -> bool:
-    return _env_bool("VIPA_HTTP_WARMUP", True)
+    return _env_bool("SILENT_VOCABULARY_HTTP_WARMUP", True)
 
 
 def _fetch_timeout_seconds() -> float:

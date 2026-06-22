@@ -7,8 +7,8 @@ def _prepare_dirs(tmp_path, monkeypatch) -> None:
     (vocabulary_root / "nouns.csv").write_text("der Abend,evening\n", encoding="utf-8")
     for filename in ("verbs.csv", "adjectives.csv", "adverbs.csv"):
         (vocabulary_root / filename).write_text("word,meaning\n", encoding="utf-8")
-    monkeypatch.setenv("VIPA_VOCABULARY_DIR", str(vocabulary_root))
-    monkeypatch.setenv("VIPA_USER_VOCABULARY_DIR", str(tmp_path / "user-vocabulary"))
+    monkeypatch.setenv("SILENT_VOCABULARY_DIR", str(vocabulary_root))
+    monkeypatch.setenv("SILENT_VOCABULARY_USER_DIR", str(tmp_path / "user-vocabulary"))
 
 
 def test_upsert_pronunciation_writes_overlay(tmp_path, monkeypatch):
