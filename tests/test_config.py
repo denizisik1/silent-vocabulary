@@ -26,6 +26,8 @@ def test_save_and_load_round_trip(tmp_path, monkeypatch):
     saved = AppConfig(
         theme="dark",
         zoom_percent=125,
+        mono_zoom_percent=110,
+        reference_zoom_percent=90,
         protect_base_vocabulary=False,
         minimize_to_tray_on_daemon=False,
         daemon_interval_minutes=30,
@@ -262,12 +264,17 @@ def test_load_clamps_small_window(tmp_path, monkeypatch):
 
 def test_load_clamps_zoom_percent(tmp_path, monkeypatch):
     config_path = tmp_path / "silent-vocabulary.toml"
-    config_path.write_text("zoom_percent = 999\n", encoding="utf-8")
+    config_path.write_text(
+        "zoom_percent = 999\nmono_zoom_percent = 10\nreference_zoom_percent = 200\n",
+        encoding="utf-8",
+    )
     monkeypatch.setattr(config, "CONFIG_PATH", config_path)
 
     loaded = config.load_config()
 
     assert loaded.zoom_percent == 150
+    assert loaded.mono_zoom_percent == 80
+    assert loaded.reference_zoom_percent == 150
 
 
 def test_clamp_zoom_percent():
@@ -283,9 +290,11 @@ def test_scale_px():
 
 
 def test_stylesheet_includes_scaled_font_size():
-    css = stylesheet("white", zoom_percent=150)
+    css = stylesheet("white", zoom_percent=150, mono_zoom_percent=120)
 
     assert "font-size: 30px;" in css
-    assert "font-size: 21px;" in css
+    assert "font-size: 20px;" in css
+    assert "font-size: 16px;" in css
+    assert "font-size: 17px;" in css
     assert 'font-family: "Noto Sans", sans-serif;' in css
     assert 'font-family: "Liberation Mono", monospace;' in css

@@ -84,13 +84,19 @@ _PALETTE = {
 }
 
 
-def stylesheet(name: str, zoom_percent: int = DEFAULT_ZOOM_PERCENT) -> str:
+def stylesheet(
+    name: str,
+    zoom_percent: int = DEFAULT_ZOOM_PERCENT,
+    mono_zoom_percent: int = DEFAULT_ZOOM_PERCENT,
+) -> str:
     colors = _PALETTE[name]
     zoom = clamp_zoom_percent(zoom_percent)
+    mono_zoom = clamp_zoom_percent(mono_zoom_percent)
     brand_size = scale_px(20, zoom)
     body_size = scale_px(13, zoom)
     hint_size = scale_px(11, zoom)
-    results_size = scale_px(14, zoom)
+    mono_body_size = scale_px(13, mono_zoom)
+    mono_results_size = scale_px(14, mono_zoom)
     tab_pad_y = scale_px(7, zoom)
     tab_pad_x = scale_px(14, zoom)
     input_min = scale_px(24, zoom)
@@ -158,7 +164,9 @@ QSpinBox:focus, QDoubleSpinBox:focus {{
     border: 1px solid {colors["accent"]};
 }}
 QTextEdit#textEdit,
-QTextEdit#textEdit_2,
+QTextEdit#textEdit_2 {{
+    font-family: {MONO_FONT};
+}}
 QTextEdit#textEdit_3,
 QTextEdit#textEdit_retrieve_results,
 QTextEdit#textEdit_vocab_retrieve_results,
@@ -166,11 +174,12 @@ QLineEdit#lineEdit_2,
 QLineEdit#lineEdit_retrieve_word,
 QLineEdit#lineEdit_add_pronunciation {{
     font-family: {MONO_FONT};
+    font-size: {mono_body_size}px;
 }}
 QTextEdit#textEdit_3,
 QTextEdit#textEdit_retrieve_results,
 QTextEdit#textEdit_vocab_retrieve_results {{
-    font-size: {results_size}px;
+    font-size: {mono_results_size}px;
     padding: 8px;
 }}
 QPushButton {{
@@ -195,7 +204,11 @@ QPushButton#spinStepButton {{
     padding: 6px 0;
 }}
 QPushButton#pushButton_zoom_out,
-QPushButton#pushButton_zoom_in {{
+QPushButton#pushButton_zoom_in,
+QPushButton#pushButton_mono_zoom_out,
+QPushButton#pushButton_mono_zoom_in,
+QPushButton#pushButton_reference_zoom_out,
+QPushButton#pushButton_reference_zoom_in {{
     min-width: 28px;
     max-width: 28px;
     min-height: 28px;
