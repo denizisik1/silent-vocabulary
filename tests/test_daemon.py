@@ -1,7 +1,6 @@
 from unittest.mock import MagicMock
 
 import pytest
-from PySide6.QtCore import QCoreApplication
 
 from daemon import PracticeDaemon, parse_interval_minutes
 from notify import NotifyBackend, desktop_notifier_label, send_notification
@@ -33,14 +32,12 @@ def test_parse_interval_minutes_rejects_zero():
         parse_interval_minutes("0")
 
 
-def test_practice_daemon_fires_immediately_and_can_stop():
+def test_practice_daemon_fires_immediately_and_can_stop(qapp):
     ticks: list[int] = []
 
     def on_tick() -> None:
         ticks.append(1)
 
-    if QCoreApplication.instance() is None:
-        QCoreApplication([])
     daemon = PracticeDaemon(on_tick)
     daemon.start(1, fire_immediately=True)
     assert daemon.is_running()
