@@ -1,8 +1,6 @@
 from words.constants import (
-    CLASSIFICATIONS,
     CSV_COLUMNS,
     DEFAULT_INCLUDE,
-    DISPLAY_COLUMNS,
     LANGUAGE_VOCABULARY_FILES,
 )
 from words.format import format_word_row
@@ -12,10 +10,8 @@ from words.export import default_export_filename, export_user_vocabulary
 from words.paths import user_vocabulary_dir, vocabulary_dir
 
 __all__ = [
-    "CLASSIFICATIONS",
     "CSV_COLUMNS",
     "DEFAULT_INCLUDE",
-    "DISPLAY_COLUMNS",
     "LANGUAGE_VOCABULARY_FILES",
     "WordFields",
     "add_word",

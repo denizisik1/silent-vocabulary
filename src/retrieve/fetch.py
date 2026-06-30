@@ -2,9 +2,9 @@ import os
 
 import requests  # type: ignore[import-untyped]
 
-from retrieve.http_headers import browser_headers, origin_url
 from browser_config import get_browser_config
 from retrieve.browser_fetch import ensure_browser_ready, fetch_html_via_browser
+from retrieve.http_headers import browser_headers, origin_url
 from retrieve.strategy import FETCH_METHOD_BASIC, FETCH_METHOD_BROWSER
 
 

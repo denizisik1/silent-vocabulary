@@ -1,8 +1,8 @@
 **/__pycache__/
+**/.pytest_cache/
 **/*.log
 .env
 .coverage
+.venv/
 **/.vscode/
-**/sql_temp/
-*.db
 **/.~lock.*

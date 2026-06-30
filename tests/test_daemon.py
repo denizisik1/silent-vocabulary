@@ -162,7 +162,9 @@ def test_handle_notify_failure_stops_daemon_after_threshold(monkeypatch):
     stop_daemon = MagicMock()
     monkeypatch.setattr("ui_daemon._get_notify_failure_count", lambda _window: 2)
     monkeypatch.setattr("ui_daemon._set_notify_failure_count", MagicMock())
-    monkeypatch.setattr("ui_daemon._surface_notify_failure_alert", lambda *args, **kwargs: "background")
+    monkeypatch.setattr(
+        "ui_daemon._surface_notify_failure_alert", lambda *args, **kwargs: "background"
+    )
     monkeypatch.setattr("ui_daemon.stop_daemon", stop_daemon)
 
     _handle_notify_failure(window, application, RuntimeError("notify-send failed"))
@@ -179,7 +181,9 @@ def test_handle_notify_failure_keeps_daemon_running_below_threshold(monkeypatch)
     stop_daemon = MagicMock()
     monkeypatch.setattr("ui_daemon._get_notify_failure_count", lambda _window: 0)
     monkeypatch.setattr("ui_daemon._set_notify_failure_count", MagicMock())
-    monkeypatch.setattr("ui_daemon._surface_notify_failure_alert", lambda *args, **kwargs: "background")
+    monkeypatch.setattr(
+        "ui_daemon._surface_notify_failure_alert", lambda *args, **kwargs: "background"
+    )
     monkeypatch.setattr("ui_daemon.stop_daemon", stop_daemon)
 
     _handle_notify_failure(window, application, RuntimeError("notify-send failed"))
@@ -193,7 +197,9 @@ def test_handle_notify_failure_dialog_ok_still_stops_after_threshold(monkeypatch
     stop_daemon = MagicMock()
     monkeypatch.setattr("ui_daemon._get_notify_failure_count", lambda _window: 2)
     monkeypatch.setattr("ui_daemon._set_notify_failure_count", MagicMock())
-    monkeypatch.setattr("ui_daemon._surface_notify_failure_alert", lambda *args, **kwargs: "continue")
+    monkeypatch.setattr(
+        "ui_daemon._surface_notify_failure_alert", lambda *args, **kwargs: "continue"
+    )
     monkeypatch.setattr("ui_daemon.stop_daemon", stop_daemon)
 
     _handle_notify_failure(window, application, RuntimeError("notify-send failed"))
@@ -208,7 +214,9 @@ def test_handle_notify_failure_dialog_ok_below_threshold_keeps_running(monkeypat
     stop_daemon = MagicMock()
     monkeypatch.setattr("ui_daemon._get_notify_failure_count", lambda _window: 0)
     monkeypatch.setattr("ui_daemon._set_notify_failure_count", MagicMock())
-    monkeypatch.setattr("ui_daemon._surface_notify_failure_alert", lambda *args, **kwargs: "continue")
+    monkeypatch.setattr(
+        "ui_daemon._surface_notify_failure_alert", lambda *args, **kwargs: "continue"
+    )
     monkeypatch.setattr("ui_daemon.stop_daemon", stop_daemon)
 
     _handle_notify_failure(window, application, RuntimeError("notify-send failed"))

@@ -12,11 +12,6 @@ RETRIEVE_STRATEGIES = frozenset(
     }
 )
 
-STRATEGY_LABELS = {
-    STRATEGY_PRIMARY_FIRST: "Primary first",
-    STRATEGY_BASIC_FIRST: "Basic first",
-}
-
 
 def normalize_retrieve_strategy(value: str | None) -> str:
     if not isinstance(value, str):

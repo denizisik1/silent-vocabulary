@@ -2,9 +2,13 @@ import os
 
 from PySide6.QtCore import QObject, Signal
 
-from retrieve import check_source_capabilities
-from retrieve.service import SourceEndpoint, retrieve_ipa_with_strategy
-from retrieve.strategy import DEFAULT_RETRIEVE_STRATEGY, normalize_retrieve_strategy
+from retrieve import (
+    DEFAULT_RETRIEVE_STRATEGY,
+    SourceEndpoint,
+    check_source_capabilities,
+    normalize_retrieve_strategy,
+    retrieve_ipa_with_strategy,
+)
 from words import upsert_pronunciation
 
 
