@@ -31,6 +31,19 @@ def qapp():
     return application
 
 
+@pytest.fixture(autouse=True)
+def isolated_user_vocabulary(tmp_path_factory, monkeypatch):
+    from words.load import clear_word_cache
+
+    monkeypatch.setenv(
+        "SILENT_VOCABULARY_USER_DIR",
+        str(tmp_path_factory.mktemp("user-vocabulary")),
+    )
+    clear_word_cache()
+    yield
+    clear_word_cache()
+
+
 @pytest.fixture
 def without_app_environment(monkeypatch):
     for name in list(os.environ):

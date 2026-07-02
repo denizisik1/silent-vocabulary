@@ -81,15 +81,11 @@ def _set_reference_zoom(window: QMainWindow, config: AppConfig, zoom_percent: in
 
 
 def _on_reference_zoom_out(window: QMainWindow, config: AppConfig) -> None:
-    _set_reference_zoom(
-        window, config, config.reference_zoom_percent - ZOOM_STEP_PERCENT
-    )
+    _set_reference_zoom(window, config, config.reference_zoom_percent - ZOOM_STEP_PERCENT)
 
 
 def _on_reference_zoom_in(window: QMainWindow, config: AppConfig) -> None:
-    _set_reference_zoom(
-        window, config, config.reference_zoom_percent + ZOOM_STEP_PERCENT
-    )
+    _set_reference_zoom(window, config, config.reference_zoom_percent + ZOOM_STEP_PERCENT)
 
 
 def wire_reference(window: QMainWindow, config: AppConfig) -> None:

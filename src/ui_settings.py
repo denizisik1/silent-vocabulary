@@ -75,12 +75,8 @@ def apply_settings_to_form(window: QMainWindow, config: AppConfig) -> None:
         browser.connect_timeout_seconds
     )
     _spin(window, "spinBox_browser_connect_tries").setValue(browser.connect_tries)
-    _double_spin(window, "doubleSpinBox_fetch_timeout").setValue(
-        browser.fetch_timeout_seconds
-    )
-    _double_spin(window, "doubleSpinBox_probe_timeout").setValue(
-        browser.probe_timeout_seconds
-    )
+    _double_spin(window, "doubleSpinBox_fetch_timeout").setValue(browser.fetch_timeout_seconds)
+    _double_spin(window, "doubleSpinBox_probe_timeout").setValue(browser.probe_timeout_seconds)
     _line(window, "lineEdit_browser_path").setText(browser.browser_path)
     refresh_browser_status(window)
 
@@ -90,20 +86,14 @@ def _read_browser_from_form(window: QMainWindow) -> BrowserConfig:
         headless=_checkbox(window, "checkBox_browser_headless").isChecked(),
         sandbox=_checkbox(window, "checkBox_browser_sandbox").isChecked(),
         wait_seconds=float(_spin(window, "spinBox_browser_wait_seconds").value()),
-        extra_timeout_seconds=_double_spin(
-            window, "doubleSpinBox_browser_extra_timeout"
-        ).value(),
+        extra_timeout_seconds=_double_spin(window, "doubleSpinBox_browser_extra_timeout").value(),
         connect_timeout_seconds=_double_spin(
             window, "doubleSpinBox_browser_connect_timeout"
         ).value(),
         connect_tries=_spin(window, "spinBox_browser_connect_tries").value(),
         browser_path=_line(window, "lineEdit_browser_path").text().strip(),
-        fetch_timeout_seconds=_double_spin(
-            window, "doubleSpinBox_fetch_timeout"
-        ).value(),
-        probe_timeout_seconds=_double_spin(
-            window, "doubleSpinBox_probe_timeout"
-        ).value(),
+        fetch_timeout_seconds=_double_spin(window, "doubleSpinBox_fetch_timeout").value(),
+        probe_timeout_seconds=_double_spin(window, "doubleSpinBox_probe_timeout").value(),
     )
 
 

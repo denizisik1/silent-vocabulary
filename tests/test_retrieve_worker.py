@@ -48,8 +48,8 @@ def use_retrieve(monkeypatch, outcome):
 def use_upsert(monkeypatch, outcome=ROW):
     calls = []
 
-    def fake_upsert(language_key, word, pronunciation, *, source=None):
-        calls.append((language_key, word, pronunciation, source))
+    def fake_upsert(language_key, word, pronunciation, **options):
+        calls.append((language_key, word, pronunciation, options))
         if isinstance(outcome, Exception):
             raise outcome
         return outcome
@@ -94,7 +94,27 @@ def test_a_retrieved_pronunciation_is_saved_and_reported(monkeypatch):
     assert "browser" in message
     assert "Abend" in message
     assert "[ˈaːbənt]" in message
-    assert upserts == [("german", "Abend", "[ˈaːbənt]", RESULT.url)]
+    assert upserts == [
+        (
+            "german",
+            "Abend",
+            "[ˈaːbənt]",
+            {"classification": None, "article": None, "source": RESULT.url},
+        )
+    ]
+
+
+def test_the_chosen_entry_is_passed_through_to_the_write(monkeypatch):
+    use_retrieve(monkeypatch, RESULT)
+    upserts = use_upsert(monkeypatch)
+
+    worker = build_worker(word="Weg", classification="noun", article="der")
+    successes, errors = run_and_collect(worker)
+
+    assert not errors
+    assert successes
+    assert upserts[0][3]["classification"] == "noun"
+    assert upserts[0][3]["article"] == "der"
 
 
 def test_a_failed_retrieve_saves_nothing(monkeypatch):

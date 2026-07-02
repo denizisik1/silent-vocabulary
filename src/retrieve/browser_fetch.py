@@ -93,8 +93,7 @@ async def _fetch_html_browser_async(url: str, *, timeout_seconds: float) -> str:
             await asyncio.sleep(1.0)
 
         raise RuntimeError(
-            f"Browser fetch timed out for {url} "
-            f"(title={last_title!r}, bytes={len(last_html)})"
+            f"Browser fetch timed out for {url} " f"(title={last_title!r}, bytes={len(last_html)})"
         )
     finally:
         await browser.stop()
@@ -110,9 +109,7 @@ def fetch_html_via_browser(url: str, *, timeout_seconds: float | None = None) ->
         else max(timeout_seconds, browser_settings.wait_seconds)
     )
     try:
-        return asyncio.run(
-            _fetch_html_browser_async(url, timeout_seconds=wait_seconds)
-        )
+        return asyncio.run(_fetch_html_browser_async(url, timeout_seconds=wait_seconds))
     except RuntimeError:
         raise
     except Exception as error:

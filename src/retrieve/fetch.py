@@ -101,8 +101,7 @@ def fetch_html(url: str, *, timeout_seconds: float | None = None) -> str:
     except Exception as browser_error:
         basic_detail = str(basic_error) if basic_error else "unknown"
         raise RuntimeError(
-            "Fetch failed via basic "
-            f"({basic_detail}) and browser ({browser_error})"
+            "Fetch failed via basic " f"({basic_detail}) and browser ({browser_error})"
         ) from browser_error
 
 

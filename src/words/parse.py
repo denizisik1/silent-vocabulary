@@ -3,6 +3,8 @@ from pathlib import Path
 
 from words.constants import ARTICLE_PREFIXES, HEADER_ALIASES, ROW_FIELD_COUNT
 
+RemovalKey = tuple[str, str | None, str | None]
+
 
 def empty_field(value: str | None) -> str | None:
     if value is None:
@@ -15,6 +17,18 @@ def empty_field(value: str | None) -> str | None:
 
 def word_key(word: str) -> str:
     return word.casefold()
+
+
+def entry_key(
+    word: str,
+    classification: str | None = None,
+    article: str | None = None,
+) -> tuple[str, str, str]:
+    return (word.casefold(), (classification or "").casefold(), (article or "").casefold())
+
+
+def row_entry_key(row: tuple) -> tuple[str, str, str]:
+    return entry_key(row[1], row[4], row[0])
 
 
 def split_article(word_field: str) -> tuple[str | None, str]:
@@ -112,18 +126,37 @@ def read_csv_rows(path: Path, default_classification: str) -> list[tuple]:
     return rows
 
 
-def read_removals(path: Path) -> set[str]:
+def _removal_from_row(row: list[str]) -> RemovalKey | None:
+    word = empty_field(row[0])
+    if word is None:
+        return None
+
+    classification = empty_field(row[1]) if len(row) > 1 else None
+    if classification is None:
+        return (word_key(word), None, None)
+
+    article = empty_field(row[2]) if len(row) > 2 else None
+    return entry_key(word, classification, article)
+
+
+def read_removals(path: Path) -> set[RemovalKey]:
     if not path.is_file():
         return set()
 
-    removals: set[str] = set()
+    removals: set[RemovalKey] = set()
     with path.open(newline="", encoding="utf-8") as handle:
         reader = csv.reader(handle)
         for row in reader:
             if not row or not any(cell.strip() for cell in row):
                 continue
-            first = row[0].strip()
-            if first.lower() == "word":
+            if row[0].strip().lower() == "word":
                 continue
-            removals.add(word_key(first))
+            removal = _removal_from_row(row)
+            if removal is not None:
+                removals.add(removal)
     return removals
+
+
+def is_entry_removed(row: tuple, removals: set[RemovalKey]) -> bool:
+    key = row_entry_key(row)
+    return key in removals or (key[0], None, None) in removals

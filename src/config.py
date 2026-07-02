@@ -232,9 +232,7 @@ def load_config() -> AppConfig:
     config_document = tomlkit.parse(CONFIG_PATH.read_text(encoding="utf-8"))
     window = _parse_window_table(config_document.get("window"))
     theme = _parse_theme_name(config_document.get("theme", DEFAULT_THEME))
-    zoom_percent = _parse_zoom_percent(
-        config_document.get("zoom_percent", DEFAULT_ZOOM_PERCENT)
-    )
+    zoom_percent = _parse_zoom_percent(config_document.get("zoom_percent", DEFAULT_ZOOM_PERCENT))
     mono_zoom_percent = _parse_zoom_percent(
         config_document.get("mono_zoom_percent", DEFAULT_MONO_ZOOM_PERCENT),
         DEFAULT_MONO_ZOOM_PERCENT,
@@ -301,8 +299,7 @@ def save_config(config: AppConfig) -> None:
         "language": config.language,
         "retrieve_strategy": normalize_retrieve_strategy(config.retrieve_strategy),
         "include": {
-            field_name: config.include_fields[field_name]
-            for field_name in INCLUDE_FIELD_NAMES
+            field_name: config.include_fields[field_name] for field_name in INCLUDE_FIELD_NAMES
         },
         "window": {
             "width": config.window.width,

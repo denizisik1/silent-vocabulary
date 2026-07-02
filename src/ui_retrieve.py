@@ -20,8 +20,9 @@ from retrieve.strategy import (
 from retrieve.worker import RetrieveWorker
 from ui_retrieve_log import RetrieveResultsLog
 from ui_browser import wire_browser_prompt
+from ui_disambiguate import choose_entry
 from ui_words import include_flags, language_key_from_combo, populate_add_form_from_row
-from words import format_word_row
+from words import AmbiguousWordError, format_word_row, resolve_entry
 
 _CONTROLLER_ATTR = "_silent_vocabulary_retrieve_controller"
 _SYNCING_ATTR = "_silent_vocabulary_word_fields_syncing"
@@ -80,9 +81,7 @@ class RetrieveController(QObject):
             if results is not None:
                 views.append(results)
         if not views:
-            raise RuntimeError(
-                f"Missing results view: one of {_RESULTS_OBJECT_NAMES}"
-            )
+            raise RuntimeError(f"Missing results view: one of {_RESULTS_OBJECT_NAMES}")
         return views
 
     def _show_cleared_buttons(self) -> list[QPushButton]:
@@ -200,6 +199,18 @@ class RetrieveController(QObject):
         self._cleanup_worker()
         self._flash_result(False)
 
+    def _pick_entry(self, language_key: str, word: str) -> tuple | None:
+        try:
+            return resolve_entry(language_key, word)
+        except AmbiguousWordError as ambiguity:
+            chosen = choose_entry(self._window, word, ambiguity.candidates)
+            if chosen is None:
+                self._append_results("Retrieve cancelled: no entry chosen", begin_session=True)
+            return chosen
+        except ValueError as error:
+            self._append_results(f"Retrieve error: {error}", begin_session=True)
+            return None
+
     def start(self, mode: str, button: QPushButton | None = None) -> None:
         if self._busy:
             self._append_results("Retrieve already running", begin_session=True)
@@ -209,22 +220,32 @@ class RetrieveController(QObject):
         if language_combo is None:
             raise RuntimeError("Missing language control: comboBox")
 
+        language_key = language_key_from_combo(language_combo.currentText())
         word = self._word_text()
         if mode != "check" and not word:
             message = "Enter a word on Sources or Vocabulary before retrieving IPA."
             self._append_results(message, begin_session=True)
             return
 
+        classification: str | None = None
+        article: str | None = None
+        if mode != "check":
+            entry = self._pick_entry(language_key, word)
+            if entry is None:
+                return
+            article, word, classification = entry[0], entry[1], entry[4]
+
         self._flash_timer.stop()
         self._apply_button_state(self._active_button, None)
         self._busy = True
         self._set_buttons_enabled(False)
 
-        language_key = language_key_from_combo(language_combo.currentText())
         worker = RetrieveWorker(
             mode=mode,
             language_key=language_key,
             word=word or os.environ.get("SILENT_VOCABULARY_SAMPLE_WORD", "Abend"),
+            classification=classification,
+            article=article,
             primary_url=self._line("lineEdit_6").text(),
             primary_find=self._line("lineEdit_8").text(),
             backup_url=self._line("lineEdit_9").text(),
@@ -273,12 +294,8 @@ def _wire_word_field_sync(window: QMainWindow) -> None:
         return
 
     retrieve_word.setText(vocabulary_word.text())
-    vocabulary_word.textChanged.connect(
-        partial(_sync_word_fields, window, "lineEdit_2")
-    )
-    retrieve_word.textChanged.connect(
-        partial(_sync_word_fields, window, "lineEdit_retrieve_word")
-    )
+    vocabulary_word.textChanged.connect(partial(_sync_word_fields, window, "lineEdit_2"))
+    retrieve_word.textChanged.connect(partial(_sync_word_fields, window, "lineEdit_retrieve_word"))
 
 
 def _apply_source_defaults(window: QMainWindow) -> None:

@@ -3,6 +3,7 @@ import csv
 import pytest
 
 from words import (
+    AmbiguousWordError,
     WordFields,
     add_word,
     get_random_words,
@@ -98,6 +99,38 @@ def test_a_removed_word_is_not_resurrected_by_a_pronunciation():
 
     with pytest.raises(ValueError, match="Word not found: Abend"):
         upsert_pronunciation("german", "Abend", "[ˈa:bn̩t]")
+
+
+def _write_homographs():
+    (vocabulary_dir() / "nouns.csv").write_text('der Weg,"path, way"\n', encoding="utf-8")
+    (vocabulary_dir() / "adverbs.csv").write_text('weg,"gone, vanished"\n', encoding="utf-8")
+
+
+def test_an_ambiguous_word_is_refused_rather_than_guessed():
+    _write_homographs()
+
+    with pytest.raises(AmbiguousWordError) as ambiguity:
+        upsert_pronunciation("german", "Weg", "[veːk]")
+
+    assert sorted(row[4] for row in ambiguity.value.candidates) == ["adverb", "noun"]
+
+
+def test_the_pronunciation_only_reaches_the_chosen_word_class():
+    _write_homographs()
+
+    upsert_pronunciation("german", "Weg", "[veːk]", classification="noun")
+
+    stored = {row[4]: row[3] for row in get_random_words("german", 2)}
+    assert stored == {"noun": "[veːk]", "adverb": None}
+
+
+def test_the_pronunciation_only_reaches_the_chosen_article():
+    (vocabulary_dir() / "nouns.csv").write_text("der See,lake\ndie See,sea\n", encoding="utf-8")
+
+    upsert_pronunciation("german", "See", "[zeː]", article="die")
+
+    stored = {row[2]: row[3] for row in get_random_words("german", 2)}
+    assert stored == {"sea": "[zeː]", "lake": None}
 
 
 def test_an_unknown_word_is_rejected():

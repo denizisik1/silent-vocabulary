@@ -1,8 +1,10 @@
+from collections import Counter
+
 import pytest
 
 from words import CSV_COLUMNS, LANGUAGE_VOCABULARY_FILES, get_random_words, vocabulary_dir
-from words.load import load_base_rows
-from words.parse import word_key
+from words.load import load_base_rows, merge_vocabulary_rows
+from words.parse import row_entry_key
 
 GERMAN_FILES = LANGUAGE_VOCABULARY_FILES["german"]
 CLASSIFICATIONS = set(GERMAN_FILES.values())
@@ -40,13 +42,27 @@ def test_optional_fields_are_absent_rather_than_blank():
             assert value is None or value.strip()
 
 
+def test_no_shipped_entry_hides_another():
+    counts = Counter(row_entry_key(row) for row in SHIPPED_ROWS)
+
+    duplicates = sorted(key for key, count in counts.items() if count > 1)
+
+    assert duplicates == []
+
+
+def test_every_shipped_entry_survives_the_merge():
+    merged = merge_vocabulary_rows(SHIPPED_ROWS, [], set())
+
+    assert len(merged) == len(SHIPPED_ROWS)
+
+
 def test_random_words_come_from_the_shipped_list():
     words = get_random_words("german", 5)
-    shipped_keys = {word_key(row[1]) for row in SHIPPED_ROWS}
+    shipped_keys = {row_entry_key(row) for row in SHIPPED_ROWS}
 
     assert len(words) == 5
-    assert len({word_key(row[1]) for row in words}) == 5
-    assert {word_key(row[1]) for row in words} <= shipped_keys
+    assert len({row_entry_key(row) for row in words}) == 5
+    assert {row_entry_key(row) for row in words} <= shipped_keys
 
 
 def test_requesting_more_words_than_exist_is_rejected():
