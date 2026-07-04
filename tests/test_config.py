@@ -100,7 +100,7 @@ def test_load_legacy_stealth_table(tmp_path, monkeypatch):
     assert loaded.browser.connect_tries == 9
 
 
-def test_apply_browser_config_updates_runtime(monkeypatch):
+def test_apply_browser_config_updates_runtime():
     apply_browser_config(BrowserConfig(sandbox=True, connect_tries=7))
     assert get_browser_config().sandbox is True
     assert get_browser_config().connect_tries == 7

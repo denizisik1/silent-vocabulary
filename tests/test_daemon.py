@@ -32,8 +32,9 @@ def test_parse_interval_minutes_rejects_zero():
         parse_interval_minutes("0")
 
 
-def test_practice_daemon_fires_immediately_and_can_stop(qapp):
-    ticks: list[int] = []
+@pytest.mark.usefixtures("qapp")
+def test_practice_daemon_fires_immediately_and_can_stop():
+    ticks: list[int] = []  # type: ignore[annotation-unchecked]
 
     def on_tick() -> None:
         ticks.append(1)
@@ -48,7 +49,7 @@ def test_practice_daemon_fires_immediately_and_can_stop(qapp):
 
 
 def test_send_notification_prefers_busctl(monkeypatch):
-    calls: list[list[str]] = []
+    calls: list[list[str]] = []  # type: ignore[annotation-unchecked]
 
     def fake_which(name: str) -> str | None:
         if name == "busctl":
@@ -57,7 +58,7 @@ def test_send_notification_prefers_busctl(monkeypatch):
             return None
         return None
 
-    def fake_run(command, check=False, capture_output=True, text=True):
+    def fake_run(command, **_options):
         calls.append(command)
         result = MagicMock()
         result.returncode = 0
@@ -77,14 +78,14 @@ def test_send_notification_prefers_busctl(monkeypatch):
 
 
 def test_send_notification_falls_back_to_notify_send(monkeypatch):
-    calls: list[list[str]] = []
+    calls: list[list[str]] = []  # type: ignore[annotation-unchecked]
 
     def fake_which(name: str) -> str | None:
         if name == "notify-send":
             return "/usr/bin/notify-send"
         return None
 
-    def fake_run(command, check=False, capture_output=True, text=True):
+    def fake_run(command, **_options):
         calls.append(command)
         result = MagicMock()
         result.returncode = 0
@@ -115,7 +116,7 @@ def test_send_notification_windows_not_implemented():
 def test_desktop_notifier_label_detects_dunst(monkeypatch):
     monkeypatch.setattr("notify.shutil.which", lambda name: "/usr/bin/busctl")
 
-    def fake_run(command, check=False, capture_output=True, text=True):
+    def fake_run(_command, **_options):
         result = MagicMock()
         result.returncode = 0
         result.stdout = "Unit: dunst.service\n"
@@ -129,7 +130,7 @@ def test_desktop_notifier_label_detects_dunst(monkeypatch):
 def test_desktop_notifier_label_detects_gnome(monkeypatch):
     monkeypatch.setattr("notify.shutil.which", lambda name: "/usr/bin/busctl")
 
-    def fake_run(command, check=False, capture_output=True, text=True):
+    def fake_run(_command, **_options):
         result = MagicMock()
         result.returncode = 0
         result.stdout = (

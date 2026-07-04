@@ -120,7 +120,6 @@ def _on_interval_saved(window: QMainWindow, config: AppConfig) -> None:
 
 
 def _on_notify_backend_toggled(
-    window: QMainWindow,
     config: AppConfig,
     backend: NotifyBackend,
     checked: bool,
@@ -230,7 +229,7 @@ def _surface_notify_failure_alert(
             pass
 
     if application is not None:
-        from ui_tray import show_tray_message
+        from ui_tray import show_tray_message  # pylint: disable=import-outside-toplevel
 
         if show_tray_message(window, application, title, body):
             return "background"
@@ -317,7 +316,7 @@ def stop_daemon(
     _update_daemon_button(window, False)
     _set_status(window, status_message or "Daemon stopped")
     if application is not None:
-        from ui_tray import show_window_from_tray
+        from ui_tray import show_window_from_tray  # pylint: disable=import-outside-toplevel
 
         show_window_from_tray(window, application)
 
@@ -358,7 +357,7 @@ def start_daemon(
     _set_status(window, f"Daemon running every {minutes} min ({backend.value})")
 
     if application is not None and config is not None:
-        from ui_tray import try_minimize_on_daemon_start
+        from ui_tray import try_minimize_on_daemon_start  # pylint: disable=import-outside-toplevel
 
         if try_minimize_on_daemon_start(window, application, config):
             _set_status(
@@ -395,6 +394,6 @@ def wire_daemon(
         radio_button = window.findChild(QRadioButton, object_name)
         if radio_button is None:
             continue
-        toggle_handler = partial(_on_notify_backend_toggled, window, config, backend)
+        toggle_handler = partial(_on_notify_backend_toggled, config, backend)
         radio_button.toggled.connect(toggle_handler)
     _update_daemon_button(window, False)

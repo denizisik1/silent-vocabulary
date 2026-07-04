@@ -147,7 +147,7 @@ def test_the_check_summarises_both_sources(monkeypatch):
 
     successes, errors = run_and_collect(build_worker(mode="check"))
 
-    assert errors == []
+    assert not errors
     message, row = successes[0]
     assert row is None
     primary_line, backup_line, strategy_line = message.splitlines()

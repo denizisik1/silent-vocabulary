@@ -1,6 +1,6 @@
 import os
 import shutil
-import subprocess
+import subprocess  # nosec B404
 from enum import Enum
 
 
@@ -21,11 +21,11 @@ def desktop_notifications_available() -> bool:
     return notify_send_available() or busctl_available()
 
 
-def _notification_service_unit() -> str | None:
+def _notification_service_unit() -> str | None:  # pylint: disable=too-many-return-statements
     if not busctl_available():
         return None
 
-    completed = subprocess.run(
+    completed = subprocess.run(  # nosec B603 B607
         ["busctl", "--user", "status", "org.freedesktop.Notifications"],
         check=False,
         capture_output=True,
@@ -61,7 +61,7 @@ def _notification_service_unit() -> str | None:
     return unit_name
 
 
-def desktop_notifier_label() -> str:
+def desktop_notifier_label() -> str:  # pylint: disable=too-many-return-statements
     unit = _notification_service_unit()
     if unit:
         lowered = unit.casefold()
@@ -110,7 +110,7 @@ def _send_via_busctl(title: str, body: str, *, expire_ms: int) -> None:
         "0",
         str(expire_ms),
     ]
-    completed = subprocess.run(command, check=False, capture_output=True, text=True)
+    completed = subprocess.run(command, check=False, capture_output=True, text=True)  # nosec B603
     if completed.returncode != 0:
         detail = (completed.stderr or completed.stdout or "unknown error").strip()
         raise RuntimeError(f"Desktop notification failed: {detail}")
@@ -125,7 +125,7 @@ def _send_via_notify_send(title: str, body: str, *, expire_ms: int) -> None:
         title,
         body,
     ]
-    completed = subprocess.run(command, check=False, capture_output=True, text=True)
+    completed = subprocess.run(command, check=False, capture_output=True, text=True)  # nosec B603
     if completed.returncode != 0:
         detail = (completed.stderr or completed.stdout or "unknown error").strip()
         raise RuntimeError(f"notify-send failed: {detail}")

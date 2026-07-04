@@ -140,7 +140,6 @@ def apply_session_config(window: QMainWindow, config: AppConfig) -> None:
 
 
 def _on_include_toggled(
-    window: QMainWindow,
     config: AppConfig,
     field_name: str,
     checked: bool,
@@ -167,7 +166,7 @@ def wire_session_config(window: QMainWindow, config: AppConfig) -> None:
         checkbox = window.findChild(QCheckBox, object_name)
         if checkbox is None:
             raise RuntimeError(f"Missing include control: {object_name}")
-        handler = partial(_on_include_toggled, window, config, field_name)
+        handler = partial(_on_include_toggled, config, field_name)
         checkbox.toggled.connect(handler)
 
     language_combo = window.findChild(QComboBox, "comboBox")
@@ -244,7 +243,9 @@ def clear_add_word_fields(window: QMainWindow) -> None:
     classification.setCurrentIndex(0)
 
 
-def populate_add_form_from_row(window: QMainWindow, row: tuple) -> None:
+def populate_add_form_from_row(  # pylint: disable=too-many-locals
+    window: QMainWindow, row: tuple
+) -> None:
     (
         article,
         word,

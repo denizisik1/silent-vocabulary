@@ -82,4 +82,4 @@ def get_random_words(language_key: str, count: int) -> list[tuple]:
     words = list(load_language_words(language_key))
     if count > len(words):
         raise ValueError(f"Count must be at most {len(words)}.")
-    return random.sample(words, count)
+    return random.sample(words, count)  # nosec B311

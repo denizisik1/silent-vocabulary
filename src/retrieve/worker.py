@@ -12,11 +12,11 @@ from retrieve import (
 from words import upsert_pronunciation
 
 
-class RetrieveWorker(QObject):
+class RetrieveWorker(QObject):  # pylint: disable=too-many-instance-attributes
     finished_ok = Signal(str, object)
     finished_error = Signal(str)
 
-    def __init__(
+    def __init__(  # pylint: disable=too-many-arguments
         self,
         *,
         mode: str,
@@ -48,7 +48,7 @@ class RetrieveWorker(QObject):
                 self._run_check()
                 return
             self._run_retrieve()
-        except Exception as error:  # noqa: BLE001 - surface unexpected worker errors
+        except Exception as error:  # pylint: disable=broad-exception-caught
             self.finished_error.emit(str(error))
 
     def _run_check(self) -> None:

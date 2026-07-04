@@ -18,7 +18,7 @@ load_dotenv(PROJECT_ROOT / ".env")
 
 @pytest.fixture(scope="session")
 def qapp():
-    from PySide6.QtWidgets import QApplication
+    from PySide6.QtWidgets import QApplication  # pylint: disable=import-outside-toplevel
 
     application = QApplication.instance()
     if application is None:
@@ -33,7 +33,7 @@ def qapp():
 
 @pytest.fixture(autouse=True)
 def isolated_user_vocabulary(tmp_path_factory, monkeypatch):
-    from words.load import clear_word_cache
+    from words.load import clear_word_cache  # pylint: disable=import-outside-toplevel
 
     monkeypatch.setenv(
         "SILENT_VOCABULARY_USER_DIR",

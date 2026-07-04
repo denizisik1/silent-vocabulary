@@ -23,7 +23,7 @@ from browser_support import (
 _PROMPT_ATTR = "_silent_vocabulary_browser_prompt"
 
 
-def run_browser_package_action(
+def run_browser_package_action(  # pylint: disable=too-many-arguments
     parent: QWidget,
     *,
     title: str,
@@ -52,7 +52,7 @@ def run_browser_package_action(
     if dialog.exec() != QMessageBox.StandardButton.Yes:
         return False
 
-    progress = QProgressDialog(progress_label, None, 0, 0, parent)
+    progress = QProgressDialog(progress_label, "", 0, 0, parent)
     progress.setWindowTitle("silent-vocabulary")
     progress.setWindowModality(Qt.WindowModality.ApplicationModal)
     progress.setMinimumDuration(0)

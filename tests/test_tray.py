@@ -3,8 +3,10 @@ from unittest.mock import MagicMock
 from config import AppConfig
 from ui_tray import (
     _apply_minimize_to_tray_checkbox,
+    hide_window_to_tray,
     minimize_to_tray_enabled,
     tray_unavailable_reason,
+    try_minimize_on_daemon_start,
 )
 
 
@@ -41,8 +43,6 @@ def test_minimize_to_tray_enabled_falls_back_to_config():
 
 
 def test_hide_window_to_tray_returns_false_when_unavailable(monkeypatch):
-    from ui_tray import hide_window_to_tray
-
     window = MagicMock()
     window.isVisible.return_value = True
     application = MagicMock()
@@ -55,8 +55,6 @@ def test_hide_window_to_tray_returns_false_when_unavailable(monkeypatch):
 
 
 def test_try_minimize_on_daemon_start_respects_config(monkeypatch):
-    from ui_tray import try_minimize_on_daemon_start
-
     window = MagicMock()
     window.findChild.return_value = None
     application = MagicMock()
