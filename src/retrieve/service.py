@@ -1,3 +1,4 @@
+from collections.abc import Sequence
 from dataclasses import dataclass
 
 from retrieve.fetch import fetch_html, fetch_html_with_method, probe_url
@@ -53,19 +54,19 @@ def retrieve_ipa(
     )
 
 
-def retrieve_ipa_with_strategy(
+def retrieve_ipa_with_attempts(
     *,
     word: str,
     primary: SourceEndpoint,
     backup: SourceEndpoint,
-    strategy: str,
+    attempts: Sequence[tuple[str, str]],
 ) -> RetrieveResult:
     endpoints = {
         primary.label: primary,
         backup.label: backup,
     }
     errors: list[str] = []
-    for source_label, fetch_method in retrieve_attempt_order(strategy):
+    for source_label, fetch_method in attempts:
         endpoint = endpoints[source_label]
         try:
             return retrieve_ipa(
@@ -79,6 +80,21 @@ def retrieve_ipa_with_strategy(
             errors.append(f"{source_label}/{fetch_method}: {error}")
 
     raise RuntimeError(" | ".join(errors) if errors else "Retrieve failed")
+
+
+def retrieve_ipa_with_strategy(
+    *,
+    word: str,
+    primary: SourceEndpoint,
+    backup: SourceEndpoint,
+    strategy: str,
+) -> RetrieveResult:
+    return retrieve_ipa_with_attempts(
+        word=word,
+        primary=primary,
+        backup=backup,
+        attempts=retrieve_attempt_order(strategy),
+    )
 
 
 def check_source_capabilities(

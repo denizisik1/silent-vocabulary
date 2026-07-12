@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from words.constants import USER_VOCABULARY_DIR, VOCABULARY_DIR
+from words.constants import PRONUNCIATIONS_DIR_NAME, USER_VOCABULARY_DIR, VOCABULARY_DIR
 
 
 def vocabulary_dir() -> Path:
@@ -28,3 +28,8 @@ def additions_path(language_key: str) -> Path:
 
 def removals_path(language_key: str) -> Path:
     return language_user_dir(language_key) / "removals.csv"
+
+
+def shipped_pronunciations_path(language_key: str, vocabulary_root: Path | None = None) -> Path:
+    root = vocabulary_dir() if vocabulary_root is None else vocabulary_root
+    return root / PRONUNCIATIONS_DIR_NAME / f"{language_key}.csv"

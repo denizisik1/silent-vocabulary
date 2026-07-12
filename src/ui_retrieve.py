@@ -12,6 +12,13 @@ from PySide6.QtWidgets import (
     QTextEdit,
 )
 from config import AppConfig, save_config
+from retrieve.sources import (
+    backup_find_by,
+    backup_source_url,
+    primary_find_by,
+    primary_source_url,
+    sample_word,
+)
 from retrieve.strategy import (
     STRATEGY_BASIC_FIRST,
     STRATEGY_PRIMARY_FIRST,
@@ -243,7 +250,7 @@ class RetrieveController(QObject):  # pylint: disable=too-many-instance-attribut
         worker = RetrieveWorker(
             mode=mode,
             language_key=language_key,
-            word=word or os.environ.get("SILENT_VOCABULARY_SAMPLE_WORD", "Abend"),
+            word=word or sample_word(),
             classification=classification,
             article=article,
             primary_url=self._line("lineEdit_6").text(),
@@ -300,16 +307,10 @@ def _wire_word_field_sync(window: QMainWindow) -> None:
 
 def _apply_source_defaults(window: QMainWindow) -> None:
     defaults = {
-        "lineEdit_6": os.environ.get(
-            "SILENT_VOCABULARY_PRIMARY_SOURCE_URL",
-            "https://en.pons.com/translate/german-english/",
-        ),
-        "lineEdit_8": os.environ.get("SILENT_VOCABULARY_PRIMARY_FIND_BY", "phonetics"),
-        "lineEdit_9": os.environ.get(
-            "SILENT_VOCABULARY_BACKUP_SOURCE_URL",
-            "https://www.collinsdictionary.com/dictionary/german-english/",
-        ),
-        "lineEdit_7": os.environ.get("SILENT_VOCABULARY_BACKUP_FIND_BY", "pron"),
+        "lineEdit_6": primary_source_url(),
+        "lineEdit_8": primary_find_by(),
+        "lineEdit_9": backup_source_url(),
+        "lineEdit_7": backup_find_by(),
     }
     for object_name, value in defaults.items():
         editor = window.findChild(QLineEdit, object_name)

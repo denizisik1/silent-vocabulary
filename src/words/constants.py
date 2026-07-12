@@ -25,6 +25,16 @@ REMOVAL_COLUMNS = (
     "article",
 )
 
+PRONUNCIATION_COLUMNS = (
+    "word",
+    "classification",
+    "article",
+    "pronunciation",
+    "source",
+)
+
+PRONUNCIATIONS_DIR_NAME = "pronunciations"
+
 DEFAULT_INCLUDE = {
     "article": True,
     "word": True,

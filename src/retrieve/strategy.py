@@ -1,3 +1,5 @@
+from collections.abc import Sequence
+
 FETCH_METHOD_BASIC = "basic"
 FETCH_METHOD_BROWSER = "browser"
 
@@ -20,6 +22,14 @@ def normalize_retrieve_strategy(value: str | None) -> str:
     if cleaned in RETRIEVE_STRATEGIES:
         return cleaned
     return DEFAULT_RETRIEVE_STRATEGY
+
+
+def basic_attempts_only(attempts: Sequence[tuple[str, str]]) -> list[tuple[str, str]]:
+    return [
+        (source_label, fetch_method)
+        for source_label, fetch_method in attempts
+        if fetch_method == FETCH_METHOD_BASIC
+    ]
 
 
 def retrieve_attempt_order(strategy: str) -> list[tuple[str, str]]:

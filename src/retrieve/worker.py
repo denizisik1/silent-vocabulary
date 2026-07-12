@@ -1,5 +1,3 @@
-import os
-
 from PySide6.QtCore import QObject, Signal
 
 from retrieve import (
@@ -8,6 +6,7 @@ from retrieve import (
     check_source_capabilities,
     normalize_retrieve_strategy,
     retrieve_ipa_with_strategy,
+    sample_word,
 )
 from words import upsert_pronunciation
 
@@ -52,7 +51,7 @@ class RetrieveWorker(QObject):  # pylint: disable=too-many-instance-attributes
             self.finished_error.emit(str(error))
 
     def _run_check(self) -> None:
-        word = self._word or os.environ.get("SILENT_VOCABULARY_SAMPLE_WORD", "Abend")
+        word = self._word or sample_word()
         primary = check_source_capabilities(
             base_url=self._primary_url,
             find_by=self._primary_find,

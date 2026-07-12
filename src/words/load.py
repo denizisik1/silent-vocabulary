@@ -4,7 +4,8 @@ from pathlib import Path
 
 from words.constants import LANGUAGE_VOCABULARY_FILES
 from words.parse import RemovalKey, is_entry_removed, read_csv_rows, read_removals, row_entry_key
-from words.paths import vocabulary_dir, user_vocabulary_dir
+from words.paths import shipped_pronunciations_path, vocabulary_dir, user_vocabulary_dir
+from words.pronunciations import apply_pronunciations, read_pronunciation_entries
 
 
 def load_base_rows(language_key: str, vocabulary_root: Path) -> list[tuple]:
@@ -18,7 +19,9 @@ def load_base_rows(language_key: str, vocabulary_root: Path) -> list[tuple]:
         if not path.is_file():
             continue
         rows.extend(read_csv_rows(path, default_classification))
-    return rows
+
+    entries = read_pronunciation_entries(shipped_pronunciations_path(language_key, vocabulary_root))
+    return apply_pronunciations(rows, entries)
 
 
 def load_addition_rows(path: Path) -> list[tuple]:
