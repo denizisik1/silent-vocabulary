@@ -12,6 +12,7 @@ from PySide6.QtWidgets import (
     QTextEdit,
 )
 from config import AppConfig, save_config
+from retrieve.progress import decorate
 from retrieve.sources import (
     backup_find_by,
     backup_source_url,
@@ -200,6 +201,10 @@ class RetrieveController(QObject):  # pylint: disable=too-many-instance-attribut
         self._cleanup_worker()
         self._flash_result(True)
 
+    @Slot(str, str)
+    def on_worker_progress(self, message: str, kind: str) -> None:
+        self._append_results(decorate(message, kind))
+
     @Slot(str)
     def on_worker_error(self, message: str) -> None:
         self._append_results(f"Retrieve error: {message}")
@@ -262,6 +267,7 @@ class RetrieveController(QObject):  # pylint: disable=too-many-instance-attribut
         thread = QThread(self._window)
         worker.moveToThread(thread)
         thread.started.connect(worker.run)
+        worker.progress.connect(self.on_worker_progress, Qt.ConnectionType.QueuedConnection)
         worker.finished_ok.connect(self.on_worker_ok, Qt.ConnectionType.QueuedConnection)
         worker.finished_error.connect(self.on_worker_error, Qt.ConnectionType.QueuedConnection)
         worker.finished_ok.connect(thread.quit)

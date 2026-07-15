@@ -2,8 +2,10 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 
 from retrieve.fetch import fetch_html, fetch_html_with_method, probe_url
-from retrieve.parse import extract_ipa_from_html
-from retrieve.strategy import FETCH_METHOD_BASIC, retrieve_attempt_order
+from retrieve.headword import WantedIpa
+from retrieve.parse import NoPronunciationFound, extract_ipa_from_html
+from retrieve.progress import KIND_BAD, KIND_GOOD, KIND_NOTE, report_progress
+from retrieve.strategy import FETCH_METHOD_BASIC, FETCH_METHOD_BROWSER, retrieve_attempt_order
 from retrieve.url import build_entry_url
 
 
@@ -43,8 +45,9 @@ def retrieve_ipa(
     fetch_method: str = FETCH_METHOD_BASIC,
 ) -> RetrieveResult:
     url = build_entry_url(base_url, word)
-    page_html = fetch_html_with_method(url, fetch_method)
-    pronunciation = extract_ipa_from_html(page_html, find_by)
+    wanted = WantedIpa(find_by=find_by, word=word.strip())
+    page_html = fetch_html_with_method(url, fetch_method, wanted=wanted)
+    pronunciation = extract_ipa_from_html(page_html, find_by, wanted.word)
     return RetrieveResult(
         word=word.strip(),
         url=url,
@@ -66,18 +69,39 @@ def retrieve_ipa_with_attempts(
         backup.label: backup,
     }
     errors: list[str] = []
+    read_without_ipa: set[str] = set()
+
     for source_label, fetch_method in attempts:
+        attempt = f"{source_label}/{fetch_method}"
         endpoint = endpoints[source_label]
+        if fetch_method == FETCH_METHOD_BROWSER and source_label in read_without_ipa:
+            report_progress(
+                f"{attempt} skipped, the page was read already and holds no IPA",
+                KIND_NOTE,
+            )
+            continue
+
         try:
-            return retrieve_ipa(
+            result = retrieve_ipa(
                 base_url=endpoint.base_url,
                 find_by=endpoint.find_by,
                 word=word,
                 source_label=source_label,
                 fetch_method=fetch_method,
             )
+        except NoPronunciationFound as error:
+            read_without_ipa.add(source_label)
+            errors.append(f"{attempt}: {error}")
+            report_progress(
+                f"{attempt} read the page but it holds no {endpoint.find_by}",
+                KIND_BAD,
+            )
         except (ValueError, RuntimeError, OSError) as error:
-            errors.append(f"{source_label}/{fetch_method}: {error}")
+            errors.append(f"{attempt}: {error}")
+            report_progress(f"{attempt} failed: {error}", KIND_BAD)
+        else:
+            report_progress(f"{attempt} found {result.pronunciation}", KIND_GOOD)
+            return result
 
     raise RuntimeError(" | ".join(errors) if errors else "Retrieve failed")
 
@@ -117,8 +141,8 @@ def check_source_capabilities(
         )
 
     try:
-        page_html = fetch_html(sample_url)
-        pronunciation = extract_ipa_from_html(page_html, find_by)
+        page_html = fetch_html(sample_url, wanted=WantedIpa(find_by=find_by, word=sample_word))
+        pronunciation = extract_ipa_from_html(page_html, find_by, sample_word)
     except (ValueError, RuntimeError, OSError) as error:
         return CapabilityReport(
             source_label=source_label,

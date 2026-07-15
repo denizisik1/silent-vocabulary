@@ -33,3 +33,8 @@ def removals_path(language_key: str) -> Path:
 def shipped_pronunciations_path(language_key: str, vocabulary_root: Path | None = None) -> Path:
     root = vocabulary_dir() if vocabulary_root is None else vocabulary_root
     return root / PRONUNCIATIONS_DIR_NAME / f"{language_key}.csv"
+
+
+def shipped_failures_path(language_key: str, vocabulary_root: Path | None = None) -> Path:
+    root = vocabulary_dir() if vocabulary_root is None else vocabulary_root
+    return root / PRONUNCIATIONS_DIR_NAME / f"{language_key}-failures.csv"

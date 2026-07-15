@@ -3,6 +3,7 @@ import requests  # type: ignore[import-untyped]
 
 from browser_config import BrowserConfig, apply_browser_config
 from retrieve.fetch import fetch_html_basic, fetch_html_with_method
+from retrieve.progress import retrieve_reporter
 
 ORIGIN_URL = "https://example.com/"
 ENTRY_URL = "https://example.com/dict/Abend"
@@ -59,6 +60,34 @@ def test_error_status_is_reported_with_the_url(fake_http):
 
     with pytest.raises(RuntimeError, match=f"HTTP 403 for {ENTRY_URL}"):
         fetch_html_basic(ENTRY_URL)
+
+
+def test_a_challenge_page_counts_as_a_refusal_rather_than_a_missing_word(fake_http):
+    fake_http.respond(ORIGIN_URL, "")
+    fake_http.respond(
+        ENTRY_URL,
+        "<html><title>Just a moment...</title>cf_chl_opt</html>",
+    )
+
+    with pytest.raises(RuntimeError, match="bot challenge"):
+        fetch_html_basic(ENTRY_URL)
+
+
+def test_a_page_that_merely_mentions_cookies_is_served_as_usual(fake_http):
+    fake_http.respond(ORIGIN_URL, "")
+    fake_http.respond(ENTRY_URL, "<html><title>Abend</title>cookie consent</html>")
+
+    assert "Abend" in fetch_html_basic(ENTRY_URL)
+
+
+def test_the_plain_request_reports_what_it_read(fake_http, progress_log):
+    fake_http.respond(ORIGIN_URL, "")
+    fake_http.respond(ENTRY_URL, PAGE)
+
+    with retrieve_reporter(progress_log.record):
+        fetch_html_basic(ENTRY_URL)
+
+    assert progress_log.messages() == [f"plain request answered {len(PAGE)} bytes for {ENTRY_URL}"]
 
 
 def test_body_is_decoded_with_the_detected_encoding(fake_http):
@@ -118,7 +147,7 @@ def test_method_dispatch_routes_to_basic_and_browser(monkeypatch):
     )
     monkeypatch.setattr(
         "retrieve.fetch.fetch_html_browser",
-        lambda url, timeout_seconds=None: f"browser {url} {timeout_seconds}",
+        lambda url, timeout_seconds=None, wanted=None: f"browser {url} {timeout_seconds}",
     )
 
     assert fetch_html_with_method(ENTRY_URL, "basic") == f"basic {ENTRY_URL} None"

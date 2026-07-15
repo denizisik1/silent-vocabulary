@@ -7,6 +7,17 @@ from retrieve.service import (
     retrieve_ipa_with_attempts,
     retrieve_ipa_with_strategy,
 )
+from retrieve.progress import (
+    KIND_BAD,
+    KIND_DETAIL,
+    KIND_GOOD,
+    KIND_HEADER,
+    KIND_NOTE,
+    decorate,
+    report_progress,
+    retrieve_reporter,
+    set_retrieve_reporter,
+)
 from retrieve.sources import backup_endpoint, primary_endpoint, sample_word
 from retrieve.strategy import (
     DEFAULT_RETRIEVE_STRATEGY,
@@ -22,6 +33,11 @@ from retrieve.url import build_entry_url
 __all__ = [
     "CapabilityReport",
     "DEFAULT_RETRIEVE_STRATEGY",
+    "KIND_BAD",
+    "KIND_DETAIL",
+    "KIND_GOOD",
+    "KIND_HEADER",
+    "KIND_NOTE",
     "RETRIEVE_STRATEGIES",
     "RetrieveResult",
     "STRATEGY_BASIC_FIRST",
@@ -31,11 +47,15 @@ __all__ = [
     "basic_attempts_only",
     "build_entry_url",
     "check_source_capabilities",
+    "decorate",
     "normalize_retrieve_strategy",
     "primary_endpoint",
+    "report_progress",
     "retrieve_attempt_order",
     "retrieve_ipa",
     "retrieve_ipa_with_attempts",
     "retrieve_ipa_with_strategy",
+    "retrieve_reporter",
     "sample_word",
+    "set_retrieve_reporter",
 ]

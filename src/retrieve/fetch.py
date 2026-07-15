@@ -4,7 +4,10 @@ import requests  # type: ignore[import-untyped]
 
 from browser_config import get_browser_config
 from retrieve.browser_fetch import ensure_browser_ready, fetch_html_via_browser
+from retrieve.headword import WantedIpa
 from retrieve.http_headers import browser_headers, origin_url
+from retrieve.parse import looks_like_challenge, page_title
+from retrieve.progress import report_progress
 from retrieve.strategy import FETCH_METHOD_BASIC, FETCH_METHOD_BROWSER
 
 
@@ -54,13 +57,22 @@ def fetch_html_basic(url: str, *, timeout_seconds: float | None = None) -> str:
         raise RuntimeError(f"HTTP {response.status_code} for {url}")
 
     encoding = response.apparent_encoding or response.encoding or "utf-8"
-    return response.content.decode(encoding, errors="replace")
+    page_html = response.content.decode(encoding, errors="replace")
+    if looks_like_challenge(page_html):
+        raise RuntimeError(
+            f"HTTP {response.status_code} but a bot challenge for {url} "
+            f"(title={page_title(page_html)!r})"
+        )
+
+    report_progress(f"plain request answered {len(page_html)} bytes for {url}")
+    return page_html
 
 
 def fetch_html_browser(
     url: str,
     *,
     timeout_seconds: float | None = None,
+    wanted: WantedIpa | None = None,
 ) -> str:
     if timeout_seconds is None:
         timeout_seconds = _fetch_timeout_seconds()
@@ -73,6 +85,7 @@ def fetch_html_browser(
     return fetch_html_via_browser(
         url,
         timeout_seconds=timeout_seconds + extra,
+        wanted=wanted,
     )
 
 
@@ -81,15 +94,21 @@ def fetch_html_with_method(
     method: str,
     *,
     timeout_seconds: float | None = None,
+    wanted: WantedIpa | None = None,
 ) -> str:
     if method == FETCH_METHOD_BASIC:
         return fetch_html_basic(url, timeout_seconds=timeout_seconds)
     if method == FETCH_METHOD_BROWSER:
-        return fetch_html_browser(url, timeout_seconds=timeout_seconds)
+        return fetch_html_browser(url, timeout_seconds=timeout_seconds, wanted=wanted)
     raise ValueError(f"Unknown fetch method: {method}")
 
 
-def fetch_html(url: str, *, timeout_seconds: float | None = None) -> str:
+def fetch_html(
+    url: str,
+    *,
+    timeout_seconds: float | None = None,
+    wanted: WantedIpa | None = None,
+) -> str:
     basic_error: Exception | None = None
     try:
         return fetch_html_basic(url, timeout_seconds=timeout_seconds)
@@ -97,7 +116,7 @@ def fetch_html(url: str, *, timeout_seconds: float | None = None) -> str:
         basic_error = error
 
     try:
-        return fetch_html_browser(url, timeout_seconds=timeout_seconds)
+        return fetch_html_browser(url, timeout_seconds=timeout_seconds, wanted=wanted)
     except Exception as browser_error:
         basic_detail = str(basic_error) if basic_error else "unknown"
         raise RuntimeError(

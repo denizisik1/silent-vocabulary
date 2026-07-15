@@ -7,6 +7,7 @@ from retrieve import (
     check_source_capabilities,
     retrieve_ipa,
     retrieve_ipa_with_strategy,
+    retrieve_reporter,
 )
 
 PRIMARY = SourceEndpoint("primary", "https://en.pons.com/dict/", "phonetics")
@@ -22,7 +23,7 @@ def page_with(pronunciation, css_class="phonetics"):
 def use_pages(monkeypatch, pages):
     calls = []
 
-    def fake_fetch(url, method):
+    def fake_fetch(url, method, *, wanted=None):  # pylint: disable=unused-argument
         calls.append((url, method))
         outcome = pages.get((url, method), RuntimeError("HTTP 403"))
         if isinstance(outcome, Exception):
@@ -131,9 +132,74 @@ def test_every_attempt_is_listed_when_all_of_them_fail(monkeypatch):
     assert "backup/browser: HTTP 403" in message
 
 
+def test_the_browser_is_skipped_when_the_page_was_read_without_any_ipa(monkeypatch):
+    calls = use_pages(
+        monkeypatch,
+        {
+            (PRIMARY_URL, "basic"): "<html><span class='x'>no phonetics here</span></html>",
+            (BACKUP_URL, "basic"): page_with("[ˈaːbənt]", "pron"),
+        },
+    )
+
+    result = retrieve_ipa_with_strategy(
+        word="Abend",
+        primary=PRIMARY,
+        backup=BACKUP,
+        strategy=STRATEGY_PRIMARY_FIRST,
+    )
+
+    assert result.source_label == "backup"
+    assert calls == [(PRIMARY_URL, "basic"), (BACKUP_URL, "basic")]
+
+
+def test_every_attempt_says_what_it_did(monkeypatch, progress_log):
+    use_pages(
+        monkeypatch,
+        {
+            (PRIMARY_URL, "basic"): "<html><span class='x'>no phonetics here</span></html>",
+            (BACKUP_URL, "basic"): page_with("[ˈaːbənt]", "pron"),
+        },
+    )
+
+    with retrieve_reporter(progress_log.record):
+        retrieve_ipa_with_strategy(
+            word="Abend",
+            primary=PRIMARY,
+            backup=BACKUP,
+            strategy=STRATEGY_PRIMARY_FIRST,
+        )
+
+    assert progress_log.messages() == [
+        "primary/basic read the page but it holds no phonetics",
+        "primary/browser skipped, the page was read already and holds no IPA",
+        "backup/basic found [ˈaːbənt]",
+    ]
+    assert progress_log.kinds() == ["bad", "note", "good"]
+
+
+def test_a_refused_request_is_reported_with_its_reason(monkeypatch, progress_log):
+    use_pages(monkeypatch, {(PRIMARY_URL, "browser"): page_with("[ˈaːbənt]")})
+
+    with retrieve_reporter(progress_log.record):
+        retrieve_ipa_with_strategy(
+            word="Abend",
+            primary=PRIMARY,
+            backup=BACKUP,
+            strategy=STRATEGY_PRIMARY_FIRST,
+        )
+
+    assert progress_log.messages() == [
+        "primary/basic failed: HTTP 403",
+        "primary/browser found [ˈaːbənt]",
+    ]
+
+
 def test_capability_check_describes_a_working_source(monkeypatch):
     monkeypatch.setattr("retrieve.service.probe_url", lambda url: (True, "HTTP 200"))
-    monkeypatch.setattr("retrieve.service.fetch_html", lambda url: page_with("[ˈaːbənt]"))
+    monkeypatch.setattr(
+        "retrieve.service.fetch_html",
+        lambda url, wanted=None: page_with("[ˈaːbənt]"),
+    )
 
     report = check_source_capabilities(
         base_url=PRIMARY.base_url,
@@ -172,7 +238,10 @@ def test_capability_check_skips_fetching_an_unreachable_source(monkeypatch):
 
 def test_capability_check_separates_reachable_from_parsable(monkeypatch):
     monkeypatch.setattr("retrieve.service.probe_url", lambda url: (True, "HTTP 200"))
-    monkeypatch.setattr("retrieve.service.fetch_html", lambda url: "<html>no phonetics</html>")
+    monkeypatch.setattr(
+        "retrieve.service.fetch_html",
+        lambda url, wanted=None: "<html>no phonetics</html>",
+    )
 
     report = check_source_capabilities(
         base_url=PRIMARY.base_url,

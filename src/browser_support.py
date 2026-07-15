@@ -3,6 +3,8 @@ import shutil
 import subprocess  # nosec B404
 from pathlib import Path
 
+from platformdirs import user_data_dir
+
 from browser_config import get_browser_config
 
 _CHROME_NAMES = (
@@ -50,6 +52,11 @@ def find_browser_path() -> str | None:
         return str(find_executable("auto"))
     except (FileNotFoundError, ValueError, OSError):
         return None
+
+
+def browser_profile_dir(name: str) -> Path:
+    root = Path(user_data_dir("silent-vocabulary", appauthor=False))
+    return root / "browser-profile" / name
 
 
 def read_os_release() -> dict[str, str]:

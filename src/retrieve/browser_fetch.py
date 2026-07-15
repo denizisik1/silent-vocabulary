@@ -1,9 +1,12 @@
-import asyncio
-import time
 from collections.abc import Callable
+from functools import partial
+from typing import Any
 
 from browser_config import get_browser_config
 from browser_support import find_browser_path
+from retrieve.browser_page import read_ready_page
+from retrieve.browser_session import run_with_browser
+from retrieve.headword import WantedIpa
 
 _EnsureCallback = Callable[[], bool]
 _ensure_callback: _EnsureCallback | None = None  # pylint: disable=invalid-name
@@ -44,69 +47,41 @@ def ensure_browser_ready() -> bool:
     return browser_available()
 
 
-def _page_looks_ready(title: str | None, html: str) -> bool:
-    cleaned_title = (title or "").strip().lower()
-    if "just a moment" in cleaned_title:
-        return False
-    if "cf-challenge" in html.lower() and 'class="pron"' not in html:
-        return False
-    return (
-        'class="pron"' in html
-        or "class='pron'" in html
-        or "phonetics" in html
-        or len(html) > 80_000
-    )
+async def _open_and_read(
+    browser: Any,
+    *,
+    url: str,
+    timeout_seconds: float,
+    wanted: WantedIpa | None,
+) -> str:
+    page = await browser.get(url)
+    return await read_ready_page(page, url, timeout_seconds=timeout_seconds, wanted=wanted)
 
 
-async def _fetch_html_browser_async(url: str, *, timeout_seconds: float) -> str:
-    import zendriver as zd  # pylint: disable=import-outside-toplevel
-
-    browser_settings = get_browser_config()
-    browser = await zd.start(
-        headless=browser_settings.headless,
-        sandbox=browser_settings.sandbox,
-        browser_executable_path=find_browser_path(),
-        browser_connection_timeout=browser_settings.connect_timeout_seconds,
-        browser_connection_max_tries=browser_settings.connect_tries,
-    )
-    try:
-        page = await browser.get(url)
-        deadline = time.monotonic() + timeout_seconds
-        last_title = ""
-        last_html = ""
-        while time.monotonic() < deadline:
-            try:
-                evaluated_title = await page.evaluate("document.title")
-            except Exception:  # pylint: disable=broad-exception-caught
-                evaluated_title = None
-            last_title = evaluated_title if isinstance(evaluated_title, str) else ""
-            try:
-                last_html = await page.get_content()
-            except Exception as error:
-                raise RuntimeError(f"Browser fetch failed reading {url}: {error}") from error
-
-            if _page_looks_ready(last_title, last_html):
-                return last_html
-            await asyncio.sleep(1.0)
-
-        raise RuntimeError(
-            f"Browser fetch timed out for {url} " f"(title={last_title!r}, bytes={len(last_html)})"
-        )
-    finally:
-        await browser.stop()
+def _browser_wait_seconds(timeout_seconds: float | None) -> float:
+    configured = get_browser_config().wait_seconds
+    if timeout_seconds is None:
+        return configured
+    return max(timeout_seconds, configured)
 
 
-def fetch_html_via_browser(url: str, *, timeout_seconds: float | None = None) -> str:
+def fetch_html_via_browser(
+    url: str,
+    *,
+    timeout_seconds: float | None = None,
+    wanted: WantedIpa | None = None,
+) -> str:
     if not ensure_browser_ready():
         raise RuntimeError(_MISSING_BROWSER_MESSAGE)
-    browser_settings = get_browser_config()
-    wait_seconds = (
-        browser_settings.wait_seconds
-        if timeout_seconds is None
-        else max(timeout_seconds, browser_settings.wait_seconds)
+
+    work = partial(
+        _open_and_read,
+        url=url,
+        timeout_seconds=_browser_wait_seconds(timeout_seconds),
+        wanted=wanted,
     )
     try:
-        return asyncio.run(_fetch_html_browser_async(url, timeout_seconds=wait_seconds))
+        return run_with_browser(work)
     except RuntimeError:
         raise
     except Exception as error:

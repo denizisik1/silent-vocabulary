@@ -51,6 +51,25 @@ def without_app_environment(monkeypatch):
             monkeypatch.delenv(name, raising=False)
 
 
+class ProgressLog:
+    def __init__(self):
+        self.entries = []
+
+    def record(self, message, kind):
+        self.entries.append((kind, message))
+
+    def messages(self):
+        return [message for _kind, message in self.entries]
+
+    def kinds(self):
+        return [kind for kind, _message in self.entries]
+
+
+@pytest.fixture
+def progress_log():
+    return ProgressLog()
+
+
 class FakeResponse:
     def __init__(self, body="", *, status_code=200, encoding="utf-8", apparent_encoding=None):
         self.status_code = status_code

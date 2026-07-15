@@ -6,6 +6,7 @@ from retrieve import (
     check_source_capabilities,
     normalize_retrieve_strategy,
     retrieve_ipa_with_strategy,
+    retrieve_reporter,
     sample_word,
 )
 from words import upsert_pronunciation
@@ -14,6 +15,7 @@ from words import upsert_pronunciation
 class RetrieveWorker(QObject):  # pylint: disable=too-many-instance-attributes
     finished_ok = Signal(str, object)
     finished_error = Signal(str)
+    progress = Signal(str, str)
 
     def __init__(  # pylint: disable=too-many-arguments
         self,
@@ -43,10 +45,11 @@ class RetrieveWorker(QObject):  # pylint: disable=too-many-instance-attributes
 
     def run(self) -> None:
         try:
-            if self._mode == "check":
-                self._run_check()
-                return
-            self._run_retrieve()
+            with retrieve_reporter(self.progress.emit):
+                if self._mode == "check":
+                    self._run_check()
+                    return
+                self._run_retrieve()
         except Exception as error:  # pylint: disable=broad-exception-caught
             self.finished_error.emit(str(error))
 

@@ -33,6 +33,13 @@ PRONUNCIATION_COLUMNS = (
     "source",
 )
 
+FAILURE_COLUMNS = (
+    "word",
+    "classification",
+    "article",
+    "reason",
+)
+
 PRONUNCIATIONS_DIR_NAME = "pronunciations"
 
 DEFAULT_INCLUDE = {

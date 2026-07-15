@@ -3,6 +3,7 @@ import requests  # type: ignore[import-untyped]
 
 from browser_config import BrowserConfig, apply_browser_config
 from retrieve.fetch import fetch_html, fetch_html_browser, probe_url
+from retrieve.headword import WantedIpa
 
 ENTRY_URL = "https://example.com/dict/Abend"
 PAGE = "<html><span class='pron'>[ˈaːbənt]</span></html>"
@@ -20,8 +21,8 @@ def default_browser_config():
 def use_browser(monkeypatch, *, available=True, result=PAGE):
     calls = []
 
-    def fake_browser_fetch(url, *, timeout_seconds=None):
-        calls.append((url, timeout_seconds))
+    def fake_browser_fetch(url, *, timeout_seconds=None, wanted=None):
+        calls.append((url, timeout_seconds, wanted))
         if isinstance(result, Exception):
             raise result
         return result
@@ -43,7 +44,15 @@ def test_browser_fetch_adds_the_configured_extra_time(monkeypatch):
     calls = use_browser(monkeypatch)
 
     assert fetch_html_browser(ENTRY_URL) == PAGE
-    assert calls == [(ENTRY_URL, 35.0)]
+    assert calls == [(ENTRY_URL, 35.0, None)]
+
+
+def test_the_browser_is_told_what_to_wait_for(monkeypatch):
+    calls = use_browser(monkeypatch)
+    wanted = WantedIpa("pron", "Abend")
+
+    assert fetch_html_browser(ENTRY_URL, wanted=wanted) == PAGE
+    assert calls[-1][2] == wanted
 
 
 def test_browser_fetch_explains_how_to_get_a_browser(monkeypatch):

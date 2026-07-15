@@ -48,50 +48,76 @@ def use_pronunciations(monkeypatch, pronunciations):
     return asked
 
 
+class BulkRun:
+    def __init__(self):
+        self.saved = []
+        self.marked = []
+        self.messages = []
+        self.outcome = None
+
+    def save(self, row, result):
+        self.saved.append((row[1], result.pronunciation))
+
+    def mark_failed(self, row, reason):
+        self.marked.append((row[1], reason))
+
+    def report(self, message, kind):
+        self.messages.append(f"{kind}: {message}")
+
+
 def run_bulk(rows, settings, *, sleep=None):
-    saved = []
-    messages = []
-
-    def save(row, result):
-        saved.append((row[1], result.pronunciation))
-
-    outcome = fetch_pronunciations(
+    run = BulkRun()
+    run.outcome = fetch_pronunciations(
         rows,
         settings,
-        save=save,
-        report=messages.append,
+        save=run.save,
+        fail=run.mark_failed,
+        report=run.report,
         sleep=(lambda seconds: None) if sleep is None else sleep,
     )
-    return outcome, saved, messages
+    return run
 
 
 def test_every_word_that_answers_is_saved(monkeypatch):
     use_pronunciations(monkeypatch, {"Abend": "[ˈaːbənt]", "Zeit": "[tsaɪt]"})
 
-    outcome, saved, messages = run_bulk(
+    run = run_bulk(
         [noun_row("Abend"), noun_row("Zeit")],
         bulk_settings(delay_seconds=0),
     )
 
-    assert saved == [("Abend", "[ˈaːbənt]"), ("Zeit", "[tsaɪt]")]
-    assert (outcome.total, outcome.saved, outcome.failed) == (2, 2, 0)
-    assert messages == [
-        "[1/2] Abend [ˈaːbənt] via primary/basic",
-        "[2/2] Zeit [tsaɪt] via primary/basic",
+    assert run.saved == [("Abend", "[ˈaːbənt]"), ("Zeit", "[tsaɪt]")]
+    assert (run.outcome.total, run.outcome.saved, run.outcome.failed) == (2, 2, 0)
+    assert run.messages == [
+        "header: [1/2] Abend",
+        "good: saved Abend [ˈaːbənt] from primary",
+        "header: [2/2] Zeit",
+        "good: saved Zeit [tsaɪt] from primary",
     ]
 
 
 def test_a_word_without_an_answer_is_reported_and_counted(monkeypatch):
     use_pronunciations(monkeypatch, {"Zeit": "[tsaɪt]"})
 
-    outcome, saved, messages = run_bulk(
+    run = run_bulk(
         [noun_row("Abend"), noun_row("Zeit")],
         bulk_settings(delay_seconds=0),
     )
 
-    assert saved == [("Zeit", "[tsaɪt]")]
-    assert (outcome.saved, outcome.failed) == (1, 1)
-    assert messages[0] == "[1/2] Abend failed: HTTP 403"
+    assert run.saved == [("Zeit", "[tsaɪt]")]
+    assert (run.outcome.saved, run.outcome.failed) == (1, 1)
+    assert run.messages[:2] == [
+        "header: [1/2] Abend",
+        "bad: no pronunciation for Abend, marked to be skipped next time",
+    ]
+
+
+def test_a_failed_word_is_handed_over_to_be_marked(monkeypatch):
+    use_pronunciations(monkeypatch, {})
+
+    run = run_bulk([noun_row("Abend")], bulk_settings(delay_seconds=0))
+
+    assert run.marked == [("Abend", "HTTP 403")]
 
 
 def test_the_wait_falls_between_words_and_not_before_the_first(monkeypatch):
@@ -122,30 +148,44 @@ def test_a_failure_is_followed_by_a_longer_wait(monkeypatch):
     assert 1.5 <= waits[1] <= 2.5
 
 
+def test_fast_skips_the_extra_wait_after_a_failure(monkeypatch):
+    use_pronunciations(monkeypatch, {"Zeit": "[tsaɪt]"})
+    waits = []
+
+    run_bulk(
+        [noun_row("Abend"), noun_row("Zeit")],
+        bulk_settings(delay_seconds=2.0, backoff_on_failure=False),
+        sleep=waits.append,
+    )
+
+    assert len(waits) == 1
+    assert 1.5 <= waits[0] <= 2.5
+
+
 def test_the_run_stops_when_too_many_words_fail_in_a_row(monkeypatch):
     asked = use_pronunciations(monkeypatch, {})
 
-    outcome, _saved, messages = run_bulk(
+    run = run_bulk(
         [noun_row(f"Wort{index}") for index in range(6)],
         bulk_settings(delay_seconds=0, max_consecutive_failures=3),
     )
 
-    assert outcome.stopped_early is True
-    assert (outcome.saved, outcome.failed, outcome.total) == (0, 3, 6)
+    assert run.outcome.stopped_early is True
+    assert (run.outcome.saved, run.outcome.failed, run.outcome.total) == (0, 3, 6)
     assert len(asked) == 3
-    assert messages[-1] == "Stopped after 3 failures in a row."
+    assert run.messages[-1] == "bad: stopped after 3 failures in a row"
 
 
 def test_a_success_clears_the_failure_streak(monkeypatch):
     use_pronunciations(monkeypatch, {"Zeit": "[tsaɪt]"})
 
-    outcome, _saved, _messages = run_bulk(
+    run = run_bulk(
         [noun_row("Abend"), noun_row("Zeit"), noun_row("Haus")],
         bulk_settings(delay_seconds=0, max_consecutive_failures=2),
     )
 
-    assert outcome.stopped_early is False
-    assert (outcome.saved, outcome.failed) == (1, 2)
+    assert run.outcome.stopped_early is False
+    assert (run.outcome.saved, run.outcome.failed) == (1, 2)
 
 
 def test_the_backoff_grows_but_never_past_the_ceiling():
