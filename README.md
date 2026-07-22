@@ -94,10 +94,32 @@ the user overlay as before.
 ```bash
 python3 src/fetch_pronunciations.py german --dry-run
 python3 src/fetch_pronunciations.py german --delay 3 --limit 200
+python3 src/fetch_pronunciations.py german --browser-fallback --fast
 ```
 
-Every word that still lacks a pronunciation is fetched one at a time, with a
-jittered pause between words and a growing pause after a failure. A success is
+`german` is the language to fill. Flags:
+
+- `--dry-run` lists the words that still need IPA and exits.
+- `--delay` seconds to wait between words, jittered by a quarter (default: 3).
+- `--limit` fetch at most this many words, then stop.
+- `--strategy` `primary_first` or `basic_first`. Defaults to the strategy saved
+  by the app.
+- `--browser-fallback` allow the browser when a source refuses the plain
+  request.
+- `--headless` keep the browser window hidden.
+- `--fast` give the browser a few seconds to find IPA, then move on, and skip
+  the extra wait after a miss.
+- `--retry-failed` try words already marked as failed, instead of skipping them.
+- `--max-consecutive-failures` stop when this many words fail in a row
+  (default: 10).
+
+Every word that still lacks a pronunciation is fetched one at a time. Between
+every word there is a jittered pause of about `--delay` seconds; that pause
+stays in the same range for the whole run. After a miss, without `--fast`, an
+extra wait is added: `--delay` doubled for each miss in a row (6s, 12s, 24s,
+... with the default delay), never more than five minutes. A success resets
+that streak, so the next miss starts at the short extra wait again. `--fast`
+skips the extra wait and keeps only the usual gap between words. A success is
 written to `vocabulary/pronunciations/german.csv` immediately, so the run can be
 interrupted at any point; starting it again picks up the words that are still
 missing. Ten failures in a row stop the run, which is the sign of a source that
