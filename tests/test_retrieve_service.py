@@ -46,7 +46,7 @@ def test_retrieve_reports_where_and_how_the_word_was_found(monkeypatch):
 
     assert result.word == "Abend"
     assert result.url == PRIMARY_URL
-    assert result.pronunciation == "[ˈaːbənt]"
+    assert result.pronunciation == "/ˈaːbənt/"
     assert result.source_label == "primary"
     assert result.fetch_method == "basic"
 

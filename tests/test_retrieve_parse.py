@@ -7,9 +7,13 @@ def test_clean_keeps_square_bracket_notation():
     assert clean_ipa_text("[ˈa:bn̩t]") == "[ˈa:bn̩t]"
 
 
-def test_clean_converts_slashes_and_parentheses_to_brackets():
-    assert clean_ipa_text("/ˈaːbənt/") == "[ˈaːbənt]"
-    assert clean_ipa_text("(ˈaːbənt)") == "[ˈaːbənt]"
+def test_clean_keeps_slash_and_parenthesis_notation():
+    assert clean_ipa_text("/ˈaːbənt/") == "/ˈaːbənt/"
+    assert clean_ipa_text("(ˈaːbənt)") == "(ˈaːbənt)"
+
+
+def test_clean_keeps_quoted_notation():
+    assert clean_ipa_text('"ˈaːbənt"') == '"ˈaːbənt"'
 
 
 def test_clean_extracts_notation_from_surrounding_text():
@@ -20,8 +24,12 @@ def test_clean_collapses_inner_whitespace():
     assert clean_ipa_text("[  ˈaː   bənt  ]") == "[ˈaː bənt]"
 
 
-def test_clean_accepts_bare_notation_with_ipa_characters():
-    assert clean_ipa_text("ˈaːbənt") == "[ˈaːbənt]"
+def test_clean_quotes_bare_notation_with_ipa_characters():
+    assert clean_ipa_text("ˈaːbənt") == '"ˈaːbənt"'
+
+
+def test_clean_ignores_a_parenthesis_that_is_not_ipa():
+    assert clean_ipa_text("Abend (noun) [ˈaːbənt]") == "[ˈaːbənt]"
 
 
 def test_clean_rejects_empty_and_plain_text():
@@ -33,6 +41,9 @@ def test_clean_rejects_empty_and_plain_text():
 def test_clean_rejects_empty_delimiters():
     assert clean_ipa_text("[]") is None
     assert clean_ipa_text("[   ]") is None
+    assert clean_ipa_text("//") is None
+    assert clean_ipa_text("()") is None
+    assert clean_ipa_text('""') is None
 
 
 def test_extract_by_bare_class_token():
@@ -44,7 +55,7 @@ def test_extract_by_bare_class_token():
 def test_extract_by_dotted_class_token():
     page_html = "<html><body><span class='pron'>/ˈaːbənt/</span></body></html>"
 
-    assert extract_ipa_from_html(page_html, ".pron") == "[ˈaːbənt]"
+    assert extract_ipa_from_html(page_html, ".pron") == "/ˈaːbənt/"
 
 
 def test_extract_by_id_token():

@@ -4,7 +4,13 @@ from lxml import html  # type: ignore[import-untyped]
 
 from retrieve.headword import RANK_EXACT, headword_rank
 
-_IPA_PATTERN = re.compile(r"[/\[\()]([^/\[\]()]+)[/\]\)]")
+_IPA_CHARACTERS = "ˈˌːɑɐəɛɪɔʊʃʒŋθðç"
+_IPA_WRAPPERS = (
+    ("[", "]", re.compile(r"\[([^\[\]]+)\]"), False),
+    ("/", "/", re.compile(r"/([^/]+)/"), False),
+    ("(", ")", re.compile(r"\(([^()]+)\)"), True),
+    ('"', '"', re.compile(r'"([^"]+)"'), True),
+)
 _TITLE_PATTERN = re.compile(r"<title[^>]*>(.*?)</title>", re.IGNORECASE | re.DOTALL)
 _CHALLENGE_TITLES = ("just a moment", "attention required", "access denied")
 _CHALLENGE_MARKERS = ("cf-challenge", "cf_chl_opt", "cdn-cgi/challenge-platform")
@@ -32,19 +38,38 @@ def looks_like_challenge(page_html: str) -> bool:
     return any(marker in lowered for marker in _CHALLENGE_MARKERS)
 
 
+def _looks_like_ipa(text: str) -> bool:
+    return any(character in text for character in _IPA_CHARACTERS)
+
+
+def _delimited_ipa(text: str) -> str | None:
+    earliest_start: int | None = None
+    preserved: str | None = None
+    for opener, closer, pattern, inner_must_look_like_ipa in _IPA_WRAPPERS:
+        match = pattern.search(text)
+        if match is None:
+            continue
+        inner = match.group(1).strip()
+        if not inner:
+            continue
+        if inner_must_look_like_ipa and not _looks_like_ipa(inner):
+            continue
+        if earliest_start is None or match.start() < earliest_start:
+            earliest_start = match.start()
+            preserved = f"{opener}{inner}{closer}"
+    return preserved
+
+
 def clean_ipa_text(text: str) -> str | None:
     stripped = " ".join(text.split()).strip()
     if not stripped:
         return None
 
-    match = _IPA_PATTERN.search(stripped)
-    if match:
-        inner = match.group(1).strip()
-        if inner:
-            return f"[{inner}]"
-
-    if any(character in stripped for character in "ˈˌːɑɐəɛɪɔʊʃʒŋθðç"):
-        return f"[{stripped.strip('[]/() ')}]"
+    delimited = _delimited_ipa(stripped)
+    if delimited is not None:
+        return delimited
+    if _looks_like_ipa(stripped):
+        return f'"{stripped}"'
     return None
 
 
