@@ -141,40 +141,47 @@
         </widget>
        </item>
        <item>
-        <widget class="QSlider" name="horizontalSlider">
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>18</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>140</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="minimum">
-          <number>80</number>
-         </property>
-         <property name="maximum">
-          <number>150</number>
-         </property>
-         <property name="value">
-          <number>100</number>
-         </property>
-         <property name="singleStep">
-          <number>5</number>
-         </property>
-         <property name="pageStep">
-          <number>10</number>
-         </property>
+        <widget class="QWidget" name="zoomWidget">
          <property name="toolTip">
           <string>Zoom</string>
          </property>
+         <layout class="QHBoxLayout" name="zoomLayout">
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="pushButton_zoom_out">
+            <property name="text">
+             <string>-</string>
+            </property>
+            <property name="toolTip">
+             <string>Zoom out</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_zoom_in">
+            <property name="text">
+             <string>+</string>
+            </property>
+            <property name="toolTip">
+             <string>Zoom in</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
@@ -211,7 +218,7 @@
            <string>Notification session</string>
           </property>
           <property name="flat">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
           <layout class="QHBoxLayout" name="sessionLayout">
            <property name="spacing">
@@ -352,30 +359,17 @@
          </widget>
         </item>
         <item>
-         <widget class="QWidget" name="previewBarWidget">
+         <widget class="QGroupBox" name="groupBox_preview">
+          <property name="title">
+           <string>Preview</string>
+          </property>
+          <property name="flat">
+           <bool>false</bool>
+          </property>
           <layout class="QHBoxLayout" name="previewBarLayout">
            <property name="spacing">
-            <number>8</number>
+            <number>6</number>
            </property>
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QLabel" name="label_2">
-             <property name="text">
-              <string>Preview</string>
-             </property>
-            </widget>
-           </item>
            <item>
             <widget class="QSpinBox" name="spinBox">
              <property name="minimum">
@@ -424,7 +418,7 @@
            <string>Show in results</string>
           </property>
           <property name="flat">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -544,47 +538,62 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="checkBox_protect_base_vocabulary">
-          <property name="text">
-           <string>Keep shipped vocabulary files read-only on launch</string>
+         <widget class="QGroupBox" name="groupBox_overlay">
+          <property name="title">
+           <string>Overlay</string>
           </property>
-          <property name="toolTip">
-           <string>When enabled, chmod removes write permission from vocabulary/*.csv at startup</string>
+          <property name="flat">
+           <bool>false</bool>
           </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
+          <layout class="QVBoxLayout" name="overlayLayout">
+           <property name="spacing">
+            <number>8</number>
+           </property>
+           <item>
+            <widget class="QCheckBox" name="checkBox_protect_base_vocabulary">
+             <property name="text">
+              <string>Keep shipped vocabulary files read-only on launch</string>
+             </property>
+             <property name="toolTip">
+              <string>When enabled, chmod removes write permission from vocabulary/*.csv at startup</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="vocabOverlayActionsLayout">
+             <property name="spacing">
+              <number>8</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="pushButton_export_overlay">
+               <property name="text">
+                <string>Export overlay</string>
+               </property>
+               <property name="toolTip">
+                <string>Save your additions and removals as a zip backup</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="vocabOverlayActionsSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+          </layout>
          </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="vocabOverlayActionsLayout">
-          <property name="spacing">
-           <number>8</number>
-          </property>
-          <item>
-           <widget class="QPushButton" name="pushButton_export_overlay">
-            <property name="text">
-             <string>Export overlay</string>
-            </property>
-            <property name="toolTip">
-             <string>Save your additions and removals as a zip backup</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="vocabOverlayActionsSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
         </item>
         <item>
          <widget class="QGroupBox" name="groupBox_3">
@@ -592,7 +601,7 @@
            <string>Add or remove</string>
           </property>
           <property name="flat">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
           <layout class="QGridLayout" name="addWordLayout">
            <property name="horizontalSpacing">
@@ -740,30 +749,17 @@
          </widget>
         </item>
         <item>
-         <widget class="QWidget" name="vocabRetrieveStrategyWidget">
+         <widget class="QGroupBox" name="groupBox_vocab_fallback">
+          <property name="title">
+           <string>Fallback order</string>
+          </property>
+          <property name="flat">
+           <bool>false</bool>
+          </property>
           <layout class="QHBoxLayout" name="vocabRetrieveStrategyLayout">
            <property name="spacing">
             <number>8</number>
            </property>
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QLabel" name="label_vocab_retrieve_strategy">
-             <property name="text">
-              <string>Fallback order</string>
-             </property>
-            </widget>
-           </item>
            <item>
             <widget class="QRadioButton" name="radioButton_vocabRetrievePrimaryFirst">
              <property name="text">
@@ -993,22 +989,16 @@
          </widget>
         </item>
         <item>
-         <widget class="QWidget" name="retrieveWordWidget">
+         <widget class="QGroupBox" name="groupBox_lookup">
+          <property name="title">
+           <string>Lookup</string>
+          </property>
+          <property name="flat">
+           <bool>false</bool>
+          </property>
           <layout class="QHBoxLayout" name="retrieveWordLayout">
            <property name="spacing">
             <number>8</number>
-           </property>
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
            </property>
            <item>
             <widget class="QLabel" name="label_retrieve_word">
@@ -1045,30 +1035,17 @@
          </widget>
         </item>
         <item>
-         <widget class="QWidget" name="retrieveStrategyWidget">
+         <widget class="QGroupBox" name="groupBox_retrieve_fallback">
+          <property name="title">
+           <string>Fallback order</string>
+          </property>
+          <property name="flat">
+           <bool>false</bool>
+          </property>
           <layout class="QHBoxLayout" name="retrieveStrategyLayout">
            <property name="spacing">
             <number>8</number>
            </property>
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QLabel" name="label_retrieve_strategy">
-             <property name="text">
-              <string>Fallback order</string>
-             </property>
-            </widget>
-           </item>
            <item>
             <widget class="QRadioButton" name="radioButton_retrievePrimaryFirst">
              <property name="text">
@@ -1114,7 +1091,7 @@
            <string>Primary</string>
           </property>
           <property name="flat">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
           <layout class="QVBoxLayout" name="primarySourceLayout">
            <property name="spacing">
@@ -1216,7 +1193,7 @@
            <string>Backup</string>
           </property>
           <property name="flat">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
           <layout class="QVBoxLayout" name="backupSourceLayout">
            <property name="spacing">
@@ -1350,7 +1327,7 @@
            <string>Browser fetch</string>
           </property>
           <property name="flat">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
           <layout class="QFormLayout" name="settingsBrowserFormLayout">
            <property name="horizontalSpacing">

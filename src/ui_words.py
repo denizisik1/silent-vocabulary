@@ -1,11 +1,13 @@
 from functools import partial
 
-from PySide6.QtGui import QStandardItemModel
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QBrush, QColor, QStandardItemModel
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
     QGroupBox,
     QLineEdit,
+    QListView,
     QMainWindow,
     QPushButton,
     QSpinBox,
@@ -44,22 +46,50 @@ _ADD_LINE_EDITS = (
     "lineEdit_add_plural",
 )
 
+_DEFAULT_FAINT = "#777777"
+
 
 def language_key_from_combo(language_text: str) -> str:
     return language_text.strip().lower()
 
 
-def disable_unavailable_languages(language_combo: QComboBox) -> None:
+def style_language_combo(window: QMainWindow, faint_color: str = _DEFAULT_FAINT) -> None:
+    language_combo = window.findChild(QComboBox, "comboBox")
+    if language_combo is None:
+        raise RuntimeError("Missing language control: comboBox")
+
+    if not isinstance(language_combo.view(), QListView):
+        language_combo.setView(QListView(language_combo))
+
     model = language_combo.model()
     if not isinstance(model, QStandardItemModel):
         return
+
+    faint = QBrush(QColor(faint_color))
     for index in range(language_combo.count()):
-        language_key = language_key_from_combo(language_combo.itemText(index))
-        if language_key in LANGUAGE_VOCABULARY_FILES:
-            continue
         item = model.item(index)
-        if item is not None:
-            item.setEnabled(False)
+        if item is None:
+            continue
+        language_key = language_key_from_combo(item.text())
+        if language_key in LANGUAGE_VOCABULARY_FILES:
+            item.setEnabled(True)
+            item.setFlags(
+                Qt.ItemFlag.ItemIsEnabled | Qt.ItemFlag.ItemIsSelectable
+            )
+            item.setData(None, Qt.ItemDataRole.ForegroundRole)
+            continue
+        item.setEnabled(False)
+        item.setFlags(Qt.ItemFlag.NoItemFlags)
+        item.setData(faint, Qt.ItemDataRole.ForegroundRole)
+
+
+def disable_unavailable_languages(language_combo: QComboBox) -> None:
+    window = language_combo.window()
+    if isinstance(window, QMainWindow):
+        style_language_combo(window)
+        return
+    raise RuntimeError("Language combo is not inside a main window")
+
 
 
 def include_flags(window: QMainWindow) -> dict[str, bool]:
