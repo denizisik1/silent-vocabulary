@@ -40,7 +40,7 @@
      <widget class="QWidget" name="headerWidget">
       <layout class="QHBoxLayout" name="headerLayout">
        <property name="spacing">
-        <number>12</number>
+        <number>18</number>
        </property>
        <property name="leftMargin">
         <number>0</number>
@@ -75,17 +75,13 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="label">
-         <property name="text">
+        <widget class="QComboBox" name="comboBox">
+         <property name="toolTip">
           <string>Language</string>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="comboBox">
          <property name="minimumSize">
           <size>
-           <width>120</width>
+           <width>132</width>
            <height>0</height>
           </size>
          </property>
@@ -97,40 +93,15 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_theme">
-         <property name="text">
+        <widget class="QToolButton" name="toolButton_theme">
+         <property name="toolTip">
           <string>Theme</string>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="radioButton_themeWhite">
          <property name="text">
-          <string>White</string>
+          <string/>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="radioButton_themeGray">
-         <property name="text">
-          <string>Gray</string>
-         </property>
-         <property name="checked">
+         <property name="autoRaise">
           <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="radioButton_themeDark">
-         <property name="text">
-          <string>Dark</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_7">
-         <property name="text">
-          <string>Zoom</string>
          </property>
         </widget>
        </item>
@@ -138,13 +109,13 @@
         <widget class="QSlider" name="horizontalSlider">
          <property name="minimumSize">
           <size>
-           <width>80</width>
-           <height>0</height>
+           <width>100</width>
+           <height>18</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>120</width>
+           <width>140</width>
            <height>16777215</height>
           </size>
          </property>
@@ -167,7 +138,7 @@
           <number>10</number>
          </property>
          <property name="toolTip">
-          <string>Zoom UI text size</string>
+          <string>Zoom</string>
          </property>
         </widget>
        </item>

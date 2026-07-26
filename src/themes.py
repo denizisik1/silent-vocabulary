@@ -84,8 +84,15 @@ def stylesheet(name: str, zoom_percent: int = DEFAULT_ZOOM_PERCENT) -> str:
     results_size = scale_px(14, zoom)
     tab_pad_y = scale_px(7, zoom)
     tab_pad_x = scale_px(14, zoom)
-    input_min = scale_px(22, zoom)
-    button_min = scale_px(24, zoom)
+    input_min = scale_px(24, zoom)
+    button_min = scale_px(28, zoom)
+    header_control_min = scale_px(28, zoom)
+    theme_button_pad = scale_px(4, zoom)
+    slider_handle = scale_px(14, zoom)
+    slider_groove = scale_px(5, zoom)
+    slider_handle_overhang = max(1, (slider_handle - slider_groove) // 2)
+    slider_min_height = slider_handle + scale_px(4, zoom)
+    slider_end_pad = slider_handle // 2
     return f"""QMainWindow {{
     background-color: {colors["window"]};
     color: {colors["text"]};
@@ -200,20 +207,42 @@ QGroupBox[flat="true"] {{
     font-weight: 600;
 }}
 QSlider::groove:horizontal {{
-    height: 4px;
+    height: {slider_groove}px;
     background: {colors["input"]};
     border-radius: 2px;
 }}
 QSlider::handle:horizontal {{
-    width: 12px;
-    margin: -4px 0;
+    width: {slider_handle}px;
+    height: {slider_handle}px;
+    margin: -{slider_handle_overhang}px 0;
     background: {colors["accent"]};
-    border-radius: 6px;
+    border-radius: {slider_handle // 2}px;
 }}
 QCheckBox, QRadioButton {{
     spacing: 6px;
     padding: 2px 0;
     font-size: {body_size}px;
+}}
+QComboBox#comboBox {{
+    min-height: {header_control_min}px;
+    min-width: {scale_px(132, zoom)}px;
+}}
+QSlider#horizontalSlider {{
+    min-width: {scale_px(100, zoom)}px;
+    max-width: {scale_px(140, zoom)}px;
+    min-height: {slider_min_height}px;
+    padding: 0 {slider_end_pad}px;
+}}
+QToolButton#toolButton_theme {{
+    background-color: transparent;
+    border: none;
+    padding: {theme_button_pad}px;
+    min-height: {header_control_min}px;
+    min-width: {header_control_min}px;
+}}
+QToolButton#toolButton_theme:hover {{
+    background-color: {colors["tab_hover"]};
+    border-radius: 3px;
 }}"""
 
 
