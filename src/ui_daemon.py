@@ -21,6 +21,7 @@ from notify import (
 )
 from ui_words import include_flags, language_key_from_combo
 from words import format_word_row, get_random_words
+from words.ipa import format_notification_body
 
 _MAX_CONSECUTIVE_NOTIFY_FAILURES = 3
 _DAEMON_ATTR = "_silent_vocabulary_practice_daemon"
@@ -283,17 +284,18 @@ def fire_practice_notification(window: QMainWindow) -> None:
         return
 
     row = words[0]
-    body = format_word_row(row, include)
+    plain_body = format_word_row(row, include)
+    notification_body = format_notification_body(row, include)
     title = "silent-vocabulary"
     try:
-        send_notification(title, body, backend=backend)
+        send_notification(title, notification_body, backend=backend)
     except (ValueError, RuntimeError, OSError) as error:
         _handle_notify_failure(window, _application_for_window(window), error)
         return
 
     _reset_notify_failure_count(window)
-    _append_result_line(window, body)
-    _set_status(window, f"Notified ({backend.value}): {body}")
+    _append_result_line(window, plain_body)
+    _set_status(window, f"Notified ({backend.value}): {plain_body}")
 
 
 def _get_daemon(window: QMainWindow) -> PracticeDaemon:
