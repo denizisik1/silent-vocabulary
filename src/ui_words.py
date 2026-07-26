@@ -1,5 +1,6 @@
 from functools import partial
 
+from PySide6.QtGui import QStandardItemModel
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
@@ -19,6 +20,7 @@ from words import (
     get_random_words,
     remove_word,
 )
+from words.constants import LANGUAGE_VOCABULARY_FILES
 from words.parse import normalize_row
 
 _INCLUDE_CHECKBOXES = {
@@ -45,6 +47,19 @@ _ADD_LINE_EDITS = (
 
 def language_key_from_combo(language_text: str) -> str:
     return language_text.strip().lower()
+
+
+def disable_unavailable_languages(language_combo: QComboBox) -> None:
+    model = language_combo.model()
+    if not isinstance(model, QStandardItemModel):
+        return
+    for index in range(language_combo.count()):
+        language_key = language_key_from_combo(language_combo.itemText(index))
+        if language_key in LANGUAGE_VOCABULARY_FILES:
+            continue
+        item = model.item(index)
+        if item is not None:
+            item.setEnabled(False)
 
 
 def include_flags(window: QMainWindow) -> dict[str, bool]:
@@ -76,6 +91,10 @@ def apply_language_from_config(window: QMainWindow, language_key: str) -> None:
     if language_combo is None:
         raise RuntimeError("Missing language control: comboBox")
 
+    disable_unavailable_languages(language_combo)
+    if language_key not in LANGUAGE_VOCABULARY_FILES:
+        return
+
     for index in range(language_combo.count()):
         item_text = language_combo.itemText(index)
         if language_key_from_combo(item_text) == language_key:
@@ -106,7 +125,10 @@ def _on_language_changed(window: QMainWindow, config: AppConfig, index: int) -> 
     language_combo = window.findChild(QComboBox, "comboBox")
     if language_combo is None:
         raise RuntimeError("Missing language control: comboBox")
-    config.language = language_key_from_combo(language_combo.itemText(index))
+    language_key = language_key_from_combo(language_combo.itemText(index))
+    if language_key not in LANGUAGE_VOCABULARY_FILES:
+        return
+    config.language = language_key
     save_config(config)
 
 
@@ -121,6 +143,7 @@ def wire_session_config(window: QMainWindow, config: AppConfig) -> None:
     language_combo = window.findChild(QComboBox, "comboBox")
     if language_combo is None:
         raise RuntimeError("Missing language control: comboBox")
+    disable_unavailable_languages(language_combo)
     language_handler = partial(_on_language_changed, window, config)
     language_combo.currentIndexChanged.connect(language_handler)
 
