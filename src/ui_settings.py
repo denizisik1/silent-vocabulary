@@ -11,9 +11,9 @@ from PySide6.QtWidgets import (
 )
 
 from config import AppConfig, save_config
-from stealth_config import StealthConfig
-from stealth_browser import find_stealth_browser_path
-from ui_stealth_browser import (
+from browser_config import BrowserConfig
+from browser_support import find_browser_path
+from ui_browser import (
     install_chromium_with_prompt,
     remove_chromium_with_prompt,
 )
@@ -54,8 +54,8 @@ def _label(window: QMainWindow, object_name: str) -> QLabel:
     return widget
 
 
-def refresh_stealth_browser_status(window: QMainWindow) -> None:
-    path = find_stealth_browser_path()
+def refresh_browser_status(window: QMainWindow) -> None:
+    path = find_browser_path()
     status = _label(window, "label_settings_browser_status")
     if path is None:
         status.setText("Browser: not found")
@@ -64,40 +64,40 @@ def refresh_stealth_browser_status(window: QMainWindow) -> None:
 
 
 def apply_settings_to_form(window: QMainWindow, config: AppConfig) -> None:
-    stealth = config.stealth
-    _checkbox(window, "checkBox_stealth_headless").setChecked(stealth.headless)
-    _checkbox(window, "checkBox_stealth_sandbox").setChecked(stealth.sandbox)
-    _spin(window, "spinBox_stealth_wait_seconds").setValue(int(stealth.wait_seconds))
-    _double_spin(window, "doubleSpinBox_stealth_extra_timeout").setValue(
-        stealth.extra_timeout_seconds
+    browser = config.browser
+    _checkbox(window, "checkBox_browser_headless").setChecked(browser.headless)
+    _checkbox(window, "checkBox_browser_sandbox").setChecked(browser.sandbox)
+    _spin(window, "spinBox_browser_wait_seconds").setValue(int(browser.wait_seconds))
+    _double_spin(window, "doubleSpinBox_browser_extra_timeout").setValue(
+        browser.extra_timeout_seconds
     )
-    _double_spin(window, "doubleSpinBox_stealth_connect_timeout").setValue(
-        stealth.connect_timeout_seconds
+    _double_spin(window, "doubleSpinBox_browser_connect_timeout").setValue(
+        browser.connect_timeout_seconds
     )
-    _spin(window, "spinBox_stealth_connect_tries").setValue(stealth.connect_tries)
+    _spin(window, "spinBox_browser_connect_tries").setValue(browser.connect_tries)
     _double_spin(window, "doubleSpinBox_fetch_timeout").setValue(
-        stealth.fetch_timeout_seconds
+        browser.fetch_timeout_seconds
     )
     _double_spin(window, "doubleSpinBox_probe_timeout").setValue(
-        stealth.probe_timeout_seconds
+        browser.probe_timeout_seconds
     )
-    _line(window, "lineEdit_stealth_browser_path").setText(stealth.browser_path)
-    refresh_stealth_browser_status(window)
+    _line(window, "lineEdit_browser_path").setText(browser.browser_path)
+    refresh_browser_status(window)
 
 
-def _read_stealth_from_form(window: QMainWindow) -> StealthConfig:
-    return StealthConfig(
-        headless=_checkbox(window, "checkBox_stealth_headless").isChecked(),
-        sandbox=_checkbox(window, "checkBox_stealth_sandbox").isChecked(),
-        wait_seconds=float(_spin(window, "spinBox_stealth_wait_seconds").value()),
+def _read_browser_from_form(window: QMainWindow) -> BrowserConfig:
+    return BrowserConfig(
+        headless=_checkbox(window, "checkBox_browser_headless").isChecked(),
+        sandbox=_checkbox(window, "checkBox_browser_sandbox").isChecked(),
+        wait_seconds=float(_spin(window, "spinBox_browser_wait_seconds").value()),
         extra_timeout_seconds=_double_spin(
-            window, "doubleSpinBox_stealth_extra_timeout"
+            window, "doubleSpinBox_browser_extra_timeout"
         ).value(),
         connect_timeout_seconds=_double_spin(
-            window, "doubleSpinBox_stealth_connect_timeout"
+            window, "doubleSpinBox_browser_connect_timeout"
         ).value(),
-        connect_tries=_spin(window, "spinBox_stealth_connect_tries").value(),
-        browser_path=_line(window, "lineEdit_stealth_browser_path").text().strip(),
+        connect_tries=_spin(window, "spinBox_browser_connect_tries").value(),
+        browser_path=_line(window, "lineEdit_browser_path").text().strip(),
         fetch_timeout_seconds=_double_spin(
             window, "doubleSpinBox_fetch_timeout"
         ).value(),
@@ -108,19 +108,19 @@ def _read_stealth_from_form(window: QMainWindow) -> StealthConfig:
 
 
 def _save_settings(window: QMainWindow, config: AppConfig) -> None:
-    config.stealth = _read_stealth_from_form(window)
+    config.browser = _read_browser_from_form(window)
     save_config(config)
-    refresh_stealth_browser_status(window)
+    refresh_browser_status(window)
 
 
 def _on_install_chromium(window: QMainWindow) -> None:
     install_chromium_with_prompt(window)
-    refresh_stealth_browser_status(window)
+    refresh_browser_status(window)
 
 
 def _on_remove_chromium(window: QMainWindow) -> None:
     remove_chromium_with_prompt(window)
-    refresh_stealth_browser_status(window)
+    refresh_browser_status(window)
 
 
 def wire_settings(window: QMainWindow, config: AppConfig) -> None:

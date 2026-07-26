@@ -61,26 +61,26 @@ def test_extract_ipa_from_html_missing_raises():
         assert "No IPA found" in str(error)
 
 
-def test_fetch_html_falls_back_to_stealth(monkeypatch):
+def test_fetch_html_falls_back_to_browser(monkeypatch):
     calls: list[str] = []
 
     def fake_basic(url: str, *, timeout_seconds: float) -> str:
         calls.append("basic")
         raise RuntimeError("HTTP 403 for https://example.com/word")
 
-    def fake_stealth(url: str, *, timeout_seconds: float) -> str:
-        calls.append("stealth")
+    def fake_browser(url: str, *, timeout_seconds: float) -> str:
+        calls.append("browser")
         return "<html><span class='phonetics'>[ˈa:bn̩t]</span></html>"
 
     monkeypatch.setattr("retrieve.fetch.fetch_html_basic", fake_basic)
-    monkeypatch.setattr("retrieve.fetch.ensure_stealth_ready", lambda: True)
-    monkeypatch.setattr("retrieve.fetch.fetch_html_stealth", fake_stealth)
+    monkeypatch.setattr("retrieve.fetch.ensure_browser_ready", lambda: True)
+    monkeypatch.setattr("retrieve.fetch.fetch_html_via_browser", fake_browser)
 
     from retrieve.fetch import fetch_html
 
     html = fetch_html("https://example.com/word")
 
-    assert calls == ["basic", "stealth"]
+    assert calls == ["basic", "browser"]
     assert "phonetics" in html
 
 
@@ -89,9 +89,9 @@ def test_fetch_html_reports_both_failures(monkeypatch):
         "retrieve.fetch.fetch_html_basic",
         lambda url, timeout_seconds: (_ for _ in ()).throw(RuntimeError("HTTP 403")),
     )
-    monkeypatch.setattr("retrieve.fetch.ensure_stealth_ready", lambda: True)
+    monkeypatch.setattr("retrieve.fetch.ensure_browser_ready", lambda: True)
     monkeypatch.setattr(
-        "retrieve.fetch.fetch_html_stealth",
+        "retrieve.fetch.fetch_html_via_browser",
         lambda url, timeout_seconds: (_ for _ in ()).throw(RuntimeError("browser missing")),
     )
 
@@ -102,7 +102,7 @@ def test_fetch_html_reports_both_failures(monkeypatch):
         assert False, "expected RuntimeError"
     except RuntimeError as error:
         assert "basic" in str(error)
-        assert "stealth" in str(error)
+        assert "browser" in str(error)
 
 
 def test_retrieve_attempt_order_primary_first():
@@ -110,9 +110,9 @@ def test_retrieve_attempt_order_primary_first():
 
     assert retrieve_attempt_order(STRATEGY_PRIMARY_FIRST) == [
         ("primary", "basic"),
-        ("primary", "stealth"),
+        ("primary", "browser"),
         ("backup", "basic"),
-        ("backup", "stealth"),
+        ("backup", "browser"),
     ]
 
 
@@ -122,8 +122,8 @@ def test_retrieve_attempt_order_basic_first():
     assert retrieve_attempt_order(STRATEGY_BASIC_FIRST) == [
         ("primary", "basic"),
         ("backup", "basic"),
-        ("primary", "stealth"),
-        ("backup", "stealth"),
+        ("primary", "browser"),
+        ("backup", "browser"),
     ]
 
 
@@ -134,7 +134,7 @@ def test_retrieve_ipa_with_strategy_primary_first(monkeypatch):
         calls.append((url, method))
         if "collins" in url and method == "basic":
             raise RuntimeError("HTTP 403")
-        if "collins" in url and method == "stealth":
+        if "collins" in url and method == "browser":
             return "<html><span class='pron'>[ˈa:bn̩t]</span></html>"
         raise RuntimeError("unexpected")
 
@@ -159,13 +159,13 @@ def test_retrieve_ipa_with_strategy_primary_first(monkeypatch):
     )
 
     assert result.source_label == "primary"
-    assert result.fetch_method == "stealth"
+    assert result.fetch_method == "browser"
     assert result.pronunciation == "[ˈa:bn̩t]"
     assert calls == [
         ("https://www.collinsdictionary.com/dictionary/german-english/Abend", "basic"),
         (
             "https://www.collinsdictionary.com/dictionary/german-english/Abend",
-            "stealth",
+            "browser",
         ),
     ]
 
@@ -210,7 +210,7 @@ def test_retrieve_ipa_with_strategy_basic_first(monkeypatch):
 
 
 def test_page_looks_ready_rejects_challenge():
-    from retrieve.stealth_fetch import _page_looks_ready
+    from retrieve.browser_fetch import _page_looks_ready
 
     assert not _page_looks_ready("Just a moment...", "<html>challenge</html>")
     assert _page_looks_ready(

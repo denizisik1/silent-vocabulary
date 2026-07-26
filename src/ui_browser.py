@@ -9,18 +9,18 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from retrieve.stealth_fetch import (
-    set_stealth_ensure_callback,
-    stealth_browser_available,
+from retrieve.browser_fetch import (
+    browser_available,
+    set_browser_ensure_callback,
 )
-from stealth_browser import (
+from browser_support import (
     browser_install_command,
     browser_remove_command,
-    install_stealth_browser,
-    remove_stealth_browser,
+    install_browser,
+    remove_browser,
 )
 
-_PROMPT_ATTR = "_vipa_stealth_browser_prompt"
+_PROMPT_ATTR = "_vipa_browser_prompt"
 
 
 def run_browser_package_action(
@@ -90,7 +90,7 @@ def run_browser_package_action(
     return False
 
 
-class StealthBrowserInstallPrompt(QObject):
+class BrowserInstallPrompt(QObject):
     _request = Signal()
 
     def __init__(self, parent: QWidget) -> None:
@@ -109,7 +109,7 @@ class StealthBrowserInstallPrompt(QObject):
             self._done.set()
 
     def ensure(self) -> bool:
-        if stealth_browser_available():
+        if browser_available():
             return True
         if QThread.currentThread() == self.thread():
             return self._prompt_and_maybe_install()
@@ -122,12 +122,15 @@ class StealthBrowserInstallPrompt(QObject):
             return self._ok
 
     def _prompt_and_maybe_install(self) -> bool:
-        if stealth_browser_available():
+        if browser_available():
             return True
         return run_browser_package_action(
             self._parent,
             title="vipa - install browser",
-            question="Stealth fetch needs Chrome, Chromium, or Brave. Install Chromium now?",
+            question=(
+                "Browser fetch needs Chrome, Chromium, or Brave. "
+                "Install Chromium now?"
+            ),
             progress_label="Installing Chromium…",
             command=browser_install_command(),
             unavailable_message=(
@@ -135,8 +138,8 @@ class StealthBrowserInstallPrompt(QObject):
                 "Install Chrome, Chromium, or Brave, "
                 "or set the browser path in Settings."
             ),
-            action=install_stealth_browser,
-            success_check=stealth_browser_available,
+            action=install_browser,
+            success_check=browser_available,
             success_failure_message=(
                 "Chromium is still not available after install.\n\n"
                 "You can also set the browser path in Settings."
@@ -155,8 +158,8 @@ def remove_chromium_with_prompt(parent: QWidget) -> bool:
             "No automatic browser removal is available for this system.\n\n"
             "Uninstall Chrome, Chromium, or Brave with your package manager."
         ),
-        action=remove_stealth_browser,
-        success_check=lambda: not stealth_browser_available(),
+        action=remove_browser,
+        success_check=lambda: not browser_available(),
         success_failure_message=(
             "A browser binary is still available after removal.\n\n"
             "Another Chrome/Chromium/Brave install may still be on PATH."
@@ -168,7 +171,7 @@ def install_chromium_with_prompt(parent: QWidget) -> bool:
     return run_browser_package_action(
         parent,
         title="vipa - install browser",
-        question="Install Chromium for stealth fetch?",
+        question="Install Chromium for browser fetch?",
         progress_label="Installing Chromium…",
         command=browser_install_command(),
         unavailable_message=(
@@ -176,8 +179,8 @@ def install_chromium_with_prompt(parent: QWidget) -> bool:
             "Install Chrome, Chromium, or Brave manually, "
             "or set the browser path in Settings."
         ),
-        action=install_stealth_browser,
-        success_check=stealth_browser_available,
+        action=install_browser,
+        success_check=browser_available,
         success_failure_message=(
             "Chromium is still not available after install.\n\n"
             "You can also set the browser path in Settings."
@@ -185,8 +188,8 @@ def install_chromium_with_prompt(parent: QWidget) -> bool:
     )
 
 
-def wire_stealth_browser_prompt(window: QMainWindow) -> StealthBrowserInstallPrompt:
-    prompt = StealthBrowserInstallPrompt(window)
+def wire_browser_prompt(window: QMainWindow) -> BrowserInstallPrompt:
+    prompt = BrowserInstallPrompt(window)
     setattr(window, _PROMPT_ATTR, prompt)
-    set_stealth_ensure_callback(prompt.ensure)
+    set_browser_ensure_callback(prompt.ensure)
     return prompt
