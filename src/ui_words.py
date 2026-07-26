@@ -125,10 +125,6 @@ def wire_session_config(window: QMainWindow, config: AppConfig) -> None:
     language_combo.currentIndexChanged.connect(language_handler)
 
 
-def apply_default_include(window: QMainWindow) -> None:
-    apply_include_from_config(window, DEFAULT_INCLUDE)
-
-
 def on_get_words(window: QMainWindow) -> None:
     count_input = window.findChild(QSpinBox, "spinBox")
     language_combo = window.findChild(QComboBox, "comboBox")
