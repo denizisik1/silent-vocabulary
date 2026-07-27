@@ -2,6 +2,9 @@ import os
 
 from zoom import DEFAULT_ZOOM_PERCENT, clamp_zoom_percent, scale_px
 
+UI_FONT = '"Noto Sans", sans-serif'
+MONO_FONT = '"Liberation Mono", monospace'
+
 _PALETTE = {
     "white": {
         "window": "#f4f5f3",
@@ -98,6 +101,7 @@ def stylesheet(name: str, zoom_percent: int = DEFAULT_ZOOM_PERCENT) -> str:
     return f"""QMainWindow {{
     background-color: {colors["window"]};
     color: {colors["text"]};
+    font-family: {UI_FONT};
     font-size: {body_size}px;
 }}
 QTabWidget::pane {{
@@ -123,6 +127,7 @@ QTabBar::tab:hover {{ background-color: {colors["tab_hover"]}; }}
 QWidget {{
     background-color: {colors["widget"]};
     color: {colors["text"]};
+    font-family: {UI_FONT};
     font-size: {body_size}px;
 }}
 QLabel {{ color: {colors["text"]}; font-size: {body_size}px; }}
@@ -151,6 +156,16 @@ QLineEdit, QTextEdit, QComboBox, QSpinBox, QDoubleSpinBox {{
 QLineEdit:focus, QTextEdit:focus, QComboBox:focus,
 QSpinBox:focus, QDoubleSpinBox:focus {{
     border: 1px solid {colors["accent"]};
+}}
+QTextEdit#textEdit,
+QTextEdit#textEdit_2,
+QTextEdit#textEdit_3,
+QTextEdit#textEdit_retrieve_results,
+QTextEdit#textEdit_vocab_retrieve_results,
+QLineEdit#lineEdit_2,
+QLineEdit#lineEdit_retrieve_word,
+QLineEdit#lineEdit_add_pronunciation {{
+    font-family: {MONO_FONT};
 }}
 QTextEdit#textEdit_3,
 QTextEdit#textEdit_retrieve_results,
