@@ -101,7 +101,7 @@ def _send_via_busctl(title: str, body: str, *, expire_ms: int) -> None:
         "org.freedesktop.Notifications",
         "Notify",
         "susssasa{sv}i",
-        "vipa",
+        "silent-vocabulary",
         "0",
         "",
         title,
@@ -119,7 +119,7 @@ def _send_via_busctl(title: str, body: str, *, expire_ms: int) -> None:
 def _send_via_notify_send(title: str, body: str, *, expire_ms: int) -> None:
     command = [
         "notify-send",
-        "--app-name=vipa",
+        "--app-name=silent-vocabulary",
         f"--expire-time={expire_ms}",
         "--urgency=normal",
         title,
@@ -162,7 +162,7 @@ def send_notification(
     expire_ms: int | None = None,
 ) -> None:
     if expire_ms is None:
-        expire_ms = int(os.environ.get("VIPA_NOTIFY_EXPIRE_MS", "10000"))
+        expire_ms = int(os.environ.get("SILENT_VOCABULARY_NOTIFY_EXPIRE_MS", "10000"))
     if not title.strip():
         raise ValueError("Notification title is empty.")
 

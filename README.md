@@ -1,8 +1,8 @@
 ## Install and run
 
 ```bash
-git clone --depth=1 git@github.com:denizisik1/vipa.git
-cd vipa
+git clone --depth=1 git@github.com:denizisik1/silent-vocabulary.git
+cd silent-vocabulary
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -12,7 +12,7 @@ python3 src/init.py
 ## Run (already installed)
 
 ```bash
-cd vipa
+cd silent-vocabulary
 [[ -d .venv ]] || python3 -m venv .venv
 source .venv/bin/activate
 python3 src/init.py
@@ -22,9 +22,9 @@ python3 src/init.py
 
 ```bash
 cd ..
-rm -rf vipa
-rm -rf "$HOME/.config/vipa"
-rm -rf "${XDG_DATA_HOME:-$HOME/.local/share}/vipa"
+rm -rf silent-vocabulary
+rm -rf "$HOME/.config/silent-vocabulary"
+rm -rf "${XDG_DATA_HOME:-$HOME/.local/share}/silent-vocabulary"
 ```
 
 Shipped vocabulary files under `vocabulary/` are read-only. User additions and

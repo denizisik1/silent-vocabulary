@@ -48,8 +48,8 @@ def test_header_csv_format(tmp_path, monkeypatch):
     for filename in ("verbs.csv", "adjectives.csv", "adverbs.csv"):
         (vocabulary_root / filename).write_text("word,meaning\n", encoding="utf-8")
 
-    monkeypatch.setenv("VIPA_VOCABULARY_DIR", str(vocabulary_root))
-    monkeypatch.setenv("VIPA_USER_VOCABULARY_DIR", str(tmp_path / "user-vocabulary"))
+    monkeypatch.setenv("SILENT_VOCABULARY_DIR", str(vocabulary_root))
+    monkeypatch.setenv("SILENT_VOCABULARY_USER_DIR", str(tmp_path / "user-vocabulary"))
 
     words = get_random_words("german", 1)
     assert words[0] == (

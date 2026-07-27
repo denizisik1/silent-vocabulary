@@ -44,7 +44,7 @@ class RetrieveWorker(QObject):
             self.finished_error.emit(str(error))
 
     def _run_check(self) -> None:
-        word = self._word or os.environ.get("VIPA_SAMPLE_WORD", "Abend")
+        word = self._word or os.environ.get("SILENT_VOCABULARY_SAMPLE_WORD", "Abend")
         primary = check_source_capabilities(
             base_url=self._primary_url,
             find_by=self._primary_find,

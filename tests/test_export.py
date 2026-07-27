@@ -13,7 +13,7 @@ from words.export import (
 def test_default_export_filename_uses_utc_stamp():
     when = datetime(2026, 7, 22, 9, 58, 0, tzinfo=timezone.utc)
 
-    assert default_export_filename(when=when) == "vipa-vocabulary-20260722-095800.zip"
+    assert default_export_filename(when=when) == "silent-vocabulary-20260722-095800.zip"
 
 
 def test_collect_overlay_files_ignores_empty_and_missing(tmp_path):

@@ -17,7 +17,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>vipa</string>
+   <string>silent-vocabulary</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="centralVerticalLayout">
@@ -57,7 +57,7 @@
        <item>
         <widget class="QLabel" name="label_brand">
          <property name="text">
-          <string>vipa</string>
+          <string>silent-vocabulary</string>
          </property>
         </widget>
        </item>

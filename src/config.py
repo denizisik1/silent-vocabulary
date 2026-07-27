@@ -25,21 +25,21 @@ from browser_config import (
 from words.constants import DEFAULT_INCLUDE, LANGUAGE_VOCABULARY_FILES
 from zoom import DEFAULT_ZOOM_PERCENT, clamp_zoom_percent
 
-CONFIG_DIR = Path(user_config_dir("vipa", appauthor=False))
-CONFIG_PATH = CONFIG_DIR / "vipa.toml"
+CONFIG_DIR = Path(user_config_dir("silent-vocabulary", appauthor=False))
+CONFIG_PATH = CONFIG_DIR / "silent-vocabulary.toml"
 
-DEFAULT_WINDOW_WIDTH = int(os.environ.get("VIPA_DEFAULT_WINDOW_WIDTH", "720"))
-DEFAULT_WINDOW_HEIGHT = int(os.environ.get("VIPA_DEFAULT_WINDOW_HEIGHT", "560"))
-MIN_WINDOW_WIDTH = int(os.environ.get("VIPA_MIN_WINDOW_WIDTH", "560"))
-MIN_WINDOW_HEIGHT = int(os.environ.get("VIPA_MIN_WINDOW_HEIGHT", "420"))
+DEFAULT_WINDOW_WIDTH = int(os.environ.get("SILENT_VOCABULARY_DEFAULT_WINDOW_WIDTH", "720"))
+DEFAULT_WINDOW_HEIGHT = int(os.environ.get("SILENT_VOCABULARY_DEFAULT_WINDOW_HEIGHT", "560"))
+MIN_WINDOW_WIDTH = int(os.environ.get("SILENT_VOCABULARY_MIN_WINDOW_WIDTH", "560"))
+MIN_WINDOW_HEIGHT = int(os.environ.get("SILENT_VOCABULARY_MIN_WINDOW_HEIGHT", "420"))
 DEFAULT_DAEMON_INTERVAL_MINUTES = int(
-    os.environ.get("VIPA_DEFAULT_DAEMON_INTERVAL_MINUTES", "15")
+    os.environ.get("SILENT_VOCABULARY_DEFAULT_DAEMON_INTERVAL_MINUTES", "15")
 )
 DEFAULT_NOTIFY_BACKEND = os.environ.get(
-    "VIPA_DEFAULT_NOTIFY_BACKEND",
+    "SILENT_VOCABULARY_DEFAULT_NOTIFY_BACKEND",
     NotifyBackend.DESKTOP.value,
 )
-DEFAULT_LANGUAGE = os.environ.get("VIPA_DEFAULT_LANGUAGE", "german")
+DEFAULT_LANGUAGE = os.environ.get("SILENT_VOCABULARY_DEFAULT_LANGUAGE", "german")
 INCLUDE_FIELD_NAMES = tuple(DEFAULT_INCLUDE.keys())
 
 

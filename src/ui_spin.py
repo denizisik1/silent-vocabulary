@@ -61,7 +61,7 @@ def _put_container_in_layout(layout: QLayout, spin: QWidget, container: QWidget)
 
 
 def _install_stepper(spin: QSpinBox | QDoubleSpinBox) -> None:
-    if bool(spin.property("vipaStepperWrapped")):
+    if bool(spin.property("silentVocabularyStepperWrapped")):
         return
     parent = spin.parentWidget()
     if parent is None:
@@ -87,7 +87,7 @@ def _install_stepper(spin: QSpinBox | QDoubleSpinBox) -> None:
 
     spin.setParent(container)
     spin.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
-    spin.setProperty("vipaStepperWrapped", True)
+    spin.setProperty("silentVocabularyStepperWrapped", True)
     if compact:
         spin.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         container.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Preferred)

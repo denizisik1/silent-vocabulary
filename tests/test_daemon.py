@@ -71,7 +71,7 @@ def test_send_notification_prefers_busctl(monkeypatch):
     monkeypatch.setattr("notify.shutil.which", fake_which)
     monkeypatch.setattr("notify.subprocess.run", fake_run)
 
-    send_notification("vipa", "der Abend - evening ([aːbənt])")
+    send_notification("silent-vocabulary", "der Abend - evening ([aːbənt])")
 
     assert calls
     assert calls[0][0] == "busctl"
@@ -98,7 +98,7 @@ def test_send_notification_falls_back_to_notify_send(monkeypatch):
     monkeypatch.setattr("notify.shutil.which", fake_which)
     monkeypatch.setattr("notify.subprocess.run", fake_run)
 
-    send_notification("vipa", "body")
+    send_notification("silent-vocabulary", "body")
 
     assert calls[0][0] == "notify-send"
 
@@ -107,12 +107,12 @@ def test_send_notification_requires_a_method(monkeypatch):
     monkeypatch.setattr("notify.shutil.which", lambda name: None)
 
     with pytest.raises(RuntimeError, match="No desktop notification method"):
-        send_notification("vipa", "body", backend=NotifyBackend.DESKTOP)
+        send_notification("silent-vocabulary", "body", backend=NotifyBackend.DESKTOP)
 
 
 def test_send_notification_windows_not_implemented():
     with pytest.raises(RuntimeError, match="Windows notifications"):
-        send_notification("vipa", "body", backend=NotifyBackend.WINDOWS)
+        send_notification("silent-vocabulary", "body", backend=NotifyBackend.WINDOWS)
 
 
 def test_desktop_notifier_label_detects_dunst(monkeypatch):
