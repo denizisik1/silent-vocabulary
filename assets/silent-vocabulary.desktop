@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=silent-vocabulary
+Comment=Practice vocabulary with IPA pronunciation
+Exec=silent-vocabulary
+TryExec=silent-vocabulary
+Icon=silent-vocabulary
+Terminal=false
+Categories=Education;
+StartupNotify=true
+StartupWMClass=silent-vocabulary

@@ -9,6 +9,19 @@ pip install -r requirements.txt
 python3 src/init.py
 ```
 
+## Desktop launcher (GNOME / app switcher icon)
+
+```bash
+chmod +x assets/silent-vocabulary.sh
+mkdir -p ~/.local/bin ~/.local/share/applications ~/.local/share/icons/hicolor/256x256/apps
+ln -sf "$(pwd)/assets/silent-vocabulary.sh" ~/.local/bin/silent-vocabulary
+ln -sf "$(pwd)/assets/silent-vocabulary.desktop" ~/.local/share/applications/silent-vocabulary.desktop
+ln -sf "$(pwd)/assets/icon.png" ~/.local/share/icons/hicolor/256x256/apps/silent-vocabulary.png
+update-desktop-database ~/.local/share/applications/ 2>/dev/null || true
+```
+
+Ensure `~/.local/bin` is on your `PATH`.
+
 ## Run (already installed)
 
 ```bash
@@ -23,6 +36,9 @@ python3 src/init.py
 ```bash
 cd ..
 rm -rf silent-vocabulary
+rm -f "$HOME/.local/bin/silent-vocabulary"
+rm -f "$HOME/.local/share/applications/silent-vocabulary.desktop"
+rm -f "$HOME/.local/share/icons/hicolor/256x256/apps/silent-vocabulary.png"
 rm -rf "$HOME/.config/silent-vocabulary"
 rm -rf "${XDG_DATA_HOME:-$HOME/.local/share}/silent-vocabulary"
 ```

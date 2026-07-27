@@ -23,7 +23,12 @@ from browser_config import (
     apply_browser_config,
 )
 from words.constants import DEFAULT_INCLUDE, LANGUAGE_VOCABULARY_FILES
-from zoom import DEFAULT_ZOOM_PERCENT, clamp_zoom_percent
+from zoom import (
+    DEFAULT_MONO_ZOOM_PERCENT,
+    DEFAULT_REFERENCE_ZOOM_PERCENT,
+    DEFAULT_ZOOM_PERCENT,
+    clamp_zoom_percent,
+)
 
 CONFIG_DIR = Path(user_config_dir("silent-vocabulary", appauthor=False))
 CONFIG_PATH = CONFIG_DIR / "silent-vocabulary.toml"
@@ -53,6 +58,8 @@ class WindowConfig:
 class AppConfig:
     theme: str = DEFAULT_THEME
     zoom_percent: int = DEFAULT_ZOOM_PERCENT
+    mono_zoom_percent: int = DEFAULT_MONO_ZOOM_PERCENT
+    reference_zoom_percent: int = DEFAULT_REFERENCE_ZOOM_PERCENT
     protect_base_vocabulary: bool = True
     minimize_to_tray_on_daemon: bool = True
     daemon_interval_minutes: int = DEFAULT_DAEMON_INTERVAL_MINUTES
@@ -97,9 +104,9 @@ def _parse_theme_name(theme_value) -> str:
     return theme_value
 
 
-def _parse_zoom_percent(zoom_value) -> int:
+def _parse_zoom_percent(zoom_value, default: int = DEFAULT_ZOOM_PERCENT) -> int:
     if not isinstance(zoom_value, int):
-        return DEFAULT_ZOOM_PERCENT
+        return default
     return clamp_zoom_percent(zoom_value)
 
 
@@ -228,6 +235,14 @@ def load_config() -> AppConfig:
     zoom_percent = _parse_zoom_percent(
         config_document.get("zoom_percent", DEFAULT_ZOOM_PERCENT)
     )
+    mono_zoom_percent = _parse_zoom_percent(
+        config_document.get("mono_zoom_percent", DEFAULT_MONO_ZOOM_PERCENT),
+        DEFAULT_MONO_ZOOM_PERCENT,
+    )
+    reference_zoom_percent = _parse_zoom_percent(
+        config_document.get("reference_zoom_percent", DEFAULT_REFERENCE_ZOOM_PERCENT),
+        DEFAULT_REFERENCE_ZOOM_PERCENT,
+    )
     protect_base_vocabulary = _parse_bool(
         config_document.get("protect_base_vocabulary", True),
         True,
@@ -255,6 +270,8 @@ def load_config() -> AppConfig:
     config = AppConfig(
         theme=theme,
         zoom_percent=zoom_percent,
+        mono_zoom_percent=mono_zoom_percent,
+        reference_zoom_percent=reference_zoom_percent,
         protect_base_vocabulary=protect_base_vocabulary,
         minimize_to_tray_on_daemon=minimize_to_tray_on_daemon,
         daemon_interval_minutes=daemon_interval_minutes,
@@ -275,6 +292,8 @@ def save_config(config: AppConfig) -> None:
     config_data = {
         "theme": config.theme,
         "zoom_percent": clamp_zoom_percent(config.zoom_percent),
+        "mono_zoom_percent": clamp_zoom_percent(config.mono_zoom_percent),
+        "reference_zoom_percent": clamp_zoom_percent(config.reference_zoom_percent),
         "protect_base_vocabulary": config.protect_base_vocabulary,
         "minimize_to_tray_on_daemon": config.minimize_to_tray_on_daemon,
         "daemon_interval_minutes": config.daemon_interval_minutes,
