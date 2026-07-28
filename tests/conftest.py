@@ -18,4 +18,9 @@ def qapp():
     application = QApplication.instance()
     if application is None:
         application = QApplication([])
+    if not isinstance(application, QApplication):
+        raise RuntimeError(
+            "A QCoreApplication already exists; create QApplication via the qapp "
+            "fixture before any QCoreApplication."
+        )
     return application
