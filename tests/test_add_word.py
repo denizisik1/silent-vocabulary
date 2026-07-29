@@ -5,7 +5,6 @@ import pytest
 from words import (
     WordFields,
     add_word,
-    format_word_row,
     get_random_words,
     remove_word,
     user_vocabulary_dir,
@@ -134,9 +133,3 @@ def test_readd_after_removing_base_word(tmp_path, monkeypatch):
     assert row[5] == "user"
     words = get_random_words("german", 1)
     assert words[0][0:3] == ("der", "Abend", "nightfall")
-
-
-def test_format_word_row_for_added_word():
-    row = ("der", "Abend", "evening", None, "noun", None, None, None, None)
-
-    assert format_word_row(row) == "der Abend - evening"

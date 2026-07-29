@@ -19,16 +19,6 @@ CSV_COLUMNS = (
     "plural",
 )
 
-DISPLAY_COLUMNS = (
-    "article",
-    "word",
-    "meaning",
-    "pronunciation",
-    "example",
-    "translation",
-    "plural",
-)
-
 DEFAULT_INCLUDE = {
     "article": True,
     "word": True,
@@ -38,13 +28,6 @@ DEFAULT_INCLUDE = {
     "translation": False,
     "plural": False,
 }
-
-CLASSIFICATIONS = (
-    "noun",
-    "verb",
-    "adjective",
-    "adverb",
-)
 
 LANGUAGE_VOCABULARY_FILES = {
     "german": {

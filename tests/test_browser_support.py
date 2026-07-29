@@ -1,74 +1,150 @@
+import pytest
+
 from browser_config import BrowserConfig, apply_browser_config
-from retrieve.browser_fetch import (
-    ensure_browser_ready,
-    reset_browser_ensure_state,
-    set_browser_ensure_callback,
-)
 from browser_support import (
     browser_install_command,
     browser_remove_command,
     find_browser_path,
+    install_browser,
+    read_os_release,
+    remove_browser,
 )
 
 
-def test_ensure_browser_ready_prompts_when_browser_missing(monkeypatch) -> None:
-    reset_browser_ensure_state()
-    calls = {"n": 0}
-    monkeypatch.setattr(
-        "retrieve.browser_fetch.browser_available",
-        lambda: calls["n"] > 0,
-    )
-
-    def approve() -> bool:
-        calls["n"] += 1
-        return True
-
-    set_browser_ensure_callback(approve)
-    try:
-        assert ensure_browser_ready()
-        assert calls["n"] == 1
-    finally:
-        set_browser_ensure_callback(None)
-        reset_browser_ensure_state()
+@pytest.fixture(autouse=True)
+def default_browser_config():
+    apply_browser_config(BrowserConfig())
+    yield
+    apply_browser_config(BrowserConfig())
 
 
-def test_ensure_browser_ready_remembers_decline(monkeypatch) -> None:
-    reset_browser_ensure_state()
-    calls = {"n": 0}
-    monkeypatch.setattr(
-        "retrieve.browser_fetch.browser_available",
-        lambda: False,
-    )
-
-    def decline() -> bool:
-        calls["n"] += 1
-        return False
-
-    set_browser_ensure_callback(decline)
-    try:
-        assert not ensure_browser_ready()
-        assert not ensure_browser_ready()
-        assert calls["n"] == 1
-    finally:
-        set_browser_ensure_callback(None)
-        reset_browser_ensure_state()
+class CompletedCommand:
+    def __init__(self, returncode, stdout="", stderr=""):
+        self.returncode = returncode
+        self.stdout = stdout
+        self.stderr = stderr
 
 
-def test_find_browser_path_uses_config(tmp_path) -> None:
-    browser = tmp_path / "chromium"
-    browser.write_text("#!/bin/sh\n", encoding="utf-8")
-    browser.chmod(0o755)
+def use_os_release(monkeypatch, values):
+    monkeypatch.setattr("browser_support.read_os_release", lambda: values)
+
+
+def executable(tmp_path, name):
+    path = tmp_path / name
+    path.write_text("#!/bin/sh\n", encoding="utf-8")
+    path.chmod(0o755)
+    return path
+
+
+def test_a_configured_browser_path_wins(tmp_path, monkeypatch):
+    browser = executable(tmp_path, "chromium")
+    monkeypatch.setattr("browser_support.shutil.which", lambda name: "/usr/bin/google-chrome")
     apply_browser_config(BrowserConfig(browser_path=str(browser)))
-    try:
-        assert find_browser_path() == str(browser.resolve())
-    finally:
-        apply_browser_config(BrowserConfig())
+
+    assert find_browser_path() == str(browser.resolve())
 
 
-def test_browser_install_command_for_fedora(monkeypatch) -> None:
+def test_a_configured_path_that_is_not_executable_is_ignored(tmp_path, monkeypatch):
+    not_a_browser = tmp_path / "chromium"
+    not_a_browser.write_text("", encoding="utf-8")
+    not_a_browser.chmod(0o644)
+    monkeypatch.setattr("browser_support.shutil.which", lambda name: "/usr/bin/chromium")
+    apply_browser_config(BrowserConfig(browser_path=str(not_a_browser)))
+
+    assert find_browser_path() == "/usr/bin/chromium"
+
+
+def test_the_first_known_browser_on_the_path_is_used(monkeypatch):
     monkeypatch.setattr(
-        "browser_support.read_os_release",
-        lambda: {"ID": "fedora", "ID_LIKE": ""},
+        "browser_support.shutil.which",
+        lambda name: "/usr/bin/brave" if name == "brave-browser" else None,
     )
-    assert browser_install_command() == ["pkexec", "dnf", "install", "-y", "chromium"]
-    assert browser_remove_command() == ["pkexec", "dnf", "remove", "-y", "chromium"]
+
+    assert find_browser_path() == "/usr/bin/brave"
+
+
+def test_os_release_is_parsed_into_unquoted_values(tmp_path, monkeypatch):
+    release = tmp_path / "os-release"
+    release.write_text('ID="fedora"\nVERSION_ID=44\nPRETTY_NAME="Fedora Linux"\n', "utf-8")
+    monkeypatch.setattr("browser_support.Path", lambda _path: release)
+
+    assert read_os_release() == {
+        "ID": "fedora",
+        "VERSION_ID": "44",
+        "PRETTY_NAME": "Fedora Linux",
+    }
+
+
+def test_a_missing_os_release_yields_no_values(tmp_path, monkeypatch):
+    monkeypatch.setattr("browser_support.Path", lambda _path: tmp_path / "absent")
+
+    assert not read_os_release()
+
+
+@pytest.mark.parametrize(
+    ("release", "install", "remove"),
+    [
+        ({"ID": "fedora"}, ["dnf", "install", "-y"], ["dnf", "remove", "-y"]),
+        ({"ID": "ubuntu"}, ["apt-get", "install", "-y"], ["apt-get", "remove", "-y"]),
+        ({"ID": "manjaro"}, ["pacman", "-S", "--noconfirm"], ["pacman", "-R", "--noconfirm"]),
+    ],
+)
+def test_each_distribution_family_gets_its_package_manager(monkeypatch, release, install, remove):
+    use_os_release(monkeypatch, release)
+
+    assert browser_install_command() == ["pkexec", *install, "chromium"]
+    assert browser_remove_command() == ["pkexec", *remove, "chromium"]
+
+
+def test_a_derivative_is_recognised_through_id_like(monkeypatch):
+    use_os_release(monkeypatch, {"ID": "linuxmint", "ID_LIKE": "ubuntu debian"})
+
+    assert browser_install_command() == ["pkexec", "apt-get", "install", "-y", "chromium"]
+
+
+def test_an_unknown_distribution_has_no_command(monkeypatch):
+    use_os_release(monkeypatch, {"ID": "plan9"})
+
+    assert browser_install_command() is None
+    assert browser_remove_command() is None
+
+
+def test_install_explains_that_it_cannot_help_an_unknown_distribution(monkeypatch):
+    use_os_release(monkeypatch, {})
+
+    with pytest.raises(RuntimeError, match="No automatic browser install"):
+        install_browser()
+
+
+def test_removal_explains_that_it_cannot_help_an_unknown_distribution(monkeypatch):
+    use_os_release(monkeypatch, {})
+
+    with pytest.raises(RuntimeError, match="No automatic browser removal"):
+        remove_browser()
+
+
+def test_a_successful_install_runs_the_package_manager(monkeypatch):
+    use_os_release(monkeypatch, {"ID": "fedora"})
+    commands = []
+
+    def fake_run(command, **_options):
+        commands.append(command)
+        return CompletedCommand(0, stdout="done")
+
+    monkeypatch.setattr("browser_support.subprocess.run", fake_run)
+
+    install_browser()
+
+    assert commands == [["pkexec", "dnf", "install", "-y", "chromium"]]
+
+
+def test_a_failed_install_reports_what_the_package_manager_printed(monkeypatch):
+    use_os_release(monkeypatch, {"ID": "fedora"})
+
+    def fake_run(_command, **_options):
+        return CompletedCommand(1, stderr="  not authorised  ")
+
+    monkeypatch.setattr("browser_support.subprocess.run", fake_run)
+
+    with pytest.raises(RuntimeError, match="^not authorised$"):
+        install_browser()

@@ -107,7 +107,6 @@ def test_apply_browser_config_updates_runtime(monkeypatch):
     apply_browser_config(BrowserConfig())
 
 
-
 def test_load_protect_base_vocabulary_default_true(tmp_path, monkeypatch):
     monkeypatch.setattr(config, "CONFIG_PATH", tmp_path / "silent-vocabulary.toml")
 
