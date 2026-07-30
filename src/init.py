@@ -1,4 +1,4 @@
-# pylint: disable=wrong-import-position,wrong-import-order
+# pylint: disable=wrong-import-position,wrong-import-order  # env checks must run first
 import sys
 from functools import partial
 from pathlib import Path
@@ -9,31 +9,31 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from universal.env_check import check_env_files  # noqa: E402
+from universal.env_check import check_env_files
 
 check_env_files(PROJECT_ROOT)
 load_dotenv(PROJECT_ROOT / ".env")
 
-from PySide6.QtCore import QFile, QIODevice  # noqa: E402
-from PySide6.QtUiTools import QUiLoader  # noqa: E402
-from PySide6.QtWidgets import QApplication, QLabel, QMainWindow  # noqa: E402
-from config import AppConfig, load_config, save_config  # noqa: E402
-from ui_daemon import stop_daemon, wire_daemon  # noqa: E402
-from ui_export import wire_export_overlay  # noqa: E402
-from ui_protect import apply_protect_setting, wire_protect_vocabulary  # noqa: E402
-from ui_tray import app_icon, wire_tray  # noqa: E402
-from ui_retrieve import wire_retrieve  # noqa: E402
-from ui_reference import wire_reference  # noqa: E402
-from ui_settings import wire_settings  # noqa: E402
-from ui_words import (  # noqa: E402
+from PySide6.QtCore import QFile, QIODevice
+from PySide6.QtUiTools import QUiLoader
+from PySide6.QtWidgets import QApplication, QLabel, QMainWindow
+from config import AppConfig, load_config, save_config
+from ui_daemon import stop_daemon, wire_daemon
+from ui_export import wire_export_overlay
+from ui_protect import apply_protect_setting, wire_protect_vocabulary
+from ui_tray import app_icon, wire_tray
+from ui_retrieve import wire_retrieve
+from ui_reference import wire_reference
+from ui_settings import wire_settings
+from ui_words import (
     apply_session_config,
     wire_add_remove_word,
     wire_get_words,
     wire_session_config,
 )
-from ui_zoom import apply_appearance, wire_theme, wire_zoom  # noqa: E402
-from ui_spin import install_spin_steppers  # noqa: E402
-from version import __version__  # noqa: E402
+from ui_zoom import apply_appearance, wire_theme, wire_zoom
+from ui_spin import install_spin_steppers
+from version import __version__
 
 UI_PATH = PROJECT_ROOT / "ui" / "main_window.ui"
 

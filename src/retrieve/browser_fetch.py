@@ -9,8 +9,8 @@ from retrieve.browser_session import run_with_browser
 from retrieve.headword import WantedIpa
 
 _EnsureCallback = Callable[[], bool]
-_ensure_callback: _EnsureCallback | None = None  # pylint: disable=invalid-name
-_install_declined = False  # pylint: disable=invalid-name
+_ensure_callback: _EnsureCallback | None = None  # pylint: disable=invalid-name  # mutable module state  # noqa: E501  # fmt: skip
+_install_declined = False  # pylint: disable=invalid-name  # mutable module state
 
 _MISSING_BROWSER_MESSAGE = (
     "No Chrome/Chromium/Brave browser binary was found for browser fetch. "
@@ -23,17 +23,17 @@ def browser_available() -> bool:
 
 
 def set_browser_ensure_callback(callback: _EnsureCallback | None) -> None:
-    global _ensure_callback  # pylint: disable=global-statement
+    global _ensure_callback  # pylint: disable=global-statement  # UI install prompt hook
     _ensure_callback = callback
 
 
 def reset_browser_ensure_state() -> None:
-    global _install_declined  # pylint: disable=global-statement
+    global _install_declined  # pylint: disable=global-statement  # user declined this session
     _install_declined = False
 
 
 def ensure_browser_ready() -> bool:
-    global _install_declined  # pylint: disable=global-statement
+    global _install_declined  # pylint: disable=global-statement  # remember a declined prompt
     if browser_available():
         return True
     if _install_declined:

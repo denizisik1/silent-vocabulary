@@ -112,7 +112,7 @@ def _on_tray_activated(
 
 
 def _stop_daemon_from_tray(window: QMainWindow, application: QApplication) -> None:
-    from ui_daemon import stop_daemon  # pylint: disable=import-outside-toplevel
+    from ui_daemon import stop_daemon  # pylint: disable=import-outside-toplevel  # circular import
 
     stop_daemon(window)
     show_window_from_tray(window, application)
@@ -144,7 +144,7 @@ def show_window_from_tray(window: QMainWindow, application: QApplication) -> Non
     _sync_quit_on_last_window_closed(window, application)
 
 
-def show_tray_message(  # pylint: disable=too-many-arguments
+def show_tray_message(  # pylint: disable=too-many-arguments  # tray API needs window + message
     window: QMainWindow,
     application: QApplication,
     title: str,
@@ -191,7 +191,7 @@ def _install_window_close_handler(window: QMainWindow, application: QApplication
         else:
             event.accept()
 
-    window.closeEvent = close_event  # type: ignore[method-assign]
+    window.closeEvent = close_event  # type: ignore[method-assign]  # Qt lets us replace the handler
 
 
 def _on_minimize_to_tray_toggled(config: AppConfig, checked: bool) -> None:

@@ -1,4 +1,4 @@
-# pylint: disable=wrong-import-position,wrong-import-order
+# pylint: disable=wrong-import-position,wrong-import-order  # .env must load first
 import argparse
 import sys
 from dataclasses import replace
@@ -10,13 +10,13 @@ from dotenv import load_dotenv
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(PROJECT_ROOT / ".env")
 
-from browser_config import (  # noqa: E402
+from browser_config import (
     FAST_BROWSER_WAIT_SECONDS,
     BrowserConfig,
     apply_browser_config,
 )
-from config import load_config  # noqa: E402
-from retrieve.bulk import (  # noqa: E402
+from config import load_config
+from retrieve.bulk import (
     DEFAULT_DELAY_SECONDS,
     DEFAULT_MAX_CONSECUTIVE_FAILURES,
     BulkOutcome,
@@ -24,23 +24,23 @@ from retrieve.bulk import (  # noqa: E402
     fetch_pronunciations,
     rows_needing_pronunciation,
 )
-from retrieve.progress import KIND_BAD, KIND_GOOD, KIND_NOTE  # noqa: E402
-from retrieve.sources import backup_endpoint, primary_endpoint  # noqa: E402
-from retrieve.strategy import (  # noqa: E402
+from retrieve.progress import KIND_BAD, KIND_GOOD, KIND_NOTE
+from retrieve.sources import backup_endpoint, primary_endpoint
+from retrieve.strategy import (
     RETRIEVE_STRATEGIES,
     basic_attempts_only,
     normalize_retrieve_strategy,
     retrieve_attempt_order,
 )
-from pronunciation_repository import (  # noqa: E402
+from pronunciation_repository import (
     mark_word_failed,
     save_pronunciation,
     words_without_marked_failures,
 )
-from terminal_output import print_notice, print_progress  # noqa: E402
-from words.constants import LANGUAGE_VOCABULARY_FILES  # noqa: E402
-from words.lookup import describe_entry  # noqa: E402
-from words.paths import shipped_failures_path, shipped_pronunciations_path  # noqa: E402
+from terminal_output import print_notice, print_progress
+from words.constants import LANGUAGE_VOCABULARY_FILES
+from words.lookup import describe_entry
+from words.paths import shipped_failures_path, shipped_pronunciations_path
 
 
 def parse_arguments(argv: list[str] | None = None) -> argparse.Namespace:

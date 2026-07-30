@@ -14,9 +14,9 @@ BrowserWork = Callable[[Any], Awaitable[str]]
 BULK_PROFILE_NAME = "bulk"
 APP_PROFILE_NAME = "app"
 
-_session_loop: asyncio.AbstractEventLoop | None = None  # pylint: disable=invalid-name
-_session_browser: Any = None  # pylint: disable=invalid-name
-_session_wanted = False  # pylint: disable=invalid-name
+_session_loop: asyncio.AbstractEventLoop | None = None  # pylint: disable=invalid-name,line-too-long  # mutable module state  # noqa: E501  # fmt: skip
+_session_browser: Any = None  # pylint: disable=invalid-name  # mutable module state
+_session_wanted = False  # pylint: disable=invalid-name  # mutable module state
 
 
 def current_profile_dir() -> Path:
@@ -25,7 +25,7 @@ def current_profile_dir() -> Path:
 
 
 async def _start_browser() -> Any:
-    import zendriver as zd  # pylint: disable=import-outside-toplevel
+    import zendriver as zd  # pylint: disable=import-outside-toplevel  # only if a session starts
 
     browser_settings = get_browser_config()
     profile = current_profile_dir()
@@ -45,7 +45,7 @@ def is_browser_session_open() -> bool:
 
 
 def _open_session() -> None:
-    global _session_loop, _session_browser  # pylint: disable=global-statement
+    global _session_loop, _session_browser  # pylint: disable=global-statement  # one reused browser
     loop = asyncio.new_event_loop()
     try:
         browser = loop.run_until_complete(_start_browser())
@@ -59,7 +59,7 @@ def _open_session() -> None:
 
 
 def close_browser_session() -> None:
-    global _session_loop, _session_browser  # pylint: disable=global-statement
+    global _session_loop, _session_browser  # pylint: disable=global-statement  # one reused browser
     loop = _session_loop
     browser = _session_browser
     _session_loop = None
@@ -69,8 +69,8 @@ def close_browser_session() -> None:
 
     try:
         loop.run_until_complete(browser.stop())
-    except Exception:  # nosec B110 # pylint: disable=broad-exception-caught
-        pass
+    except Exception as error:  # pylint: disable=broad-exception-caught  # still close the loop
+        report_progress(f"browser close failed: {error}", KIND_NOTE)
     finally:
         loop.close()
     report_progress("browser closed", KIND_NOTE)
@@ -78,7 +78,7 @@ def close_browser_session() -> None:
 
 @contextmanager
 def reused_browser_session() -> Iterator[None]:
-    global _session_wanted  # pylint: disable=global-statement
+    global _session_wanted  # pylint: disable=global-statement  # bulk vs one-shot profile
     previous = _session_wanted
     _session_wanted = True
     try:

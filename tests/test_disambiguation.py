@@ -17,7 +17,7 @@ class FakeInputDialog:
         self.prompts = []
         self.offered = []
 
-    def getItem(  # pylint: disable=invalid-name
+    def getItem(  # pylint: disable=invalid-name  # Qt QInputDialog.getItem
         self, _parent, _title, prompt, labels, _current, _editable
     ):
         self.prompts.append(prompt)

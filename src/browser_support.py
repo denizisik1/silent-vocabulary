@@ -1,6 +1,6 @@
 import os
 import shutil
-import subprocess  # nosec B404
+import subprocess  # fixed argv lists for package install/remove  # nosec B404
 from pathlib import Path
 
 from platformdirs import user_data_dir
@@ -45,7 +45,7 @@ def find_browser_path() -> str | None:
             return found
 
     try:
-        from zendriver.core.config import find_executable  # pylint: disable=import-outside-toplevel
+        from zendriver.core.config import find_executable  # pylint: disable=import-outside-toplevel,line-too-long  # optional PATH fallback  # noqa: E501  # fmt: skip
     except ImportError:
         return None
     try:
@@ -108,7 +108,7 @@ def browser_remove_command() -> list[str] | None:
 
 
 def _run_package_command(command: list[str], *, action: str) -> None:
-    completed = subprocess.run(  # nosec B603
+    completed = subprocess.run(  # fixed package-manager argv, no shell  # nosec B603
         command,
         capture_output=True,
         text=True,

@@ -59,7 +59,7 @@ _STRATEGY_RADIOS = {
 }
 
 
-class RetrieveController(QObject):  # pylint: disable=too-many-instance-attributes
+class RetrieveController(QObject):  # pylint: disable=too-many-instance-attributes  # UI job state
     def __init__(self, window: QMainWindow, config: AppConfig) -> None:
         super().__init__(window)
         self._window = window

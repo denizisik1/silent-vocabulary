@@ -17,11 +17,11 @@ _MARKERS = {
 
 ReportCallback = Callable[[str, str], None]
 
-_reporter: ReportCallback | None = None  # pylint: disable=invalid-name
+_reporter: ReportCallback | None = None  # pylint: disable=invalid-name  # current run hook
 
 
 def set_retrieve_reporter(report: ReportCallback | None) -> None:
-    global _reporter  # pylint: disable=global-statement
+    global _reporter  # pylint: disable=global-statement  # current run hook
     _reporter = report
 
 

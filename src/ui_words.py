@@ -243,7 +243,7 @@ def clear_add_word_fields(window: QMainWindow) -> None:
     classification.setCurrentIndex(0)
 
 
-def populate_add_form_from_row(  # pylint: disable=too-many-locals
+def populate_add_form_from_row(  # pylint: disable=too-many-locals  # one local per form widget
     window: QMainWindow, row: tuple
 ) -> None:
     (

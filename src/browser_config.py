@@ -10,7 +10,7 @@ DEFAULT_BROWSER_CONNECT_TRIES = 40
 
 
 @dataclass
-class BrowserConfig:  # pylint: disable=too-many-instance-attributes
+class BrowserConfig:  # pylint: disable=too-many-instance-attributes  # settings bag
     headless: bool = False
     sandbox: bool = False
     wait_seconds: float = DEFAULT_BROWSER_WAIT_SECONDS
@@ -30,7 +30,7 @@ def get_browser_config() -> BrowserConfig:
 
 
 def apply_browser_config(browser: BrowserConfig) -> None:
-    global _RUNTIME_BROWSER  # pylint: disable=global-statement
+    global _RUNTIME_BROWSER  # pylint: disable=global-statement  # process-wide browser settings
     _RUNTIME_BROWSER = BrowserConfig(
         headless=browser.headless,
         sandbox=browser.sandbox,

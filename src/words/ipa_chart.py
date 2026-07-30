@@ -1,7 +1,7 @@
 from functools import cache
 from pathlib import Path
 
-from lxml import html as html_parser  # type: ignore[import-untyped]
+from lxml import html as html_parser  # type: ignore[import-untyped]  # no stubs
 
 from words.ipa_runs import example_html_from_cell
 

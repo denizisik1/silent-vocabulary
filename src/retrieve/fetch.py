@@ -1,6 +1,6 @@
 import os
 
-import requests  # type: ignore[import-untyped]
+import requests  # type: ignore[import-untyped]  # no stubs
 
 from browser_config import get_browser_config
 from retrieve.browser_fetch import ensure_browser_ready, fetch_html_via_browser
@@ -159,6 +159,6 @@ def _probe_with_browser(
             url,
             timeout_seconds=timeout_seconds + get_browser_config().extra_timeout_seconds,
         )
-    except Exception as error:  # pylint: disable=broad-exception-caught
+    except Exception as error:  # pylint: disable=broad-exception-caught  # probe should not raise
         return False, f"{requests_detail}; browser: {error}"
     return True, f"{requests_detail}; browser: ok"

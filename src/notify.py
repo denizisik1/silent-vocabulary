@@ -1,6 +1,6 @@
 import os
 import shutil
-import subprocess  # nosec B404
+import subprocess  # fixed argv lists for busctl/notify-send  # nosec B404
 from enum import Enum
 
 
@@ -21,11 +21,33 @@ def desktop_notifications_available() -> bool:
     return notify_send_available() or busctl_available()
 
 
-def _notification_service_unit() -> str | None:  # pylint: disable=too-many-return-statements
+_NOTIFICATION_UNITS = (
+    ("dunst", "dunst"),
+    ("gnome", "org.gnome.Shell.Notifications"),
+    ("gjs", "org.gnome.Shell.Notifications"),
+    ("plasma", "plasma"),
+    ("kde", "plasma"),
+    ("xfce", "xfce4-notifyd"),
+    ("mako", "mako"),
+    ("swaync", "swaync"),
+)
+
+_NOTIFIER_LABELS = (
+    ("dunst", "Dunst"),
+    ("gnome", "GNOME"),
+    ("plasma", "KDE"),
+    ("kde", "KDE"),
+    ("xfce", "XFCE"),
+    ("mako", "Mako"),
+    ("swaync", "SwayNC"),
+)
+
+
+def _notification_service_unit() -> str | None:
     if not busctl_available():
         return None
 
-    completed = subprocess.run(  # nosec B603 B607
+    completed = subprocess.run(  # fixed busctl argv; PATH after which()  # nosec B603 B607
         ["busctl", "--user", "status", "org.freedesktop.Notifications"],
         check=False,
         capture_output=True,
@@ -46,37 +68,19 @@ def _notification_service_unit() -> str | None:  # pylint: disable=too-many-retu
             command_line = line.split("=", 1)[1].strip().casefold()
 
     probe = f"{unit_name or ''} {exe_path} {command_line}"
-    if "dunst" in probe:
-        return "dunst"
-    if "gnome" in probe or "gjs" in probe:
-        return "org.gnome.Shell.Notifications"
-    if "plasma" in probe or "kde" in probe:
-        return "plasma"
-    if "xfce" in probe:
-        return "xfce4-notifyd"
-    if "mako" in probe:
-        return "mako"
-    if "swaync" in probe:
-        return "swaync"
+    for needle, unit in _NOTIFICATION_UNITS:
+        if needle in probe:
+            return unit
     return unit_name
 
 
-def desktop_notifier_label() -> str:  # pylint: disable=too-many-return-statements
+def desktop_notifier_label() -> str:
     unit = _notification_service_unit()
     if unit:
         lowered = unit.casefold()
-        if "dunst" in lowered:
-            return "Dunst"
-        if "gnome" in lowered:
-            return "GNOME"
-        if "plasma" in lowered or "kde" in lowered:
-            return "KDE"
-        if "xfce" in lowered:
-            return "XFCE"
-        if "mako" in lowered:
-            return "Mako"
-        if "swaync" in lowered:
-            return "SwayNC"
+        for needle, label in _NOTIFIER_LABELS:
+            if needle in lowered:
+                return label
         return unit
     if desktop_notifications_available():
         return "Desktop"
@@ -110,7 +114,12 @@ def _send_via_busctl(title: str, body: str, *, expire_ms: int) -> None:
         "0",
         str(expire_ms),
     ]
-    completed = subprocess.run(command, check=False, capture_output=True, text=True)  # nosec B603
+    completed = subprocess.run(  # fixed busctl argv, no shell  # nosec B603
+        command,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
     if completed.returncode != 0:
         detail = (completed.stderr or completed.stdout or "unknown error").strip()
         raise RuntimeError(f"Desktop notification failed: {detail}")
@@ -125,7 +134,12 @@ def _send_via_notify_send(title: str, body: str, *, expire_ms: int) -> None:
         title,
         body,
     ]
-    completed = subprocess.run(command, check=False, capture_output=True, text=True)  # nosec B603
+    completed = subprocess.run(  # fixed notify-send argv, no shell  # nosec B603
+        command,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
     if completed.returncode != 0:
         detail = (completed.stderr or completed.stdout or "unknown error").strip()
         raise RuntimeError(f"notify-send failed: {detail}")

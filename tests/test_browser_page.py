@@ -36,7 +36,7 @@ class FakePage:
             return self._pages.pop(0)
         return self._pages[0]
 
-    async def find(self, text, best_match=True, timeout=10):  # pylint: disable=unused-argument
+    async def find(self, text, **_options):
         self.log.append(f"find {text}")
         if text != self._consent_label:
             raise TimeoutError(f"no element for {text}")
@@ -44,7 +44,7 @@ class FakePage:
 
 
 class FakeCloudflarePage(FakePage):
-    async def verify_cf(self, timeout=15.0):  # pylint: disable=unused-argument
+    async def verify_cf(self, timeout=15.0):
         self.log.append(f"verify_cf {timeout}")
 
 

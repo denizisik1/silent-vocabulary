@@ -21,7 +21,7 @@ from words.paths import additions_path, removals_path, vocabulary_dir
 
 
 @dataclass(frozen=True)
-class WordFields:  # pylint: disable=too-many-instance-attributes
+class WordFields:  # pylint: disable=too-many-instance-attributes  # vocabulary row shape
     word: str
     article: str | None = None
     meaning: str | None = None
@@ -205,7 +205,7 @@ def add_word(language_key: str, fields: WordFields) -> tuple:
     return row
 
 
-def upsert_pronunciation(  # pylint: disable=too-many-arguments,too-many-locals
+def upsert_pronunciation(  # pylint: disable=too-many-arguments,too-many-locals  # row + lookup keys
     language_key: str,
     word: str,
     pronunciation: str,

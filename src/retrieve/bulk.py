@@ -56,7 +56,7 @@ def jittered_delay_seconds(delay_seconds: float) -> float:
         return 0.0
     lowest = delay_seconds * (1.0 - _JITTER_RATIO)
     highest = delay_seconds * (1.0 + _JITTER_RATIO)
-    return random.uniform(lowest, highest)  # nosec B311
+    return random.uniform(lowest, highest)  # delay jitter, not cryptography  # nosec B311
 
 
 def failure_backoff_seconds(delay_seconds: float, consecutive_failures: int) -> float:
@@ -69,7 +69,7 @@ def wants_browser(settings: BulkSettings) -> bool:
     return any(fetch_method == FETCH_METHOD_BROWSER for _label, fetch_method in settings.attempts)
 
 
-def fetch_pronunciations(  # pylint: disable=too-many-arguments
+def fetch_pronunciations(  # pylint: disable=too-many-arguments  # bulk-run hooks
     rows: Sequence[tuple],
     settings: BulkSettings,
     *,
@@ -83,7 +83,7 @@ def fetch_pronunciations(  # pylint: disable=too-many-arguments
         return _fetch_every_row(rows, settings, save=save, fail=fail, report=report, sleep=sleep)
 
 
-def _fetch_every_row(  # pylint: disable=too-many-arguments
+def _fetch_every_row(  # pylint: disable=too-many-arguments  # same bulk-run hooks
     rows: Sequence[tuple],
     settings: BulkSettings,
     *,

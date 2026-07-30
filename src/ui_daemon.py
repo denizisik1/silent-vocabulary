@@ -230,7 +230,7 @@ def _surface_notify_failure_alert(
             pass
 
     if application is not None:
-        from ui_tray import show_tray_message  # pylint: disable=import-outside-toplevel
+        from ui_tray import show_tray_message  # pylint: disable=import-outside-toplevel  # circular import  # noqa: E501  # fmt: skip
 
         if show_tray_message(window, application, title, body):
             return "background"
@@ -318,7 +318,7 @@ def stop_daemon(
     _update_daemon_button(window, False)
     _set_status(window, status_message or "Daemon stopped")
     if application is not None:
-        from ui_tray import show_window_from_tray  # pylint: disable=import-outside-toplevel
+        from ui_tray import show_window_from_tray  # pylint: disable=import-outside-toplevel  # circular import  # noqa: E501  # fmt: skip
 
         show_window_from_tray(window, application)
 
@@ -359,7 +359,7 @@ def start_daemon(
     _set_status(window, f"Daemon running every {minutes} min ({backend.value})")
 
     if application is not None and config is not None:
-        from ui_tray import try_minimize_on_daemon_start  # pylint: disable=import-outside-toplevel
+        from ui_tray import try_minimize_on_daemon_start  # pylint: disable=import-outside-toplevel  # circular import  # noqa: E501  # fmt: skip
 
         if try_minimize_on_daemon_start(window, application, config):
             _set_status(

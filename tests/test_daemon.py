@@ -33,8 +33,8 @@ def test_parse_interval_minutes_rejects_zero():
 
 
 @pytest.mark.usefixtures("qapp")
-def test_practice_daemon_fires_immediately_and_can_stop():
-    ticks: list[int] = []  # type: ignore[annotation-unchecked]
+def test_practice_daemon_fires_immediately_and_can_stop() -> None:
+    ticks: list[int] = []
 
     def on_tick() -> None:
         ticks.append(1)
@@ -48,8 +48,8 @@ def test_practice_daemon_fires_immediately_and_can_stop():
     assert not daemon.is_running()
 
 
-def test_send_notification_prefers_busctl(monkeypatch):
-    calls: list[list[str]] = []  # type: ignore[annotation-unchecked]
+def test_send_notification_prefers_busctl(monkeypatch) -> None:
+    calls: list[list[str]] = []
 
     def fake_which(name: str) -> str | None:
         if name == "busctl":
@@ -77,8 +77,8 @@ def test_send_notification_prefers_busctl(monkeypatch):
     assert "der Abend - evening ([aːbənt])" in calls[0]
 
 
-def test_send_notification_falls_back_to_notify_send(monkeypatch):
-    calls: list[list[str]] = []  # type: ignore[annotation-unchecked]
+def test_send_notification_falls_back_to_notify_send(monkeypatch) -> None:
+    calls: list[list[str]] = []
 
     def fake_which(name: str) -> str | None:
         if name == "notify-send":

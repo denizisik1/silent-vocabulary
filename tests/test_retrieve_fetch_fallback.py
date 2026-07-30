@@ -1,5 +1,5 @@
 import pytest
-import requests  # type: ignore[import-untyped]
+import requests  # type: ignore[import-untyped]  # no stubs
 
 from browser_config import BrowserConfig, apply_browser_config
 from retrieve.fetch import fetch_html, fetch_html_browser, probe_url

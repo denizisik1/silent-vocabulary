@@ -21,7 +21,7 @@ def page_holds_wanted(html: str, wanted: WantedIpa | None) -> bool:
         return False
     try:
         extract_ipa_from_html(html, wanted.find_by, wanted.word)
-    except Exception:  # pylint: disable=broad-exception-caught
+    except Exception:  # pylint: disable=broad-exception-caught  # parse miss is "not held"
         return False
     return True
 
@@ -29,7 +29,7 @@ def page_holds_wanted(html: str, wanted: WantedIpa | None) -> bool:
 async def read_page_title(page: Any) -> str:
     try:
         evaluated = await page.evaluate("document.title")
-    except Exception:  # pylint: disable=broad-exception-caught
+    except Exception:  # pylint: disable=broad-exception-caught  # title is optional
         return ""
     return evaluated if isinstance(evaluated, str) else ""
 
@@ -45,13 +45,13 @@ async def dismiss_consent_dialog(page: Any) -> str | None:
     for label in _CONSENT_LABELS:
         try:
             element = await page.find(label, best_match=True, timeout=1)
-        except Exception:  # nosec B112 # pylint: disable=broad-exception-caught
+        except Exception:  # next label  # nosec B112  # pylint: disable=broad-exception-caught
             continue
         if element is None:
             continue
         try:
             await element.click()
-        except Exception:  # nosec B112 # pylint: disable=broad-exception-caught
+        except Exception:  # next label  # nosec B112  # pylint: disable=broad-exception-caught
             continue
         return label
     return None
@@ -62,7 +62,7 @@ async def tick_cloudflare_checkbox(page: Any, timeout_seconds: float) -> bool:
         return False
     try:
         await page.verify_cf(timeout=min(timeout_seconds, _CHALLENGE_TIMEOUT_SECONDS))
-    except Exception:  # pylint: disable=broad-exception-caught
+    except Exception:  # pylint: disable=broad-exception-caught  # challenge may already be gone
         return False
     return True
 

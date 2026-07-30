@@ -84,7 +84,7 @@ _PALETTE = {
 }
 
 
-def stylesheet(  # pylint: disable=too-many-locals
+def stylesheet(  # pylint: disable=too-many-locals  # each CSS size is a named zoom-scaled value
     name: str,
     zoom_percent: int = DEFAULT_ZOOM_PERCENT,
     mono_zoom_percent: int = DEFAULT_ZOOM_PERCENT,

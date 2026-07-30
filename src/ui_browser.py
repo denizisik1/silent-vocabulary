@@ -23,7 +23,7 @@ from browser_support import (
 _PROMPT_ATTR = "_silent_vocabulary_browser_prompt"
 
 
-def run_browser_package_action(  # pylint: disable=too-many-arguments
+def run_browser_package_action(  # pylint: disable=too-many-arguments  # dialog copy + callbacks
     parent: QWidget,
     *,
     title: str,

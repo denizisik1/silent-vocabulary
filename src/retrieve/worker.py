@@ -12,12 +12,12 @@ from retrieve import (
 from words import upsert_pronunciation
 
 
-class RetrieveWorker(QObject):  # pylint: disable=too-many-instance-attributes
+class RetrieveWorker(QObject):  # pylint: disable=too-many-instance-attributes  # job fields
     finished_ok = Signal(str, object)
     finished_error = Signal(str)
     progress = Signal(str, str)
 
-    def __init__(  # pylint: disable=too-many-arguments
+    def __init__(  # pylint: disable=too-many-arguments  # job is passed field by field
         self,
         *,
         mode: str,
@@ -50,7 +50,7 @@ class RetrieveWorker(QObject):  # pylint: disable=too-many-instance-attributes
                     self._run_check()
                     return
                 self._run_retrieve()
-        except Exception as error:  # pylint: disable=broad-exception-caught
+        except Exception as error:  # pylint: disable=broad-exception-caught  # Qt thread boundary
             self.finished_error.emit(str(error))
 
     def _run_check(self) -> None:

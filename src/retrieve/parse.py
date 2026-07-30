@@ -1,6 +1,6 @@
 import re
 
-from lxml import html  # type: ignore[import-untyped]
+from lxml import html  # type: ignore[import-untyped]  # no stubs
 
 from retrieve.headword import RANK_EXACT, headword_rank
 

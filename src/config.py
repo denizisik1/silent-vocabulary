@@ -55,7 +55,7 @@ class WindowConfig:
 
 
 @dataclass
-class AppConfig:  # pylint: disable=too-many-instance-attributes
+class AppConfig:  # pylint: disable=too-many-instance-attributes  # settings bag
     theme: str = DEFAULT_THEME
     zoom_percent: int = DEFAULT_ZOOM_PERCENT
     mono_zoom_percent: int = DEFAULT_MONO_ZOOM_PERCENT
@@ -223,7 +223,7 @@ def _parse_include_fields(include_table) -> dict[str, bool]:
     return include_fields
 
 
-def load_config() -> AppConfig:  # pylint: disable=too-many-locals
+def load_config() -> AppConfig:  # pylint: disable=too-many-locals  # one local per toml setting
     if not CONFIG_PATH.is_file():
         config = AppConfig()
         apply_browser_config(config.browser)

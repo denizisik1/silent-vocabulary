@@ -23,7 +23,7 @@ def page_with(pronunciation, css_class="phonetics"):
 def use_pages(monkeypatch, pages):
     calls = []
 
-    def fake_fetch(url, method, *, wanted=None):  # pylint: disable=unused-argument
+    def fake_fetch(url, method, **_options):
         calls.append((url, method))
         outcome = pages.get((url, method), RuntimeError("HTTP 403"))
         if isinstance(outcome, Exception):
