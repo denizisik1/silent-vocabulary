@@ -19,6 +19,12 @@ CSV_COLUMNS = (
     "plural",
 )
 
+REMOVAL_COLUMNS = (
+    "word",
+    "classification",
+    "article",
+)
+
 DEFAULT_INCLUDE = {
     "article": True,
     "word": True,

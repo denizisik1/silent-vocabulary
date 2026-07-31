@@ -3,7 +3,7 @@ from functools import lru_cache
 from pathlib import Path
 
 from words.constants import LANGUAGE_VOCABULARY_FILES
-from words.parse import read_csv_rows, read_removals, word_key
+from words.parse import RemovalKey, is_entry_removed, read_csv_rows, read_removals, row_entry_key
 from words.paths import vocabulary_dir, user_vocabulary_dir
 
 
@@ -30,16 +30,15 @@ def load_addition_rows(path: Path) -> list[tuple]:
 def merge_vocabulary_rows(
     base_rows: list[tuple],
     addition_rows: list[tuple],
-    removals: set[str],
+    removals: set[RemovalKey],
 ) -> list[tuple]:
-    merged: dict[str, tuple] = {}
+    merged: dict[tuple[str, str, str], tuple] = {}
     for row in base_rows:
-        key = word_key(row[1])
-        if key in removals:
+        if is_entry_removed(row, removals):
             continue
-        merged[key] = row
+        merged[row_entry_key(row)] = row
     for row in addition_rows:
-        merged[word_key(row[1])] = row
+        merged[row_entry_key(row)] = row
     return list(merged.values())
 
 

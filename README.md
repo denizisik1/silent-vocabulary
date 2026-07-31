@@ -75,6 +75,12 @@ are never rewritten; the overlay can be exported as a zip archive. Window size,
 theme, zoom, daemon interval and source settings live in
 `~/.config/silent-vocabulary/silent-vocabulary.toml`.
 
+An entry is identified by its word, its word class and its article, so
+homographs such as `der Weg` and `weg`, or `der See` and `die See`, are kept as
+separate entries. When a typed word matches more than one of them, removing a
+word or retrieving a pronunciation asks which entry is meant instead of
+guessing.
+
 ##### Development
 
 ```bash

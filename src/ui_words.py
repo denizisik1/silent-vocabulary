@@ -14,10 +14,13 @@ from PySide6.QtWidgets import (
     QTextEdit,
 )
 from config import AppConfig, save_config
+from ui_disambiguate import choose_entry
 from words import (
     DEFAULT_INCLUDE,
+    AmbiguousWordError,
     WordFields,
     add_word,
+    describe_entry,
     format_word_row,
     get_random_words,
     remove_word,
@@ -73,9 +76,7 @@ def style_language_combo(window: QMainWindow, faint_color: str = _DEFAULT_FAINT)
         language_key = language_key_from_combo(item.text())
         if language_key in LANGUAGE_VOCABULARY_FILES:
             item.setEnabled(True)
-            item.setFlags(
-                Qt.ItemFlag.ItemIsEnabled | Qt.ItemFlag.ItemIsSelectable
-            )
+            item.setFlags(Qt.ItemFlag.ItemIsEnabled | Qt.ItemFlag.ItemIsSelectable)
             item.setData(None, Qt.ItemDataRole.ForegroundRole)
             continue
         item.setEnabled(False)
@@ -89,7 +90,6 @@ def disable_unavailable_languages(language_combo: QComboBox) -> None:
         style_language_combo(window)
         return
     raise RuntimeError("Language combo is not inside a main window")
-
 
 
 def include_flags(window: QMainWindow) -> dict[str, bool]:
@@ -308,14 +308,34 @@ def on_remove_word(window: QMainWindow) -> None:
         raise RuntimeError("Missing Remove Word controls")
 
     language_key = language_key_from_combo(language_combo.currentText())
+    word = word_input.text()
     try:
-        removed = remove_word(language_key, word_input.text())
+        removed = remove_chosen_entry(window, language_key, word)
     except (ValueError, FileNotFoundError, OSError) as error:
         results.setPlainText(str(error))
         return
 
+    if removed is None:
+        results.setPlainText("Removal cancelled: no entry chosen")
+        return
+
     word_input.clear()
-    results.setPlainText(f"Removed: {removed}")
+    results.setPlainText(f"Removed: {describe_entry(removed)}")
+
+
+def remove_chosen_entry(window: QMainWindow, language_key: str, word: str) -> tuple | None:
+    try:
+        return remove_word(language_key, word)
+    except AmbiguousWordError as ambiguity:
+        chosen = choose_entry(window, word, ambiguity.candidates)
+        if chosen is None:
+            return None
+        return remove_word(
+            language_key,
+            chosen[1],
+            classification=chosen[4],
+            article=chosen[0],
+        )
 
 
 def wire_add_remove_word(window: QMainWindow) -> None:

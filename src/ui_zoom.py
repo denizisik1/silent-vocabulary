@@ -73,9 +73,7 @@ def apply_header_controls(window: QMainWindow, config: AppConfig) -> None:
 
 
 def apply_appearance(window: QMainWindow, config: AppConfig) -> None:
-    window.setStyleSheet(
-        stylesheet(config.theme, config.zoom_percent, config.mono_zoom_percent)
-    )
+    window.setStyleSheet(stylesheet(config.theme, config.zoom_percent, config.mono_zoom_percent))
     apply_header_controls(window, config)
     apply_theme_button(window, config)
     style_language_combo(window, theme_color(config.theme, "faint"))

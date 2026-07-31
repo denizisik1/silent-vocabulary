@@ -263,9 +263,7 @@ def _handle_notify_failure(
         return
 
     if should_stop_daemon_after_notify_failures(failure_count):
-        stop_message = (
-            f"Daemon stopped after {failure_count} consecutive notification failures."
-        )
+        stop_message = f"Daemon stopped after {failure_count} consecutive notification failures."
         _append_result_line(window, stop_message)
         stop_daemon(window, application, status_message=stop_message)
 

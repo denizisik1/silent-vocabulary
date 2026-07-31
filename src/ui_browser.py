@@ -47,9 +47,7 @@ def run_browser_package_action(
     dialog.setIcon(QMessageBox.Icon.Question)
     dialog.setText(question)
     dialog.setInformativeText(f"Command: {' '.join(command)}")
-    dialog.setStandardButtons(
-        QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
-    )
+    dialog.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
     dialog.setDefaultButton(QMessageBox.StandardButton.Yes)
     if dialog.exec() != QMessageBox.StandardButton.Yes:
         return False
@@ -127,10 +125,7 @@ class BrowserInstallPrompt(QObject):
         return run_browser_package_action(
             self._parent,
             title="silent-vocabulary - install browser",
-            question=(
-                "Browser fetch needs Chrome, Chromium, or Brave. "
-                "Install Chromium now?"
-            ),
+            question=("Browser fetch needs Chrome, Chromium, or Brave. " "Install Chromium now?"),
             progress_label="Installing Chromium…",
             command=browser_install_command(),
             unavailable_message=(

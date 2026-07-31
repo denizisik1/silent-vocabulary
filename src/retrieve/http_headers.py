@@ -1,7 +1,6 @@
 from urllib.parse import urlparse, urlunparse
 import os
 
-
 _DEFAULT_USER_AGENT = (
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
     "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
@@ -49,7 +48,9 @@ def browser_headers(url: str) -> dict[str, str]:
             '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
         ),
         "Sec-CH-UA-Mobile": "?0",
-        "Sec-CH-UA-Platform": os.environ.get("SILENT_VOCABULARY_HTTP_SEC_CH_UA_PLATFORM", '"Linux"'),
+        "Sec-CH-UA-Platform": os.environ.get(
+            "SILENT_VOCABULARY_HTTP_SEC_CH_UA_PLATFORM", '"Linux"'
+        ),
         "Cache-Control": "max-age=0",
         "Connection": "keep-alive",
         "DNT": "1",
@@ -57,7 +58,9 @@ def browser_headers(url: str) -> dict[str, str]:
 
 
 def browser_locale(accept_language: str | None = None) -> str:
-    raw = accept_language or os.environ.get("SILENT_VOCABULARY_HTTP_ACCEPT_LANGUAGE", "en-US,en;q=0.9")
+    raw = accept_language or os.environ.get(
+        "SILENT_VOCABULARY_HTTP_ACCEPT_LANGUAGE", "en-US,en;q=0.9"
+    )
     primary = raw.split(",")[0].strip()
     if not primary:
         return "en-US"

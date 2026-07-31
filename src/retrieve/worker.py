@@ -26,12 +26,16 @@ class RetrieveWorker(QObject):
         primary_find: str,
         backup_url: str,
         backup_find: str,
+        classification: str | None = None,
+        article: str | None = None,
         retrieve_strategy: str = DEFAULT_RETRIEVE_STRATEGY,
     ) -> None:
         super().__init__()
         self._mode = mode
         self._language_key = language_key
         self._word = word
+        self._classification = classification
+        self._article = article
         self._primary_url = primary_url
         self._primary_find = primary_find
         self._backup_url = backup_url
@@ -100,6 +104,8 @@ class RetrieveWorker(QObject):
             self._language_key,
             result.word,
             result.pronunciation,
+            classification=self._classification,
+            article=self._article,
             source=result.url,
         )
         message = (
