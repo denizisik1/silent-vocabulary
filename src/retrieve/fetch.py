@@ -140,6 +140,6 @@ def _probe_with_browser(
             url,
             timeout_seconds=timeout_seconds + get_browser_config().extra_timeout_seconds,
         )
-    except Exception as error:
+    except Exception as error:  # pylint: disable=broad-exception-caught
         return False, f"{requests_detail}; browser: {error}"
     return True, f"{requests_detail}; browser: ok"

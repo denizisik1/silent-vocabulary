@@ -84,7 +84,7 @@ _PALETTE = {
 }
 
 
-def stylesheet(
+def stylesheet(  # pylint: disable=too-many-locals
     name: str,
     zoom_percent: int = DEFAULT_ZOOM_PERCENT,
     mono_zoom_percent: int = DEFAULT_ZOOM_PERCENT,

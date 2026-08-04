@@ -112,7 +112,7 @@ def _on_tray_activated(
 
 
 def _stop_daemon_from_tray(window: QMainWindow, application: QApplication) -> None:
-    from ui_daemon import stop_daemon
+    from ui_daemon import stop_daemon  # pylint: disable=import-outside-toplevel
 
     stop_daemon(window)
     show_window_from_tray(window, application)
@@ -144,7 +144,7 @@ def show_window_from_tray(window: QMainWindow, application: QApplication) -> Non
     _sync_quit_on_last_window_closed(window, application)
 
 
-def show_tray_message(
+def show_tray_message(  # pylint: disable=too-many-arguments
     window: QMainWindow,
     application: QApplication,
     title: str,
@@ -194,11 +194,7 @@ def _install_window_close_handler(window: QMainWindow, application: QApplication
     window.closeEvent = close_event  # type: ignore[method-assign]
 
 
-def _on_minimize_to_tray_toggled(
-    window: QMainWindow,
-    config: AppConfig,
-    checked: bool,
-) -> None:
+def _on_minimize_to_tray_toggled(config: AppConfig, checked: bool) -> None:
     config.minimize_to_tray_on_daemon = checked
     save_config(config)
 
@@ -238,6 +234,6 @@ def wire_tray(window: QMainWindow, application: QApplication, config: AppConfig)
     _apply_minimize_to_tray_checkbox(window, config)
     checkbox = _minimize_checkbox(window)
     if checkbox is not None:
-        handler = partial(_on_minimize_to_tray_toggled, window, config)
+        handler = partial(_on_minimize_to_tray_toggled, config)
         checkbox.toggled.connect(handler)
     _install_window_close_handler(window, application)

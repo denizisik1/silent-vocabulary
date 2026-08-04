@@ -51,7 +51,7 @@ _STRATEGY_RADIOS = {
 }
 
 
-class RetrieveController(QObject):
+class RetrieveController(QObject):  # pylint: disable=too-many-instance-attributes
     def __init__(self, window: QMainWindow, config: AppConfig) -> None:
         super().__init__(window)
         self._window = window
@@ -105,13 +105,13 @@ class RetrieveController(QObject):
             results.setPlainText(text)
             self._scroll_results_to_bottom(results)
         QTimer.singleShot(0, self._scroll_all_results_to_bottom)
-        self._sync_show_cleared_buttons()
+        self.sync_show_cleared_buttons()
 
     def _scroll_all_results_to_bottom(self) -> None:
         for results in self._result_views():
             self._scroll_results_to_bottom(results)
 
-    def _sync_show_cleared_buttons(self) -> None:
+    def sync_show_cleared_buttons(self) -> None:
         has_archive = self._results_log.has_archive()
         showing = self._results_log.showing_archive()
         label = "Hide cleared" if showing else "Show cleared"
@@ -387,7 +387,7 @@ def _wire_results_actions(window: QMainWindow, controller: RetrieveController) -
         if button is None:
             raise RuntimeError(f"Missing results control: {object_name}")
         button.clicked.connect(controller.toggle_show_cleared)
-    controller._sync_show_cleared_buttons()
+    controller.sync_show_cleared_buttons()
 
 
 def wire_retrieve(window: QMainWindow, config: AppConfig) -> None:

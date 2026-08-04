@@ -1,6 +1,9 @@
+from typing import cast
+
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QAbstractSpinBox,
+    QBoxLayout,
     QDoubleSpinBox,
     QFormLayout,
     QGridLayout,
@@ -44,19 +47,21 @@ def _put_container_in_layout(layout: QLayout, spin: QWidget, container: QWidget)
             item = layout.itemAt(index)
             if item is None or item.widget() is not spin:
                 continue
-            row, column, row_span, column_span = layout.getItemPosition(index)
+            position = cast(tuple[int, int, int, int], layout.getItemPosition(index))
+            row, column, row_span, column_span = position
             layout.removeWidget(spin)
             layout.addWidget(container, row, column, row_span, column_span)
             return True
         return False
 
-    for index in range(layout.count()):
-        item = layout.itemAt(index)
-        if item is None or item.widget() is not spin:
-            continue
-        layout.removeWidget(spin)
-        layout.insertWidget(index, container)
-        return True
+    if isinstance(layout, QBoxLayout):
+        for index in range(layout.count()):
+            item = layout.itemAt(index)
+            if item is None or item.widget() is not spin:
+                continue
+            layout.removeWidget(spin)
+            layout.insertWidget(index, container)
+            return True
     return False
 
 

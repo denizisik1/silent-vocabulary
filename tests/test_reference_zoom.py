@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import pytest
 from PySide6.QtWidgets import QTextEdit
 
 from ui_reference import scale_document_fonts
@@ -21,7 +22,8 @@ def _sample_font_sizes(editor: QTextEdit, limit: int = 8) -> list[float]:
     return sizes
 
 
-def test_scale_document_fonts_scales_inline_html_sizes(qapp):
+@pytest.mark.usefixtures("qapp")
+def test_scale_document_fonts_scales_inline_html_sizes():
     editor = QTextEdit()
     html = Path("data/reference/consonants.html").read_text(encoding="utf-8")
     editor.setHtml(html)

@@ -8,7 +8,10 @@ b tidy:
 	flake8 --max-line-length 100 src tests
 
 c lint:
-	pylint --disable=missing-class-docstring,missing-function-docstring,missing-module-docstring,too-few-public-methods src tests
+	PYTHONPATH=.:src pylint \
+		--ignored-modules=PySide6 \
+		--disable=missing-class-docstring,missing-function-docstring,missing-module-docstring,too-few-public-methods,duplicate-code,cyclic-import \
+		src tests
 
 d typecheck:
 	mypy src tests

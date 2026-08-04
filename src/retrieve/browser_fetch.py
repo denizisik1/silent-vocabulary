@@ -6,8 +6,8 @@ from browser_config import get_browser_config
 from browser_support import find_browser_path
 
 _EnsureCallback = Callable[[], bool]
-_ensure_callback: _EnsureCallback | None = None
-_install_declined = False
+_ensure_callback: _EnsureCallback | None = None  # pylint: disable=invalid-name
+_install_declined = False  # pylint: disable=invalid-name
 
 _MISSING_BROWSER_MESSAGE = (
     "No Chrome/Chromium/Brave browser binary was found for browser fetch. "
@@ -20,17 +20,17 @@ def browser_available() -> bool:
 
 
 def set_browser_ensure_callback(callback: _EnsureCallback | None) -> None:
-    global _ensure_callback
+    global _ensure_callback  # pylint: disable=global-statement
     _ensure_callback = callback
 
 
 def reset_browser_ensure_state() -> None:
-    global _install_declined
+    global _install_declined  # pylint: disable=global-statement
     _install_declined = False
 
 
 def ensure_browser_ready() -> bool:
-    global _install_declined
+    global _install_declined  # pylint: disable=global-statement
     if browser_available():
         return True
     if _install_declined:
@@ -59,20 +59,16 @@ def _page_looks_ready(title: str | None, html: str) -> bool:
 
 
 async def _fetch_html_browser_async(url: str, *, timeout_seconds: float) -> str:
-    import zendriver as zd
+    import zendriver as zd  # pylint: disable=import-outside-toplevel
 
     browser_settings = get_browser_config()
-    browser_path = find_browser_path()
-    start_kwargs: dict[str, object] = {
-        "headless": browser_settings.headless,
-        "sandbox": browser_settings.sandbox,
-        "browser_connection_timeout": browser_settings.connect_timeout_seconds,
-        "browser_connection_max_tries": browser_settings.connect_tries,
-    }
-    if browser_path is not None:
-        start_kwargs["browser_executable_path"] = browser_path
-
-    browser = await zd.start(**start_kwargs)
+    browser = await zd.start(
+        headless=browser_settings.headless,
+        sandbox=browser_settings.sandbox,
+        browser_executable_path=find_browser_path(),
+        browser_connection_timeout=browser_settings.connect_timeout_seconds,
+        browser_connection_max_tries=browser_settings.connect_tries,
+    )
     try:
         page = await browser.get(url)
         deadline = time.monotonic() + timeout_seconds
@@ -80,9 +76,10 @@ async def _fetch_html_browser_async(url: str, *, timeout_seconds: float) -> str:
         last_html = ""
         while time.monotonic() < deadline:
             try:
-                last_title = await page.evaluate("document.title")
-            except Exception:
-                last_title = ""
+                evaluated_title = await page.evaluate("document.title")
+            except Exception:  # pylint: disable=broad-exception-caught
+                evaluated_title = None
+            last_title = evaluated_title if isinstance(evaluated_title, str) else ""
             try:
                 last_html = await page.get_content()
             except Exception as error:

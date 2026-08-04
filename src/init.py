@@ -1,3 +1,4 @@
+# pylint: disable=wrong-import-position,wrong-import-order
 import sys
 from functools import partial
 from pathlib import Path
