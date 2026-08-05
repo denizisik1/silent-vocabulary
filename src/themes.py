@@ -3,7 +3,7 @@ import os
 from zoom import DEFAULT_ZOOM_PERCENT, clamp_zoom_percent, scale_px
 
 UI_FONT = '"Noto Sans", sans-serif'
-MONO_FONT = '"Liberation Mono", monospace'
+MONO_FONT = '"Noto Sans Mono", monospace'
 
 _PALETTE = {
     "white": {
