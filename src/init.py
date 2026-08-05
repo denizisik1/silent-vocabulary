@@ -16,7 +16,7 @@ load_dotenv(PROJECT_ROOT / ".env")
 
 from PySide6.QtCore import QFile, QIODevice  # noqa: E402
 from PySide6.QtUiTools import QUiLoader  # noqa: E402
-from PySide6.QtWidgets import QApplication, QMainWindow  # noqa: E402
+from PySide6.QtWidgets import QApplication, QLabel, QMainWindow  # noqa: E402
 from config import AppConfig, load_config, save_config  # noqa: E402
 from ui_daemon import stop_daemon, wire_daemon  # noqa: E402
 from ui_export import wire_export_overlay  # noqa: E402
@@ -33,6 +33,7 @@ from ui_words import (  # noqa: E402
 )
 from ui_zoom import apply_appearance, wire_theme, wire_zoom  # noqa: E402
 from ui_spin import install_spin_steppers  # noqa: E402
+from version import __version__  # noqa: E402
 
 UI_PATH = PROJECT_ROOT / "ui" / "main_window.ui"
 
@@ -73,12 +74,16 @@ def _on_about_to_quit(
 def main() -> None:
     application = QApplication(sys.argv)
     application.setApplicationName("silent-vocabulary")
+    application.setApplicationVersion(__version__)
     application.setDesktopFileName("silent-vocabulary")
     application.setWindowIcon(app_icon())
     config = load_config()
     apply_protect_setting(config)
     window = _load_window()
     window.setWindowIcon(app_icon())
+    version_label = window.findChild(QLabel, "label_version")
+    if version_label is not None:
+        version_label.setText(__version__)
     _apply_window_config(window, config)
     install_spin_steppers(window)
     wire_zoom(window, config)

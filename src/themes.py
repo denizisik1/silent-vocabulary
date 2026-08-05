@@ -143,6 +143,12 @@ QLabel#label_brand {{
     font-weight: 700;
     letter-spacing: 0.5px;
 }}
+QLabel#label_version {{
+    color: {colors["muted"]};
+    font-size: {hint_size}px;
+    font-weight: 400;
+    padding-bottom: {scale_px(2, zoom)}px;
+}}
 QLabel#label_vocab_hint,
 QLabel#label_6,
 QLabel#label_tray_unavailable {{

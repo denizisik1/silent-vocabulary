@@ -55,10 +55,41 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QLabel" name="label_brand">
-         <property name="text">
-          <string>silent-vocabulary</string>
-         </property>
+        <widget class="QWidget" name="brandWidget">
+         <layout class="QHBoxLayout" name="brandLayout">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_brand">
+            <property name="text">
+             <string>silent-vocabulary</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_version">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignBottom|Qt::AlignLeading</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
        <item>
