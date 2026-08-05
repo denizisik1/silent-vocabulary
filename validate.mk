@@ -1,4 +1,4 @@
-.PHONY: format tidy lint typecheck security test a b c d e f x closing install
+.PHONY: format tidy lint typecheck security test a b c d e f x
 
 
 a format:
@@ -24,10 +24,3 @@ f test:
 
 
 x: format tidy lint typecheck security test
-
-
-closing:
-	pip freeze > requirements.txt
-
-install:
-	pip install -r requirements.txt
