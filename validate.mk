@@ -21,6 +21,8 @@
 # has its own syntax for this; see the comment above each target below.
 # ---------------------------------------------------------------------------
 
+print_separator = @printf '\n\n\033[32m________________________________________________________________________\033[0m\n\n\n'
+
 # black: reformats code automatically, it doesn't really "complain" about
 # choices you can disagree with. If one line must keep its layout (a
 # hand-aligned table, or a long suppressor comment), append:
@@ -32,6 +34,7 @@
 # Use sparingly.
 a format:
 	black --line-length 100 src tests
+	$(print_separator)
 
 # flake8: style/lint checker (pycodestyle + pyflakes).
 # Suppress one warning on one line with:
@@ -47,6 +50,7 @@ b tidy:
 	flake8 --max-line-length 100 \
 		--per-file-ignores='src/init.py:E402,src/fetch_pronunciations.py:E402' \
 		src tests
+	$(print_separator)
 
 # pylint: deeper static analysis.
 # Suppress one rule on one line with:
@@ -63,6 +67,7 @@ c lint:
 		--ignored-modules=PySide6 \
 		--disable=missing-class-docstring,missing-function-docstring,missing-module-docstring,too-few-public-methods,duplicate-code,cyclic-import \
 		src tests
+	$(print_separator)
 
 # mypy: static type checker.
 # Suppress one error on one line with:
@@ -73,6 +78,7 @@ c lint:
 #   import requests  # type: ignore[import-untyped]  # no stubs
 d typecheck:
 	mypy src tests
+	$(print_separator)
 
 # bandit: security linter.
 # Suppress one finding on one line with:
@@ -82,6 +88,7 @@ d typecheck:
 # IDs. B101 (assert use) is already excluded globally below via -s B101.
 e security:
 	bandit -r src tests -s B101
+	$(print_separator)
 
 # pytest: test runner.
 # A failing test should be fixed, not silenced - there's no legitimate
@@ -94,6 +101,7 @@ e security:
 # on the specific test, rather than a blanket filter for the whole suite.
 f test:
 	PYTHONPATH=.:src pytest
+	$(print_separator)
 
 
 x: format tidy lint typecheck security test
