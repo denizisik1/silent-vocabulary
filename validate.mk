@@ -21,7 +21,7 @@
 # has its own syntax for this; see the comment above each target below.
 # ---------------------------------------------------------------------------
 
-print_separator = @printf '\n\n\033[32m________________________________________________________________________\033[0m\n\n\n'
+print_separator = @printf '\n\033[32m________________________________________________________________________\033[0m\n\n\n'
 
 # black: reformats code automatically, it doesn't really "complain" about
 # choices you can disagree with. If one line must keep its layout (a
@@ -33,6 +33,7 @@ print_separator = @printf '\n\n\033[32m_________________________________________
 #   # fmt: on
 # Use sparingly.
 a format:
+	$(print_separator)
 	black --line-length 100 src tests
 	$(print_separator)
 
