@@ -1,5 +1,6 @@
 import os
 import sys
+from pathlib import Path
 from typing import Any
 
 from retrieve.progress import (
@@ -10,6 +11,7 @@ from retrieve.progress import (
     KIND_NOTE,
     decorate,
 )
+from words.paths import pronunciation_files_line_count
 
 _RESET = "\033[0m"
 
@@ -53,3 +55,16 @@ def print_progress(message: str, kind: str = KIND_DETAIL) -> None:
 
 def print_notice(message: str, kind: str = KIND_HEADER) -> None:
     _print_line(message, kind)
+
+
+IPA_FILES_HINT = (
+    "If you have IPA files from before you can place them under "
+    'vocabulary/pronunciation and avoid having to "retrieve" them en masse.'
+)
+IPA_FILES_HINT_LINE_THRESHOLD = 2000
+
+
+def print_ipa_files_hint(project_root: Path) -> None:
+    if pronunciation_files_line_count(project_root) > IPA_FILES_HINT_LINE_THRESHOLD:
+        return
+    print_notice(IPA_FILES_HINT, KIND_NOTE)

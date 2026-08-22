@@ -18,6 +18,7 @@ from PySide6.QtCore import QFile, QIODevice
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QApplication, QLabel, QMainWindow
 from config import AppConfig, load_config, save_config
+from terminal_output import print_ipa_files_hint
 from ui_daemon import stop_daemon, wire_daemon
 from ui_export import wire_export_overlay
 from ui_protect import apply_protect_setting, wire_protect_vocabulary
@@ -72,6 +73,7 @@ def _on_about_to_quit(
 
 
 def main() -> None:
+    print_ipa_files_hint(PROJECT_ROOT)
     application = QApplication(sys.argv)
     application.setApplicationName("silent-vocabulary")
     application.setApplicationVersion(__version__)
