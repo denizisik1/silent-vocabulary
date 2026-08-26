@@ -18,11 +18,11 @@ notification service on the session bus.
 ```bash
 git clone --depth=1 git@github.com:denizisik1/silent-vocabulary.git
 cd silent-vocabulary
+cp .env.example .env
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 python3 src/init.py
-cp .env.example .env
 ```
 
 `.env` is optional. Without it the values from `.env.example` apply as code
