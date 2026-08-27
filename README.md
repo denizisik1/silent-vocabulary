@@ -100,6 +100,7 @@ python3 src/fetch_pronunciations.py german --browser-fallback --fast
 
 `german` is the language to fill. Flags:
 
+```
 `--dry-run` lists the words that still need IPA and exits.
 `--delay` seconds to wait between words, jittered by a quarter (default: 3).
 `--limit` fetch at most this many words, then stop.
@@ -113,6 +114,7 @@ the extra wait after a miss.
 `--retry-failed` try words already marked as failed, instead of skipping them.
 `--max-consecutive-failures` stop when this many words fail in a row
 (default: 10).
+```
 
 Every word that still lacks a pronunciation is fetched one at a time. Between
 every word there is a jittered pause of about `--delay` seconds; that pause
